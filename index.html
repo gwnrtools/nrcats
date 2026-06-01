@@ -943,6 +943,62 @@
   
   
     <li class="md-nav__item">
+      <a href="api/surrogate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    surrogate
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="api/comparisons/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    comparisons
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="api/metadata/" class="md-nav__link">
         
   
@@ -1487,20 +1543,28 @@ validating analytical waveform models (EOB, phenomenological, surrogate) against
 <hr />
 <h2 id="module-structure">Module Structure<a class="headerlink" href="#module-structure" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>nrcatalogtools/
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── __init__.py     # Public API: MayaCatalog, RITCatalog, SXSCatalog,
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                   #   WaveformModes, apply_wigner_rotation_to_mode_dict
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── catalog.py      # Abstract base CatalogABC + shared CatalogBase
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── rit.py          # RITCatalog + RITCatalogHelper
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── sxs.py          # SXSCatalog
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── maya.py         # MayaCatalog
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── waveform/       # WaveformModes sub-package
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>│   ├── modes.py    #   WaveformModes class
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│   ├── loaders.py  #   load_from_h5, load_from_targz
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│   ├── matching.py #   match_sphere_averaged, match_sphere_averaged_bms_maximized
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>│   └── units.py    #   time_to_physical, amp_to_physical (waveform-level)
-<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>├── metadata.py     # get_source_parameters_from_metadata()
-<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── lvc.py          # Frame-rotation helpers
-<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>└── utils.py        # Cache paths, download helpers, unit conversions
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── __init__.py      # Public API: MayaCatalog, RITCatalog, SXSCatalog,
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│                    #   WaveformModes, apply_wigner_rotation_to_mode_dict,
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                    #   load_catalog, filter_by_surrogate_prior
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── catalog.py       # Abstract base CatalogABC + shared CatalogBase
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── rit.py           # RITCatalog + RITCatalogHelper
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── sxs.py           # SXSCatalog
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>├── maya.py          # MayaCatalog
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├── surrogate.py     # NRSur7dq4 loading, evaluation, prior check
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│                    #   load_nrsur7dq4, generate_surrogate_modes,
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>│                    #   check_surrogate_prior, SURROGATE_MODES, NR_MODES
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── comparisons.py   # End-to-end NR vs surrogate comparison pipeline
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>│                    #   compare_sim_vs_surrogate, DELTA_T
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>├── waveform/        # WaveformModes sub-package
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>│   ├── modes.py     #   WaveformModes class
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>│   ├── loaders.py   #   load_from_h5, load_from_targz
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>│   ├── matching.py  #   apply_wigner_rotation_to_mode_dict,
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>│   │                #   load_psd, compute_mode_match,
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>│   │                #   compute_phase_diff_per_cycle, mode_f_lower
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>│   └── units.py     #   time_to_physical, amp_to_physical (waveform-level)
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>├── metadata.py      # get_source_parameters_from_metadata()
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── lvc.py           # Frame-rotation helpers
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>└── utils.py         # Cache paths, download helpers, unit conversions
 </code></pre></div>
 <hr />
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
@@ -1572,23 +1636,27 @@ validating analytical waveform models (EOB, phenomenological, surrogate) against
 <h2 id="quick-start">Quick Start<a class="headerlink" href="#quick-start" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">nrcatalogtools</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nrcat</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Load catalogs</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1"># Load catalogs (explicit class methods)</span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">ritcat</span>  <span class="o">=</span> <span class="n">nrcat</span><span class="o">.</span><span class="n">RITCatalog</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">sxscat</span>  <span class="o">=</span> <span class="n">nrcat</span><span class="o">.</span><span class="n">SXSCatalog</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">mayacat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="o">.</span><span class="n">MayaCatalog</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># Load a waveform</span>
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">wfm</span> <span class="o">=</span> <span class="n">ritcat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RIT:BBH:0003-n100-id0&quot;</span><span class="p">)</span>
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1"># Physical-unit (2,2) mode</span>
-<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="n">mode22</span> <span class="o">=</span> <span class="n">wfm</span><span class="o">.</span><span class="n">get_mode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">delta_t_seconds</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">4096</span><span class="p">)</span>
-<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>
-<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1"># Polarizations</span>
-<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="n">pols</span> <span class="o">=</span> <span class="n">wfm</span><span class="o">.</span><span class="n">get_td_waveform</span><span class="p">(</span><span class="n">total_mass</span><span class="o">=</span><span class="mf">40.</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">inclination</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coa_phase</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">hp</span><span class="p">,</span> <span class="n">hc</span> <span class="o">=</span> <span class="n">pols</span><span class="o">.</span><span class="n">real</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">pols</span><span class="o">.</span><span class="n">imag</span><span class="p">()</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1"># …or use the unified helper</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">ritcat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="o">.</span><span class="n">load_catalog</span><span class="p">(</span><span class="s2">&quot;RIT&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">sxscat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="o">.</span><span class="n">load_catalog</span><span class="p">(</span><span class="s2">&quot;SXS&quot;</span><span class="p">)</span>   <span class="c1"># sets download=False automatically</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># Load a waveform</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">wfm</span> <span class="o">=</span> <span class="n">ritcat</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;RIT:BBH:0003-n100-id0&quot;</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="c1"># Physical-unit (2,2) mode</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="n">mode22</span> <span class="o">=</span> <span class="n">wfm</span><span class="o">.</span><span class="n">get_mode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">60.0</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span> <span class="n">delta_t_seconds</span><span class="o">=</span><span class="mf">1.</span><span class="o">/</span><span class="mi">4096</span><span class="p">)</span>
 <a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a>
-<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># PyCBC-compatible source parameters</span>
-<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">params</span> <span class="o">=</span> <span class="n">ritcat</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="s2">&quot;RIT:BBH:0001-n100-id3&quot;</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="c1"># Polarizations</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">pols</span> <span class="o">=</span> <span class="n">wfm</span><span class="o">.</span><span class="n">get_td_waveform</span><span class="p">(</span><span class="n">total_mass</span><span class="o">=</span><span class="mf">40.</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">inclination</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">coa_phase</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="n">hp</span><span class="p">,</span> <span class="n">hc</span> <span class="o">=</span> <span class="n">pols</span><span class="o">.</span><span class="n">real</span><span class="p">(),</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">pols</span><span class="o">.</span><span class="n">imag</span><span class="p">()</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="c1"># PyCBC-compatible source parameters</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="n">params</span> <span class="o">=</span> <span class="n">ritcat</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="s2">&quot;RIT:BBH:0001-n100-id3&quot;</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span>
 </code></pre></div>
 <hr />
 <h2 id="cache-layout">Cache Layout<a class="headerlink" href="#cache-layout" title="Permanent link">&para;</a></h2>
