@@ -782,34 +782,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalog.load--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalog.load--see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See Also
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -1091,34 +1063,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" simname_from_metadata_filename">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Output:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -1305,34 +1249,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label=" sim_info_from_metadata_filename">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Output:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
         
@@ -1885,34 +1801,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalog.load--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalog.load--see-also" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        See Also
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -2194,34 +2082,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" simname_from_metadata_filename">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Output:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -2409,34 +2269,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" sim_info_from_metadata_filename">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--input" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Input:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--output" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Output:
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
       </ul>
@@ -2506,20 +2338,11 @@ logic to <code>RITCatalogHelper</code>.  <code>RITCatalog</code> itself provides
 <li>A module-level singleton prevents redundant catalog loads when
   <code>load()</code> is called multiple times in the same process.</li>
 </ul>
+<p>Example:
+    &gt;&gt;&gt; import nrcatalogtools as nrcat
+    &gt;&gt;&gt; cat = nrcat.RITCatalog.load(verbosity=0)
+    &gt;&gt;&gt; wfm = cat.get("RIT:BBH:0001-n100-id3")</p>
 
-
-<details class="example" open>
-  <summary>Example</summary>
-  <blockquote>
-<blockquote>
-<blockquote>
-<p>import nrcatalogtools as nrcat
-cat = nrcat.RITCatalog.load(verbosity=0)
-wfm = cat.get("RIT:BBH:0001-n100-id3")</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</details>
 
 
 
@@ -3477,39 +3300,9 @@ wfm = cat.get("RIT:BBH:0001-n100-id3")</p>
         <p>All simulations as a Pandas DataFrame indexed by simulation name.</p>
 <p>Removes any unnamed index columns left over from CSV round-trips and
 sets <code>simulation_name</code> as both the index and an explicit column.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: DataFrame with one row per simulation and</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>metadata fields as columns.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    pandas.DataFrame: DataFrame with one row per simulation and
+    metadata fields as columns.</p>
 
     </div>
 
@@ -3538,29 +3331,8 @@ sets <code>simulation_name</code> as both the index and an explicit column.</p>
 <p>Each value is a dict with keys: <code>checksum</code> (None), <code>filename</code>,
 <code>filesize</code> (bytes; 0 if not cached), <code>download</code> (remote URL), and
 <code>truepath</code> (canonical local filename after deduplication).</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>dict[str, dict]: Mapping from bare filename to file-info dict.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    dict[str, dict]: Mapping from bare filename to file-info dict.</p>
 
     </div>
 
@@ -3592,18 +3364,49 @@ successful load.  Subsequent calls return the cached instance without
 re-reading disk or the network, unless <code>download=True</code> is passed.</p>
 <p>Pass <code>download=True</code> to force a fresh download and replace the
 singleton, or call <code>RITCatalog.reload()</code> for the same effect.</p>
-<h5 id="nrcatalogtools.rit.RITCatalog.load--parameters">Parameters<a class="headerlink" href="#nrcatalogtools.rit.RITCatalog.load--parameters" title="Permanent link">&para;</a></h5>
-<p>download : {None, bool}, optional
-    If False, this function will look for the catalog in the cache and
-    raise an error if it is not found.  If True, this function will
-    download the catalog and raise an error if the download fails.
-    If None (the default), it will try to download the file, warn but
-    fall back to the cache if that fails, and only raise an error if
-    the catalog is not found in the cache.</p>
-<h5 id="nrcatalogtools.rit.RITCatalog.load--see-also">See Also<a class="headerlink" href="#nrcatalogtools.rit.RITCatalog.load--see-also" title="Permanent link">&para;</a></h5>
-<p>RITCatalog.reload : Force a fresh download and replace the singleton.
-nrcatalogtools.utils.rit_catalog_info : Catalog info, including cache directory.</p>
 
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>download</code>
+            </td>
+            <td>
+                  <code>(None, <span title="bool">bool</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If False, this function will look for the catalog in the cache and
+raise an error if it is not found.  If True, this function will
+download the catalog and raise an error if the download fails.
+If None (the default), it will try to download the file, warn but
+fall back to the cache if that fails, and only raise an error if
+the catalog is not found in the cache.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+<details class="see-also" open>
+  <summary>See Also</summary>
+  <p>RITCatalog.reload : Force a fresh download and replace the singleton.
+nrcatalogtools.utils.rit_catalog_info : Catalog info, including cache directory.</p>
+</details>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>nrcatalogtools/rit.py</code></summary>
@@ -3858,60 +3661,10 @@ nrcatalogtools.utils.rit_catalog_info : Catalog info, including cache directory.
     <div class="doc doc-contents ">
 
         <p>Return the bare filename of the RIT metadata text file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag, e.g. <code>"RIT:BBH:0001-n100-id3"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename string, e.g. <code>"RIT:BBH:0001-n100-id3_Metadata.txt"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag, e.g. <code>"RIT:BBH:0001-n100-id3"</code>.</p>
+<p>Returns:
+    Filename string, e.g. <code>"RIT:BBH:0001-n100-id3_Metadata.txt"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3955,84 +3708,13 @@ nrcatalogtools.utils.rit_catalog_info : Catalog info, including cache directory.
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path to the metadata file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag, e.g. <code>"RIT:BBH:0001-n100-id3"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path string to the cached <code>.txt</code> metadata file.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="RuntimeError">RuntimeError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the path stored in the metadata dict does not exist
-on disk.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag, e.g. <code>"RIT:BBH:0001-n100-id3"</code>.</p>
+<p>Returns:
+    Absolute path string to the cached <code>.txt</code> metadata file.</p>
+<p>Raises:
+    RuntimeError: If the path stored in the metadata dict does not exist
+        on disk.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4096,60 +3778,10 @@ on disk.</p>
     <div class="doc doc-contents ">
 
         <p>Return the remote URL for the metadata text file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full URL string on the RIT web server.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Full URL string on the RIT web server.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4201,60 +3833,10 @@ on disk.</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare filename of the RIT waveform HDF5 file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename string, e.g. <code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Filename string, e.g. <code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4300,70 +3882,11 @@ on disk.</p>
         <p>Return the absolute local cache path to the waveform HDF5 for <em>sim_name</em>.</p>
 <p>Falls back to re-anchoring the filename under the current cache directory
 when the stored path (from a shared CSV) belongs to a different machine.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path string to the local <code>.h5</code> waveform file.  Returns the</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>stored (possibly stale) path if the file is not yet downloaded.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Absolute path string to the local <code>.h5</code> waveform file.  Returns the
+    stored (possibly stale) path if the file is not yet downloaded.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4441,60 +3964,10 @@ when the stored path (from a shared CSV) belongs to a different machine.</p>
     <div class="doc doc-contents ">
 
         <p>Return the remote URL of the waveform HDF5 file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full URL string on the RIT web server.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Full URL string on the RIT web server.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4546,78 +4019,13 @@ when the stored path (from a shared CSV) belongs to a different machine.</p>
     <div class="doc doc-contents ">
 
         <p>Download the waveform HDF5 file for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag,
-e.g. <code>"RIT:BBH:0001-n100-id3"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Use the cached file if present.
-Defaults to None (uses helper's default).</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>bool</code></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>True if the file is available locally after the call.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): RIT simulation name tag,
+        e.g. <code>"RIT:BBH:0001-n100-id3"</code>.
+    use_cache (bool or None): Use the cached file if present.
+        Defaults to None (uses helper's default).</p>
+<p>Returns:
+    bool: True if the file is available locally after the call.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4671,70 +4079,11 @@ Defaults to None (uses helper's default).</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare filename of the RIT psi4 tar.gz archive for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename string, e.g.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Filename string, e.g.
+    <code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4780,70 +4129,11 @@ Defaults to None (uses helper's default).</p>
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path to the psi4 archive for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path string, or an empty string if the file is not yet</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>downloaded.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Absolute path string, or an empty string if the file is not yet
+    downloaded.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4905,60 +4195,10 @@ Defaults to None (uses helper's default).</p>
     <div class="doc doc-contents ">
 
         <p>Return the remote URL of the psi4 archive for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full URL string on the RIT web server.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.</p>
+<p>Returns:
+    Full URL string on the RIT web server.</p>
 
 
             <details class="mkdocstrings-source">
@@ -5006,77 +4246,12 @@ Defaults to None (uses helper's default).</p>
     <div class="doc doc-contents ">
 
         <p>Download the psi4 tar.gz archive for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> | None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Skip download if a non-empty file exists locally.
-Defaults to None (uses helper's default).</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>True if the file is available locally after the call.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name: RIT simulation name tag.
+    use_cache: Skip download if a non-empty file exists locally.
+        Defaults to None (uses helper's default).</p>
+<p>Returns:
+    True if the file is available locally after the call.</p>
 
 
             <details class="mkdocstrings-source">
@@ -5124,61 +4299,11 @@ Defaults to None (uses helper's default).</p>
     <div class="doc doc-contents ">
 
         <p>Delegate to <code>RITCatalogHelper.refresh_metadata_df_on_disk()</code>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_sims_to_crawl</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Upper bound on the simulation index.
-Defaults to 2000.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2000</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: Refreshed aggregated metadata DataFrame.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    num_sims_to_crawl (int): Upper bound on the simulation index.
+        Defaults to 2000.</p>
+<p>Returns:
+    pandas.DataFrame: Refreshed aggregated metadata DataFrame.</p>
 
 
             <details class="mkdocstrings-source">
@@ -5228,139 +4353,20 @@ Defaults to 2000.</p>
     <div class="doc doc-contents ">
 
         <p>Download waveform or psi4 data for all simulations in the catalog.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_sims_to_crawl</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum number of simulations to process.
-Defaults to 2000.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2000</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>which_data</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>"waveform"</code> or <code>"psi4"</code>. Defaults to
-<code>"waveform"</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;waveform&#39;</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>possible_res</code>
-            </td>
-            <td>
-                  <code><span title="list">list</span>[<span title="int">int</span>] or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Resolution values to try.
-Defaults to the list in <code>utils.rit_catalog_info</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>max_id_in_name</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum ID suffix to search for. Defaults to
-<code>-1</code> (uses the value in <code>utils.rit_catalog_info</code>).</p>
-              </div>
-            </td>
-            <td>
-                  <code>-1</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Skip download if a non-empty file exists locally.
-Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>dict[str, pathlib.Path]: Mapping from simulation name to the</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>local file path for each successfully downloaded file.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    num_sims_to_crawl (int): Maximum number of simulations to process.
+        Defaults to 2000.
+    which_data (str): <code>"waveform"</code> or <code>"psi4"</code>. Defaults to
+        <code>"waveform"</code>.
+    possible_res (list[int] or None): Resolution values to try.
+        Defaults to the list in <code>utils.rit_catalog_info</code>.
+    max_id_in_name (int): Maximum ID suffix to search for. Defaults to
+        <code>-1</code> (uses the value in <code>utils.rit_catalog_info</code>).
+    use_cache (bool): Skip download if a non-empty file exists locally.
+        Defaults to True.</p>
+<p>Returns:
+    dict[str, pathlib.Path]: Mapping from simulation name to the
+    local file path for each successfully downloaded file.</p>
 
 
             <details class="mkdocstrings-source">
@@ -7510,112 +6516,14 @@ Defaults to True.</p>
         <p>Return all candidate metadata filenames for simulation <em>idx</em>.</p>
 <p>Returns one name for the quasicircular BBH format and one for the
 eccentric BBH format, since a given index may correspond to either.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index (e.g. <code>1</code> for <code>0001</code>).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>res</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Numerical resolution tag (e.g. <code>100</code>).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>id_val</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>ID suffix for quasicircular simulations (e.g. <code>3</code>).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>list[str]: Two candidate filenames:</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>``["RIT:BBH:NNNN-nRRR-idI_Metadata.txt",</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>"RIT:eBBH:NNNN-nRRR-ecc_Metadata.txt"]``.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index (e.g. <code>1</code> for <code>0001</code>).
+    res (int): Numerical resolution tag (e.g. <code>100</code>).
+    id_val (int): ID suffix for quasicircular simulations (e.g. <code>3</code>).</p>
+<p>Returns:
+    list[str]: Two candidate filenames:
+    <code>["RIT:BBH:NNNN-nRRR-idI_Metadata.txt",
+    "RIT:eBBH:NNNN-nRRR-ecc_Metadata.txt"]</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -7736,70 +6644,11 @@ eccentric BBH format, since a given index may correspond to either.</p>
         <p>Return the path of the cached metadata file for simulation <em>idx</em>.</p>
 <p>Searches the local metadata cache directory for any file whose name
 starts with either the BBH or eBBH sim-tag prefix for this index.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full path of the first matching cached file, or <code>""</code> if no</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>cached file is found.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    str: Full path of the first matching cached file, or <code>""</code> if no
+    cached file is found.</p>
 
 
             <details class="mkdocstrings-source">
@@ -7928,70 +6777,11 @@ starts with either the BBH or eBBH sim-tag prefix for this index.</p>
         <p>Return the psi4 filename for simulation <em>idx</em> via the cache.</p>
 <p>Looks up the cached metadata filename for <em>idx</em>, derives the
 simulation name from it, and then computes the psi4 filename.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Psi4 filename, e.g.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    str: Psi4 filename, e.g.
+    <code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -8128,70 +6918,11 @@ RIT:eBBH:1843-n100-ecc_Metadata.txt</p>
         <p>Return the waveform HDF5 filename for simulation <em>idx</em> via the cache.</p>
 <p>Looks up the cached metadata filename for <em>idx</em>, derives the
 simulation name from it, and then computes the waveform filename.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Waveform filename, e.g.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    str: Waveform filename, e.g.
+    <code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -8246,15 +6977,21 @@ simulation name from it, and then computes the waveform filename.</p>
 
     <div class="doc doc-contents ">
 
-        <h5 id="nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--input">Input:<a class="headerlink" href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--input" title="Permanent link">&para;</a></h5>
-<ul>
+
+
+<details class="input:" open>
+  <summary>Input:</summary>
+  <ul>
 <li>filename: name (not path) of metadata file as hosted on the web</li>
 </ul>
-<h5 id="nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--output">Output:<a class="headerlink" href="#nrcatalogtools.rit.RITCatalogHelper.simname_from_metadata_filename--output" title="Permanent link">&para;</a></h5>
-<ul>
+</details>
+
+<details class="output:" open>
+  <summary>Output:</summary>
+  <ul>
 <li>Simulation Name Tag (Class uses this tag for internal indexing)</li>
 </ul>
-
+</details>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>nrcatalogtools/rit.py</code></summary>
@@ -8302,70 +7039,11 @@ simulation name from it, and then computes the waveform filename.</p>
 <p>Searches the metadata cache directory for a file matching either the
 BBH or eBBH prefix, then derives the simulation name from the
 filename.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag (e.g. <code>"RIT:BBH:0001-n100-id3"</code>), or</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>""</code> if no cached metadata file is found for <em>idx</em>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    str: Simulation name tag (e.g. <code>"RIT:BBH:0001-n100-id3"</code>), or
+    <code>""</code> if no cached metadata file is found for <em>idx</em>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -8441,92 +7119,12 @@ filename.</p>
     <div class="doc doc-contents ">
 
         <p>Return candidate simulation name tags for <em>idx</em> at <em>res</em> and <em>id_val</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>res</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Numerical resolution tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>id_val</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>ID suffix for quasicircular simulations.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>list[str]: Two candidate simulation names (BBH and eBBH formats).</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.
+    res (int): Numerical resolution tag.
+    id_val (int): ID suffix for quasicircular simulations.</p>
+<p>Returns:
+    list[str]: Two candidate simulation names (BBH and eBBH formats).</p>
 
 
             <details class="mkdocstrings-source">
@@ -8583,70 +7181,11 @@ filename.</p>
 <p>Returns one prefix for the BBH format and one for the eBBH format,
 which are used to search for cached metadata files with
 <code>glob(prefix + "*")</code>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>list[str]: Two prefix strings, e.g.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>["RIT:BBH:0001", "RIT:eBBH:0001"]</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    list[str]: Two prefix strings, e.g.
+    <code>["RIT:BBH:0001", "RIT:eBBH:0001"]</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -8706,70 +7245,11 @@ which are used to search for cached metadata files with
     <div class="doc doc-contents ">
 
         <p>Parses raw RIT metadata</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>raw</code>
-            </td>
-            <td>
-                  <code><span title="list">list</span>(<span title="str">str</span>)</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>List of lines read in from RIT metadata</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>list</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Original metadata with empty lines removed</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td><code>dict</code></td>            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Parsed metadata as a dictionary</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    raw (list(str)): List of lines read in from RIT metadata</p>
+<p>Returns:
+   list(str): Original metadata with empty lines removed
+   dict     : Parsed metadata as a dictionary</p>
 
 
             <details class="mkdocstrings-source">
@@ -8974,127 +7454,17 @@ which are used to search for cached metadata files with
 <p>If <em>save_to</em> is given, downloads the file to disk and then parses it
 with <code>metadata_from_file()</code>.  Otherwise performs an in-memory HTTP
 GET and parses the response body directly.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>link</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL to the <code>*_Metadata.txt</code> file.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>save_to</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span> or <span title="pathlib.Path">Path</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If provided, save the
-downloaded text to this path before parsing. Defaults to None.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_retries</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Number of request attempts with exponential
-backoff. Defaults to 5.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>tuple[list[str], dict]: The output of <code>parse_metadata_txt()</code>:</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>a list of non-empty metadata lines and a dict of parsed fields.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="ConnectionError">ConnectionError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If all retry attempts fail.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    link (str): Full HTTP(S) URL to the <code>*_Metadata.txt</code> file.
+    save_to (str or pathlib.Path or None): If provided, save the
+        downloaded text to this path before parsing. Defaults to None.
+    num_retries (int): Number of request attempts with exponential
+        backoff. Defaults to 5.</p>
+<p>Returns:
+    tuple[list[str], dict]: The output of <code>parse_metadata_txt()</code>:
+    a list of non-empty metadata lines and a dict of parsed fields.</p>
+<p>Raises:
+    ConnectionError: If all retry attempts fail.</p>
 
 
             <details class="mkdocstrings-source">
@@ -9216,71 +7586,12 @@ backoff. Defaults to 5.</p>
     <div class="doc doc-contents ">
 
         <p>Parse a locally cached RIT metadata text file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>file_path</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span> or <span title="pathlib.Path">Path</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Path to the <code>*_Metadata.txt</code>
-file on disk.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>tuple[list[str], dict]: The output of <code>parse_metadata_txt()</code>:</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>a list of non-empty metadata lines and a dict of parsed fields.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    file_path (str or pathlib.Path): Path to the <code>*_Metadata.txt</code>
+        file on disk.</p>
+<p>Returns:
+    tuple[list[str], dict]: The output of <code>parse_metadata_txt()</code>:
+    a list of non-empty metadata lines and a dict of parsed fields.</p>
 
 
             <details class="mkdocstrings-source">
@@ -9335,100 +7646,14 @@ file on disk.</p>
 <p>Searches the local metadata cache for any file matching the BBH or
 eBBH prefix for <em>idx</em>.  If found, parses it and enriches the result
 with the simulation name, metadata/psi4/waveform URLs and local paths.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: Single-row DataFrame with all metadata fields</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>plus <code>simulation_name</code>, <code>metadata_link</code>, <code>metadata_location</code>,</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>psi4_data_link</code>, <code>psi4_data_location</code>, <code>waveform_data_link</code>,</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>and <code>waveform_data_location</code> columns.  Returns an empty DataFrame</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>if no cached file is found for <em>idx</em>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Returns:
+    pandas.DataFrame: Single-row DataFrame with all metadata fields
+    plus <code>simulation_name</code>, <code>metadata_link</code>, <code>metadata_location</code>,
+    <code>psi4_data_link</code>, <code>psi4_data_location</code>, <code>waveform_data_link</code>,
+    and <code>waveform_data_location</code> columns.  Returns an empty DataFrame
+    if no cached file is found for <em>idx</em>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -9576,113 +7801,15 @@ with the simulation name, metadata/psi4/waveform URLs and local paths.</p>
 candidate filename, checks the local cache first (if <code>use_cache</code> is
 True) before making an HTTP request.  The downloaded file is saved
 to the metadata cache directory.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>res</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Numerical resolution tag (e.g. <code>100</code>).</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>id_val</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>ID suffix for quasicircular simulations. Defaults to
-<code>-1</code> (triggers the eccentric filename format as fallback).</p>
-              </div>
-            </td>
-            <td>
-                  <code>-1</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: Single-row DataFrame (same schema as</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>metadata_from_cache()</code>), or an empty DataFrame if neither</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>filename is found locally or remotely.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.
+    res (int): Numerical resolution tag (e.g. <code>100</code>).
+    id_val (int): ID suffix for quasicircular simulations. Defaults to
+        <code>-1</code> (triggers the eccentric filename format as fallback).</p>
+<p>Returns:
+    pandas.DataFrame: Single-row DataFrame (same schema as
+    <code>metadata_from_cache()</code>), or an empty DataFrame if neither
+    filename is found locally or remotely.</p>
 
 
             <details class="mkdocstrings-source">
@@ -10188,61 +8315,11 @@ each simulation's metadata is downloaded during a catalog crawl.</p>
 simulation's metadata from the local file cache (does <strong>not</strong> make
 network requests), concatenates the results, and writes the aggregated
 DataFrame to <code>metadata.csv</code>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_sims_to_crawl</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Upper bound on the simulation index to
-scan. Defaults to 2000.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2000</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: The refreshed aggregated metadata DataFrame.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    num_sims_to_crawl (int): Upper bound on the simulation index to
+        scan. Defaults to 2000.</p>
+<p>Returns:
+    pandas.DataFrame: The refreshed aggregated metadata DataFrame.</p>
 
 
             <details class="mkdocstrings-source">
@@ -10324,39 +8401,9 @@ scan. Defaults to 2000.</p>
         <p>Load the aggregated metadata DataFrame from <code>metadata.csv</code>.</p>
 <p>If the CSV file does not exist or is empty, sets <code>self.metadata</code> to
 an empty DataFrame and returns it.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: The previously saved aggregated metadata, or an</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>empty DataFrame if the cache file is absent.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    pandas.DataFrame: The previously saved aggregated metadata, or an
+    empty DataFrame if the cache file is absent.</p>
 
 
             <details class="mkdocstrings-source">
@@ -10419,89 +8466,15 @@ file already exists.</p>
 <li><code>https://ccrgpages.rit.edu/~RITCatalog/Data/ExtrapStrain_RIT-BBH-0193-n100.h5</code></li>
 <li><code>https://ccrgpages.rit.edu/~RITCatalog/Data/ExtrapStrain_RIT-eBBH-1911-n100.h5</code></li>
 </ul>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag, e.g.
-<code>"RIT:BBH:0001-n100-id3"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Use cached file if present.  If
-<code>None</code>, falls back to the instance-level <code>self.use_cache</code>.
-Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>bool</code></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>True if the file is available locally (either from cache or</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>after a successful download), False if the URL was not found.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): RIT simulation name tag, e.g.
+        <code>"RIT:BBH:0001-n100-id3"</code>.
+    use_cache (bool or None): Use cached file if present.  If
+        <code>None</code>, falls back to the instance-level <code>self.use_cache</code>.
+        Defaults to True.</p>
+<p>Returns:
+    bool: True if the file is available locally (either from cache or
+    after a successful download), False if the URL was not found.</p>
 
 
             <details class="mkdocstrings-source">
@@ -10645,89 +8618,15 @@ Defaults to True.</p>
         <p>Download the psi4 tar.gz file for <em>sim_name</em> via <code>wget</code>.</p>
 <p>Skips the download if <code>use_cache</code> is True and a non-empty local
 file already exists.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>RIT simulation name tag, e.g.
-<code>"RIT:BBH:0001-n100-id3"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Use cached file if present.  If
-<code>None</code>, falls back to the instance-level <code>self.use_cache</code>.
-Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>bool</code></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>True if the file is available locally (either from cache or</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>after a successful download), False if the URL was not found.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): RIT simulation name tag, e.g.
+        <code>"RIT:BBH:0001-n100-id3"</code>.
+    use_cache (bool or None): Use cached file if present.  If
+        <code>None</code>, falls back to the instance-level <code>self.use_cache</code>.
+        Defaults to True.</p>
+<p>Returns:
+    bool: True if the file is available locally (either from cache or
+    after a successful download), False if the URL was not found.</p>
 
 
             <details class="mkdocstrings-source">
@@ -10858,139 +8757,20 @@ Defaults to True.</p>
 <p>Crawls the RIT web directory for waveform or psi4 data files and
 downloads each one.  Refreshes the on-disk metadata DataFrame first
 if it is out of date.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_sims_to_crawl</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum number of simulations to process.
-Defaults to 2000.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2000</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>which_data</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p><code>"waveform"</code> or <code>"psi4"</code>. Defaults to
-<code>"waveform"</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;waveform&#39;</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>possible_res</code>
-            </td>
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Resolution values to try. Defaults to the
-list in <code>utils.rit_catalog_info</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>[]</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>max_id_in_name</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum ID suffix to search. Defaults to
-<code>-1</code> (uses the value in <code>utils.rit_catalog_info</code>).</p>
-              </div>
-            </td>
-            <td>
-                  <code>-1</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Skip download if a non-empty file exists locally.
-Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>dict[str, pathlib.Path]: Mapping from simulation name to the</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>local file path for each successfully downloaded file.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    num_sims_to_crawl (int): Maximum number of simulations to process.
+        Defaults to 2000.
+    which_data (str): <code>"waveform"</code> or <code>"psi4"</code>. Defaults to
+        <code>"waveform"</code>.
+    possible_res (list): Resolution values to try. Defaults to the
+        list in <code>utils.rit_catalog_info</code>.
+    max_id_in_name (int): Maximum ID suffix to search. Defaults to
+        <code>-1</code> (uses the value in <code>utils.rit_catalog_info</code>).
+    use_cache (bool): Skip download if a non-empty file exists locally.
+        Defaults to True.</p>
+<p>Returns:
+    dict[str, pathlib.Path]: Mapping from simulation name to the
+    local file path for each successfully downloaded file.</p>
 
 
             <details class="mkdocstrings-source">
@@ -11160,60 +8940,10 @@ Defaults to True.</p>
     <div class="doc doc-contents ">
 
         <p>Not yet implemented.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>idx</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Four-digit simulation index.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    idx (int): Four-digit simulation index.</p>
+<p>Raises:
+    NotImplementedError: Always.</p>
 
 
             <details class="mkdocstrings-source">
@@ -11256,15 +8986,21 @@ Defaults to True.</p>
 
     <div class="doc doc-contents ">
 
-        <h5 id="nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--input">Input:<a class="headerlink" href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--input" title="Permanent link">&para;</a></h5>
-<p>file_name: name (not path) of metadata file as hosted on the web</p>
-<h5 id="nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--output">Output:<a class="headerlink" href="#nrcatalogtools.rit.RITCatalogHelper.sim_info_from_metadata_filename--output" title="Permanent link">&para;</a></h5>
-<ul>
+
+
+<details class="input:" open>
+  <summary>Input:</summary>
+  <p>file_name: name (not path) of metadata file as hosted on the web</p>
+</details>
+
+<details class="output:" open>
+  <summary>Output:</summary>
+  <ul>
 <li>simulation number</li>
 <li>resolution as indicated with an integer</li>
 <li>ID value (only for non-eccentric simulations)</li>
 </ul>
-
+</details>
 
             <details class="mkdocstrings-source">
               <summary>Source code in <code>nrcatalogtools/rit.py</code></summary>

@@ -777,23 +777,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.sxs.SXSCatalog.load--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -1427,23 +1410,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" load">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.sxs.SXSCatalog.load--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -1652,20 +1618,11 @@ interface over the SXS Zenodo-hosted catalog.  Key design points:</p>
 <li>A module-level singleton prevents redundant catalog loads when
   <code>load()</code> is called multiple times in the same process.</li>
 </ul>
+<p>Example:
+    &gt;&gt;&gt; import nrcatalogtools as nrcat
+    &gt;&gt;&gt; cat = nrcat.SXSCatalog.load(download=False)
+    &gt;&gt;&gt; wfm = cat.get("SXS:BBH:0001")</p>
 
-
-<details class="example" open>
-  <summary>Example</summary>
-  <blockquote>
-<blockquote>
-<blockquote>
-<p>import nrcatalogtools as nrcat
-cat = nrcat.SXSCatalog.load(download=False)
-wfm = cat.get("SXS:BBH:0001")</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</details>
 
 
 
@@ -2433,14 +2390,42 @@ wfm = cat.get("SXS:BBH:0001")</p>
 <p>This is a wrapper around <code>sxs.load</code>.  The result is cached in a
 module-level singleton; pass <code>download=True</code> or call
 <code>SXSCatalog.reload()</code> to force a fresh download.</p>
-<h5 id="nrcatalogtools.sxs.SXSCatalog.load--parameters">Parameters<a class="headerlink" href="#nrcatalogtools.sxs.SXSCatalog.load--parameters" title="Permanent link">&para;</a></h5>
-<p>download : {None, bool}, optional
-    If False, this function will look for the catalog in the cache and
-    raise an error if it is not found.  If True, this function will
-    download the catalog and raise an error if the download fails.
-    If None (the default), it will try to download the file, warn but
-    fall back to the cache if that fails, and only raise an error if
-    the catalog is not found in the cache.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>download</code>
+            </td>
+            <td>
+                  <code>(None, <span title="bool">bool</span>)</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>If False, this function will look for the catalog in the cache and
+raise an error if it is not found.  If True, this function will
+download the catalog and raise an error if the download fails.
+If None (the default), it will try to download the file, warn but
+fall back to the cache if that fails, and only raise an error if
+the catalog is not found in the cache.</p>
+              </div>
+            </td>
+            <td>
+                  <code>None</code>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
             <details class="mkdocstrings-source">
@@ -2582,106 +2567,17 @@ module-level singleton; pass <code>download=True</code> or call
         <p>Load the strain waveform for <em>sim_name</em> and return a WaveformModes object.</p>
 <p>Overrides <code>CatalogBase.get()</code> because SXS waveform loading goes
 entirely through the <code>sxs</code> package rather than via direct HDF5 reads.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.
-Deprecated IDs are resolved automatically via
-<code>auto_supersede=True</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>extrapolation_order</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Waveform extrapolation order used as a
-fallback when <code>sim_obj.strain</code> is unavailable.  Defaults to 2.</p>
-              </div>
-            </td>
-            <td>
-                  <code>2</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>download</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to download the waveform if not cached.
-Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><a class="autorefs autorefs-internal" title="            WaveformModes (nrcatalogtools.waveform.WaveformModes)" href="../waveform/#nrcatalogtools.waveform.modes.WaveformModes">WaveformModes</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>nrcatalogtools.waveform.WaveformModes: Waveform object with the</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><a class="autorefs autorefs-internal" title="            WaveformModes (nrcatalogtools.waveform.WaveformModes)" href="../waveform/#nrcatalogtools.waveform.modes.WaveformModes">WaveformModes</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>catalog metadata attached.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.
+        Deprecated IDs are resolved automatically via
+        <code>auto_supersede=True</code>.
+    extrapolation_order (int): Waveform extrapolation order used as a
+        fallback when <code>sim_obj.strain</code> is unavailable.  Defaults to 2.
+    download (bool): Whether to download the waveform if not cached.
+        Defaults to True.</p>
+<p>Returns:
+    nrcatalogtools.waveform.WaveformModes: Waveform object with the
+    catalog metadata attached.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2802,60 +2698,10 @@ Defaults to True.</p>
 <p>First fetches the simulation metadata JSON, then downloads the
 <code>rhOverM</code> strain file.  Both are handled by the <code>sxs</code> package's
 download and caching machinery.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>sxs.WaveformModes: Raw waveform object returned by <code>sxs.load()</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    sxs.WaveformModes: Raw waveform object returned by <code>sxs.load()</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2911,37 +2757,8 @@ download and caching machinery.</p>
         <p>Download the psi4 data for <em>sim_name</em> via the <code>sxs</code> package.</p>
 <p>Accesses <code>sim.psi4</code> to trigger the download; the file is cached
 in the <code>sxs</code> package's own cache directory.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2991,60 +2808,10 @@ in the <code>sxs</code> package's own cache directory.</p>
         <p>Return the bare filename for the strain waveform file.</p>
 <p>Resolves the path on demand by calling <code>sxs.load(sim_name,
 download=False)</code> and extracting <code>sim.strain_path[0]</code>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename component only (no directory).</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: Filename component only (no directory).</p>
 
 
             <details class="mkdocstrings-source">
@@ -3097,60 +2864,10 @@ download=False)</code> and extracting <code>sim.strain_path[0]</code>.</p>
 <p>Path resolution is lazy: this calls <code>sxs.load(sim_name,
 download=False)</code> each time it is invoked.  The file may not yet
 exist locally if it has never been downloaded.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>POSIX-style absolute path string.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: POSIX-style absolute path string.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3222,29 +2939,8 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented for SXS; downloads are managed by <code>sxs.load()</code>.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3282,60 +2978,10 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare filename for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename component only (no directory).</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: Filename component only (no directory).</p>
 
 
             <details class="mkdocstrings-source">
@@ -3379,60 +3025,10 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>POSIX-style absolute path string.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: POSIX-style absolute path string.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3496,60 +3092,10 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Return the remote download URL for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL from the SXS file manifest.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: Full HTTP(S) URL from the SXS file manifest.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3597,60 +3143,10 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare filename for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename component only (no directory).</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: Filename component only (no directory).</p>
 
 
             <details class="mkdocstrings-source">
@@ -3694,60 +3190,10 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>POSIX-style absolute path string.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): SXS simulation name, e.g. <code>"SXS:BBH:0001"</code>.</p>
+<p>Returns:
+    str: POSIX-style absolute path string.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3809,29 +3255,8 @@ exist locally if it has never been downloaded.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented for SXS; use <code>sxs.load()</code> instead.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always.</p>
 
 
             <details class="mkdocstrings-source">

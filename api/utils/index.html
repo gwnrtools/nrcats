@@ -1044,34 +1044,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" time_to_physical">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.time_to_physical--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.time_to_physical--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1083,34 +1055,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" amp_to_physical">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amp_to_physical--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amp_to_physical--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1121,34 +1065,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label=" amplitude_phase_frequency_from_complex_mode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1454,34 +1370,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" time_to_physical">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.time_to_physical--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.time_to_physical--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1493,34 +1381,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" amp_to_physical">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amp_to_physical--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amp_to_physical--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1531,34 +1391,6 @@
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label=" amplitude_phase_frequency_from_complex_mode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--returns" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Returns
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1606,92 +1438,12 @@
 backoff (<code>2**attempt</code> seconds, capped at 30 s).  A non-OK HTTP status
 is returned immediately as <code>False</code> without retrying (the URL exists but
 is not accessible / not found — no point retrying).</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>link</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Complete web URL.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_retries</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum number of attempts. Defaults to 5.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>verbosity</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Print retry progress when &gt; 0. Defaults to 0.</p>
-              </div>
-            </td>
-            <td>
-                  <code>0</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>bool</code></td>            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>True if the URL returned HTTP 200, False otherwise.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    link (str): Complete web URL.
+    num_retries (int): Maximum number of attempts. Defaults to 5.
+    verbosity (int): Print retry progress when &gt; 0. Defaults to 0.</p>
+<p>Returns:
+    bool: True if the URL returned HTTP 200, False otherwise.</p>
 
 
             <details class="mkdocstrings-source">
@@ -1786,173 +1538,18 @@ It first tries to use the <code>sxs.utilities.downloads.download_file</code> uti
 If that fails, it falls back to using the Python <code>requests</code> package, with SSL
 verification disabled and up to <code>num_retries</code> attempts with exponential
 backoff (<code>2**attempt</code> seconds, capped at 30 s).</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>url</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The URL to download the file from.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>path</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span> or <span title="pathlib.Path">Path</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The destination path where the file should be saved.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>progress</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to show a progress bar if supported.</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>if_newer</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Only download if the remote file is newer than the local file.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>num_retries</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum number of fallback attempts. Defaults to 5.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>verbosity</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Print retry progress when &gt; 0. Defaults to 0.</p>
-              </div>
-            </td>
-            <td>
-                  <code>0</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="pathlib.Path">Path</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The path (as a pathlib.Path object) to the downloaded file.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="ConnectionError">ConnectionError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the file could not be fetched after all retry attempts.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="RuntimeError">RuntimeError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the server returned a non-200 status.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    url (str): The URL to download the file from.
+    path (str or pathlib.Path): The destination path where the file should be saved.
+    progress (bool, optional): Whether to show a progress bar if supported.
+    if_newer (bool, optional): Only download if the remote file is newer than the local file.
+    num_retries (int): Maximum number of fallback attempts. Defaults to 5.
+    verbosity (int): Print retry progress when &gt; 0. Defaults to 0.</p>
+<p>Returns:
+    The path (as a pathlib.Path object) to the downloaded file.</p>
+<p>Raises:
+    ConnectionError: If the file could not be fetched after all retry attempts.
+    RuntimeError: If the server returned a non-200 status.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2128,132 +1725,16 @@ backoff (<code>2**attempt</code> seconds, capped at 30 s).</p>
 arguments (<code>kwargs</code>) in a separate process. If the function does not complete
 within <code>timeout</code> seconds, the process is terminated and an exception is raised.
 If the function completes within the timeout, its result is returned.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>myfunc</code>
-            </td>
-            <td>
-                  <code><span title="callable">callable</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The function to execute.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>args</code>
-            </td>
-            <td>
-                  <code><span title="tuple">tuple</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Positional arguments to pass to <code>myfunc</code>. Defaults to ().</p>
-              </div>
-            </td>
-            <td>
-                  <code>()</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>_kwargs</code>
-            </td>
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Reserved; keyword arguments are not currently
-                      forwarded to the subprocess. Defaults to {}.</p>
-              </div>
-            </td>
-            <td>
-                  <code>{}</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>timeout</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span> or <span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Maximum allowed execution time in seconds. Defaults to 5.</p>
-              </div>
-            </td>
-            <td>
-                  <code>5</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The result of <code>myfunc(*args, **kwargs)</code> if completed within the timeout.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="Exception">Exception</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the function does not complete within the specified timeout.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    myfunc (callable): The function to execute.
+    args (tuple, optional): Positional arguments to pass to <code>myfunc</code>. Defaults to ().
+    _kwargs (dict, optional): Reserved; keyword arguments are not currently
+                              forwarded to the subprocess. Defaults to {}.
+    timeout (int or float, optional): Maximum allowed execution time in seconds. Defaults to 5.</p>
+<p>Returns:
+    The result of <code>myfunc(*args, **kwargs)</code> if completed within the timeout.</p>
+<p>Raises:
+    Exception: If the function does not complete within the specified timeout.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2371,10 +1852,60 @@ If the function completes within the timeout, its result is returned.</p>
     <div class="doc doc-contents first">
 
         <p>Factor to convert time from dimensionless units to SI units</p>
-<h4 id="nrcatalogtools.utils.time_to_physical--parameters">parameters<a class="headerlink" href="#nrcatalogtools.utils.time_to_physical--parameters" title="Permanent link">&para;</a></h4>
-<p>M: mass of system in the units of solar mass</p>
-<h4 id="nrcatalogtools.utils.time_to_physical--returns">Returns<a class="headerlink" href="#nrcatalogtools.utils.time_to_physical--returns" title="Permanent link">&para;</a></h4>
-<p>converting factor</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>M</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>converting factor</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
             <details class="mkdocstrings-source">
@@ -2427,11 +1958,76 @@ If the function completes within the timeout, its result is returned.</p>
 
         <p>Factor to rescale strain to mass M and distance D convert from
 dimensionless units to SI units</p>
-<h4 id="nrcatalogtools.utils.amp_to_physical--parameters">parameters<a class="headerlink" href="#nrcatalogtools.utils.amp_to_physical--parameters" title="Permanent link">&para;</a></h4>
-<p>M: mass of the system in units of solar mass
-D: Luminosity distance in units of megaparsecs</p>
-<h4 id="nrcatalogtools.utils.amp_to_physical--returns">Returns<a class="headerlink" href="#nrcatalogtools.utils.amp_to_physical--returns" title="Permanent link">&para;</a></h4>
-<p>Scaling factor</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>M</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+            <td>
+                <code>D</code>
+            </td>
+            <td>
+                  <code><span title="float">float</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                  <code>Scaling factor</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
             <details class="mkdocstrings-source">
@@ -2487,17 +2083,81 @@ D: Luminosity distance in units of megaparsecs</p>
     <div class="doc doc-contents first">
 
         <p>Compute amplitude, phase, and instantaneous frequency from a complex mode time series.</p>
-<h4 id="nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--parameters">Parameters<a class="headerlink" href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--parameters" title="Permanent link">&para;</a></h4>
-<p>hlm : tuple of (real, imag) pycbc.types.TimeSeries, or a single complex pycbc.types.TimeSeries
-    Either a tuple of real and imaginary parts of a mode (as PyCBC TimeSeries with matching sample_times),
-    or a single complex-valued PyCBC TimeSeries.</p>
-<h4 id="nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--returns">Returns<a class="headerlink" href="#nrcatalogtools.utils.amplitude_phase_frequency_from_complex_mode--returns" title="Permanent link">&para;</a></h4>
-<p>amp : pycbc.types.TimeSeries
-    The instantaneous amplitude as a function of time.
-phase : pycbc.types.TimeSeries
-    The instantaneous phase as a function of time.
-freq : pycbc.types.TimeSeries
-    The instantaneous frequency (cycles per unit time) as a function of time.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Type</th>
+          <th>Description</th>
+          <th>Default</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+            <td>
+                <code>hlm</code>
+            </td>
+            <td>
+                  <code>tuple of (real, imag) pycbc.types.TimeSeries, or a single complex pycbc.types.TimeSeries</code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>Either a tuple of real and imaginary parts of a mode (as PyCBC TimeSeries with matching sample_times),
+or a single complex-valued PyCBC TimeSeries.</p>
+              </div>
+            </td>
+            <td>
+                <em>required</em>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+
+
+    <p><span class="doc-section-title">Returns:</span></p>
+    <table>
+      <thead>
+        <tr>
+<th>Name</th>          <th>Type</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+          <tr class="doc-section-item">
+<td><code>amp</code></td>            <td>
+                  <code><span title="pycbc.types.TimeSeries">TimeSeries</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The instantaneous amplitude as a function of time.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>phase</code></td>            <td>
+                  <code><span title="pycbc.types.TimeSeries">TimeSeries</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The instantaneous phase as a function of time.</p>
+              </div>
+            </td>
+          </tr>
+          <tr class="doc-section-item">
+<td><code>freq</code></td>            <td>
+                  <code><span title="pycbc.types.TimeSeries">TimeSeries</span></code>
+            </td>
+            <td>
+              <div class="doc-md-description">
+                <p>The instantaneous frequency (cycles per unit time) as a function of time.</p>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
 
 
             <details class="mkdocstrings-source">

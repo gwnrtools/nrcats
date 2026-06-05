@@ -1660,20 +1660,11 @@ individual waveform HDF5 files.  Key design points:</p>
 <li>A module-level singleton prevents redundant catalog loads when
   <code>load()</code> is called multiple times in the same process.</li>
 </ul>
+<p>Example:
+    &gt;&gt;&gt; import nrcatalogtools as nrcat
+    &gt;&gt;&gt; cat = nrcat.MayaCatalog.load()
+    &gt;&gt;&gt; wfm = cat.get("GT0001")</p>
 
-
-<details class="example" open>
-  <summary>Example</summary>
-  <blockquote>
-<blockquote>
-<blockquote>
-<p>import nrcatalogtools as nrcat
-cat = nrcat.MayaCatalog.load()
-wfm = cat.get("GT0001")</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</details>
 
 
 
@@ -2800,29 +2791,8 @@ wfm = cat.get("GT0001")</p>
 <p>Columns correspond to the MAYA metadata fields (mass ratio, spins,
 orbital frequency, etc.) plus the path/link columns added by
 <code>_add_paths_to_metadata()</code>.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="object">object</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>pandas.DataFrame: DataFrame with one row per simulation.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    pandas.DataFrame: DataFrame with one row per simulation.</p>
 
     </div>
 
@@ -2852,29 +2822,8 @@ orbital frequency, etc.) plus the path/link columns added by
 <code>checksum</code> (None), <code>filename</code>, <code>filesize</code> (bytes, 0 if not
 cached), <code>download</code> (remote URL), and <code>truepath</code> (canonical
 local filename after deduplication).</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>dict[str, dict]: Mapping from bare filename to file-info dict.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    dict[str, dict]: Mapping from bare filename to file-info dict.</p>
 
     </div>
 
@@ -2905,128 +2854,18 @@ local filename after deduplication).</p>
 compresses it to a local bzip2 ZIP cache, and parses it into a
 <code>MayaCatalog</code> singleton.  Subsequent calls return the singleton
 without re-parsing, unless <code>download=True</code>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>download</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>False</code>, only the local cache is
-used and an error is raised if it is absent.  If <code>True</code>, a
-fresh download is always attempted.  If <code>None</code> (default), a
-download is attempted and the cache is used as a fallback.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>verbosity</code>
-            </td>
-            <td>
-                  <code><span title="int">int</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Verbosity level (0 = quiet). Defaults to 0.</p>
-              </div>
-            </td>
-            <td>
-                  <code>0</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>show_progress</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Show a download progress bar. Defaults to True.</p>
-              </div>
-            </td>
-            <td>
-                  <code>True</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>MayaCatalog</code></td>            <td>
-                  <code><a class="autorefs autorefs-internal" title="            MayaCatalog (nrcatalogtools.maya.MayaCatalog)" href="#nrcatalogtools.maya.MayaCatalog">MayaCatalog</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>The loaded (possibly cached) catalog instance.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="RuntimeError">RuntimeError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>download=True</code> and the download fails.</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="ValueError">ValueError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the catalog cache file is missing or corrupt.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    download (bool or None): If <code>False</code>, only the local cache is
+        used and an error is raised if it is absent.  If <code>True</code>, a
+        fresh download is always attempted.  If <code>None</code> (default), a
+        download is attempted and the cache is used as a fallback.
+    verbosity (int): Verbosity level (0 = quiet). Defaults to 0.
+    show_progress (bool): Show a download progress bar. Defaults to True.</p>
+<p>Returns:
+    MayaCatalog: The loaded (possibly cached) catalog instance.</p>
+<p>Raises:
+    RuntimeError: If <code>download=True</code> and the download fails.
+    ValueError: If the catalog cache file is missing or corrupt.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3427,60 +3266,10 @@ full re-download and replace the singleton.</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare HDF5 filename for <em>sim_name</em>.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename, e.g. <code>"GT0001.h5"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
+<p>Returns:
+    str: Filename, e.g. <code>"GT0001.h5"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3524,60 +3313,10 @@ full re-download and replace the singleton.</p>
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the waveform HDF5 file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>POSIX-style absolute path under <code>~/.cache/MAYA/data/</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
+<p>Returns:
+    str: POSIX-style absolute path under <code>~/.cache/MAYA/data/</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3639,77 +3378,12 @@ full re-download and replace the singleton.</p>
     <div class="doc doc-contents ">
 
         <p>Return the remote URL for the waveform HDF5 file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>maya_format</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If True, return the URL for the native MAYA
-format file instead of the LVCNR-format file. Defaults to False.</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.
+    maya_format (bool): If True, return the URL for the native MAYA
+        format file instead of the LVCNR-format file. Defaults to False.</p>
+<p>Returns:
+    str: Full HTTP(S) URL.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3772,72 +3446,13 @@ format file instead of the LVCNR-format file. Defaults to False.</p>
 <p>By default downloads the LVCNR-format file.  If <code>maya_format=True</code>
 the native MAYA format is downloaded and then converted to LVCNR
 format using the <code>mayawaves</code> package before the original is removed.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>maya_format</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Download in native MAYA format and convert to
-LVCNR. Requires <code>mayawaves</code> to be installed. Defaults to False.</p>
-              </div>
-            </td>
-            <td>
-                  <code>False</code>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>use_cache</code>
-            </td>
-            <td>
-                  <code><span title="bool">bool</span> or None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Whether to skip download if a non-empty
-local file already exists.  If <code>None</code>, falls back to the
-instance-level <code>self.use_cache</code> setting.</p>
-              </div>
-            </td>
-            <td>
-                  <code>None</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.
+    maya_format (bool): Download in native MAYA format and convert to
+        LVCNR. Requires <code>mayawaves</code> to be installed. Defaults to False.
+    use_cache (bool or None): Whether to skip download if a non-empty
+        local file already exists.  If <code>None</code>, falls back to the
+        instance-level <code>self.use_cache</code> setting.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4021,29 +3636,8 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented; MAYA distributes strain waveforms only.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always. Use <code>get(sim_name)</code> for strain data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always. Use <code>get(sim_name)</code> for strain data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4087,29 +3681,8 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented; MAYA distributes strain waveforms only.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always. Use <code>get(sim_name)</code> for strain data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always. Use <code>get(sim_name)</code> for strain data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4153,29 +3726,8 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented; MAYA distributes strain waveforms only.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always. Use <code>get(sim_name)</code> for strain data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always. Use <code>get(sim_name)</code> for strain data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4219,29 +3771,8 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Not implemented; MAYA distributes strain waveforms only.</p>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Always. Use <code>download_waveform_data()</code> instead.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Raises:
+    NotImplementedError: Always. Use <code>download_waveform_data()</code> instead.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4285,60 +3816,10 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Return the bare filename for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename, e.g. <code>"GT0001.txt"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
+<p>Returns:
+    str: Filename, e.g. <code>"GT0001.txt"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4382,76 +3863,11 @@ instance-level <code>self.use_cache</code> setting.</p>
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>MAYA simulation name, e.g. <code>"GT0001"</code>.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>ext</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>File extension. Defaults to <code>"txt"</code>.</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;txt&#39;</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path under <code>~/.cache/MAYA/metadata/</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): MAYA simulation name, e.g. <code>"GT0001"</code>.
+    ext (str): File extension. Defaults to <code>"txt"</code>.</p>
+<p>Returns:
+    str: Absolute path under <code>~/.cache/MAYA/metadata/</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4499,29 +3915,8 @@ instance-level <code>self.use_cache</code> setting.</p>
         <p>MAYA does not expose per-simulation metadata URLs; returns None.</p>
 <p>The parameter is accepted for interface compatibility with
 <code>CatalogABC</code> but is not used.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code>None</code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>None</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    None</p>
 
 
             <details class="mkdocstrings-source">

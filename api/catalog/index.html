@@ -2042,60 +2042,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the bare filename (no directory) for the waveform HDF5 file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename, e.g. <code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Filename, e.g. <code>"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2146,60 +2096,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
 
         <p>Return the absolute local path for the waveform HDF5 file.</p>
 <p>The file may not yet exist on disk if it has not been downloaded.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path under the catalog cache directory.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Absolute path under the catalog cache directory.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2253,60 +2153,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the remote URL for the waveform HDF5 file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Full HTTP(S) URL.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2356,37 +2206,8 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Download the waveform data file for <em>sim_name</em> into the local cache.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2430,83 +2251,12 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the bare filename for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename, e.g. <code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the catalog does not distribute psi4 data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Filename, e.g. <code>"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</p>
+<p>Raises:
+    NotImplementedError: If the catalog does not distribute psi4 data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2562,83 +2312,12 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path under the catalog cache directory.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the catalog does not distribute psi4 data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Absolute path under the catalog cache directory.</p>
+<p>Raises:
+    NotImplementedError: If the catalog does not distribute psi4 data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2694,83 +2373,12 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the remote URL for the psi4 data file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the catalog does not distribute psi4 data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Full HTTP(S) URL.</p>
+<p>Raises:
+    NotImplementedError: If the catalog does not distribute psi4 data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2826,60 +2434,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Download the psi4 data file for <em>sim_name</em> into the local cache.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="NotImplementedError">NotImplementedError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If the catalog does not distribute psi4 data.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Raises:
+    NotImplementedError: If the catalog does not distribute psi4 data.</p>
 
 
             <details class="mkdocstrings-source">
@@ -2929,60 +2487,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the bare filename for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Filename, e.g. <code>"RIT:BBH:0001-n100-id3_Metadata.txt"</code>.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Filename, e.g. <code>"RIT:BBH:0001-n100-id3_Metadata.txt"</code>.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3032,60 +2540,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the absolute local path for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Absolute path under the catalog cache directory.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Absolute path under the catalog cache directory.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3135,60 +2593,10 @@ argument.  The naming convention for <code>sim_name</code> is catalog-specific
     <div class="doc doc-contents ">
 
         <p>Return the remote URL for the per-simulation metadata file.</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Simulation name tag.</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>str</code></td>            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Full HTTP(S) URL.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Simulation name tag.</p>
+<p>Returns:
+    str: Full HTTP(S) URL.</p>
 
 
             <details class="mkdocstrings-source">
@@ -3718,29 +3126,8 @@ by <code>RITCatalog</code>, <code>SXSCatalog</code>, and <code>MayaCatalog</code
     <div class="doc doc-contents ">
 
         <p>List of all simulation name tags in the catalog.</p>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="list">list</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>list[str]: Simulation names in insertion order.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Returns:
+    list[str]: Simulation names in insertion order.</p>
 
     </div>
 
@@ -3763,110 +3150,15 @@ by <code>RITCatalog</code>, <code>SXSCatalog</code>, and <code>MayaCatalog</code
     <div class="doc doc-contents ">
 
         <p>Retrieve specific quantities for one simulation</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name of simulation in catalog</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>quantity</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name of quantity to fetch.
-            Options: {waveform, psi4}</p>
-              </div>
-            </td>
-            <td>
-                  <code>&#39;waveform&#39;</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="IOError">IOError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>sim_name</code> not found in the catalog</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="IOError">IOError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>quantity</code> is not one of the options above</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><a class="autorefs autorefs-internal" title="            WaveformModes (nrcatalogtools.waveform.WaveformModes)" href="../waveform/#nrcatalogtools.waveform.modes.WaveformModes">WaveformModes</a></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>nrcatalogtools.waveform.WaveformModes: Waveform modes</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Name of simulation in catalog
+    quantity (str): Name of quantity to fetch.
+                    Options: {waveform, psi4}</p>
+<p>Raises:
+    IOError: If <code>sim_name</code> not found in the catalog
+    IOError: If <code>quantity</code> is not one of the options above</p>
+<p>Returns:
+    nrcatalogtools.waveform.WaveformModes: Waveform modes</p>
 
 
             <details class="mkdocstrings-source">
@@ -4008,103 +3300,14 @@ by <code>RITCatalog</code>, <code>SXSCatalog</code>, and <code>MayaCatalog</code
     <div class="doc doc-contents ">
 
         <p>Get Metadata for this simulation</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name of simulation in catalog</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-<p><span class="doc-section-title">Raises:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                  <code><span title="IOError">IOError</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>If <code>sim_name</code> is not found in the catalog</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>dict</code></td>            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Metadata dictionary.  Always contains a <code>"catalog_type"</code></p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>key (value: <code>"RIT"</code>, <code>"SXS"</code>, or <code>"MAYA"</code>) so that</p>
-              </div>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-<td></td>            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>downstream code can dispatch without fragile sentinel-key checks.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Name of simulation in catalog</p>
+<p>Raises:
+    IOError: If <code>sim_name</code> is not found in the catalog</p>
+<p>Returns:
+    dict: Metadata dictionary.  Always contains a <code>"catalog_type"</code>
+    key (value: <code>"RIT"</code>, <code>"SXS"</code>, or <code>"MAYA"</code>) so that
+    downstream code can dispatch without fragile sentinel-key checks.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4181,61 +3384,11 @@ by <code>RITCatalog</code>, <code>SXSCatalog</code>, and <code>MayaCatalog</code
 
         <p>Return the initial physical parameters for the simulation. Only for
 quasicircular simulations are supported, orbital eccentricity is ignored</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>total_mass</code>
-            </td>
-            <td>
-                  <code><span title="float">float</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Total Mass of Binary (solar masses).
-Defaults to 1.0.</p>
-              </div>
-            </td>
-            <td>
-                  <code>1.0</code>
-            </td>
-          </tr>
-      </tbody>
-    </table>
-
-
-    <p><span class="doc-section-title">Returns:</span></p>
-    <table>
-      <thead>
-        <tr>
-<th>Name</th>          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-<td><code>dict</code></td>            <td>
-                  <code><span title="dict">dict</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Initial binary parameters with names compatible with PyCBC.</p>
-              </div>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    total_mass (float, optional): Total Mass of Binary (solar masses).
+        Defaults to 1.0.</p>
+<p>Returns:
+    dict: Initial binary parameters with names compatible with PyCBC.</p>
 
 
             <details class="mkdocstrings-source">
@@ -4306,69 +3459,10 @@ Defaults to 1.0.</p>
 
         <p>Set attributes in the HDF5 file holding waveform data for a given
 simulation</p>
-
-
-<p><span class="doc-section-title">Parameters:</span></p>
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Default</th>
-        </tr>
-      </thead>
-      <tbody>
-          <tr class="doc-section-item">
-            <td>
-                <code>sim_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name/Tag of the simulation</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>attr_name</code>
-            </td>
-            <td>
-                  <code><span title="str">str</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Name of the attribute to set</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-          <tr class="doc-section-item">
-            <td>
-                <code>attr_value</code>
-            </td>
-            <td>
-                  <code><span title="any">any</span> / <span title="serializable">serializable</span></code>
-            </td>
-            <td>
-              <div class="doc-md-description">
-                <p>Value of the attribute</p>
-              </div>
-            </td>
-            <td>
-                <em>required</em>
-            </td>
-          </tr>
-      </tbody>
-    </table>
+<p>Args:
+    sim_name (str): Name/Tag of the simulation
+    attr_name (str): Name of the attribute to set
+    attr_value (any/serializable): Value of the attribute</p>
 
 
             <details class="mkdocstrings-source">

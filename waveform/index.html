@@ -770,6 +770,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="match_sphere_averaged(other, psd, f_lower, delta_t, ...)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spherical-integration-mode-by-mode-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spherical Integration &amp; Mode-by-Mode Equivalence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extrinsic-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extrinsic Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1645,6 +1673,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="match_sphere_averaged(other, psd, f_lower, delta_t, ...)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#spherical-integration-mode-by-mode-equivalence" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Spherical Integration &amp; Mode-by-Mode Equivalence
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extrinsic-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extrinsic Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
           <li class="md-nav__item">
@@ -1856,10 +1912,19 @@ is deprecated. Use <code>delta_t_seconds</code> or <code>delta_t_Msun</code> exp
 <hr />
 <h2 id="mismatch-methods">Mismatch methods<a class="headerlink" href="#mismatch-methods" title="Permanent link">&para;</a></h2>
 <h3 id="match_sphere_averagedother-psd-f_lower-delta_t"><code>match_sphere_averaged(other, psd, f_lower, delta_t, ...)</code><a class="headerlink" href="#match_sphere_averagedother-psd-f_lower-delta_t" title="Permanent link">&para;</a></h3>
-<p>Sky-averaged mismatch minimized over <span class="arithmatex">\(t_c\)</span>, <span class="arithmatex">\(\phi_c\)</span>, and <span class="arithmatex">\(R \in SO(3)\)</span>:</p>
-<div class="arithmatex">\[\mathcal{M} = 1 - \max_{t_c,\, \phi_c,\, R \in SO(3)} \frac{\langle h_1 | h_2 \rangle}{\sqrt{\langle h_1 | h_1 \rangle \langle h_2 | h_2 \rangle}}\]</div>
-<!-- Mismatch = 1 - max over (time shift, phase shift, SO(3) rotation) of normalized inner product -->
-
+<p>This method calculates the match (noise-weighted overlap) between two waveforms, integrated over the entire sphere of possible observer directions (sky-averaged) and maximized over coordinate time shift <span class="arithmatex">\(t_c\)</span>, coalescence phase <span class="arithmatex">\(\phi_c\)</span>, and active/passive <span class="arithmatex">\(SO(3)\)</span> rotation <span class="arithmatex">\(R\)</span>.</p>
+<h4 id="spherical-integration-mode-by-mode-equivalence">Spherical Integration &amp; Mode-by-Mode Equivalence<a class="headerlink" href="#spherical-integration-mode-by-mode-equivalence" title="Permanent link">&para;</a></h4>
+<p>The overlap between the full multidimensional strain fields <span class="arithmatex">\(h_1(t, \Omega)\)</span> and <span class="arithmatex">\(h_2(t, \Omega)\)</span> over the sphere <span class="arithmatex">\(S^2\)</span> is defined as:
+$<span class="arithmatex">\(\mathcal{O}_{\text{sphere}}(h_1, h_2) = \frac{\int_{S^2} \langle h_1(t, \Omega) \mid h_2(t, \Omega) \rangle_t \, d\Omega}{\sqrt{\left[ \int_{S^2} \langle h_1(t, \Omega) \mid h_1(t, \Omega) \rangle_t \, d\Omega \right] \left[ \int_{S^2} \langle h_2(t, \Omega) \mid h_2(t, \Omega) \rangle_t \, d\Omega \right]}}\)</span>$</p>
+<p>By expanding the strain fields in spin-weighted spherical harmonics <span class="arithmatex">\({}^{-2}Y_{\ell m}(\theta, \phi)\)</span> and invoking their orthonormality:
+$<span class="arithmatex">\(\int_{S^2} {}^{-2}Y_{\ell m}^*(\Omega) \, {}^{-2}Y_{\ell' m'}(\Omega) \, d\Omega = \delta_{\ell \ell'} \, \delta_{m m'}\)</span>$
+all cross-terms between different modes decouple and vanish. The integrated overlap simplifies to the sum of the mode-by-mode overlaps:
+$<span class="arithmatex">\(\int_{S^2} \langle h_1(t, \Omega) \mid h_2(t, \Omega) \rangle_t \, d\Omega = \sum_{\ell, m} \langle h_{1, \ell m} \mid h_{2, \ell m} \rangle_t\)</span>$</p>
+<h4 id="extrinsic-optimization">Extrinsic Optimization<a class="headerlink" href="#extrinsic-optimization" title="Permanent link">&para;</a></h4>
+<p>To align the coordinate frames, the second waveform is transformed via:
+$<span class="arithmatex">\(h_{2, \ell m}^{\text{rot, shifted}}(t) = e^{-i m \phi_c} \sum_{m'=-\ell}^{\ell} h_{2, \ell m'}(t - t_c) \, D^{\ell}_{m' m}(R)\)</span>$
+where <span class="arithmatex">\(D^\ell_{m'm}(R)\)</span> is the Wigner D-matrix. The returned mismatch <span class="arithmatex">\(\mathcal{M}\)</span> is defined as:
+$<span class="arithmatex">\(\mathcal{M} = 1 - \max_{t_c,\, \phi_c,\, R \in SO(3)} \left[ \frac{\sum_{\ell, m} \langle h_{1, \ell m} \mid h_{2, \ell m}^{\text{rot, shifted}}(t_c, \phi_c, R) \rangle_t}{\sqrt{\left( \sum_{\ell, m} \langle h_{1, \ell m} \mid h_{1, \ell m} \rangle_t \right) \left( \sum_{\ell, m} \langle h_{2, \ell m} \mid h_{2, \ell m} \rangle_t \right)}} \right]\)</span>$</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">mismatch</span> <span class="o">=</span> <span class="n">wfm_a</span><span class="o">.</span><span class="n">match_sphere_averaged</span><span class="p">(</span>
 <a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>    <span class="n">wfm_b</span><span class="p">,</span>
 <a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    <span class="n">psd</span><span class="o">=</span><span class="n">my_psd</span><span class="p">,</span>
@@ -1868,11 +1933,20 @@ is deprecated. Use <code>delta_t_seconds</code> or <code>delta_t_Msun</code> exp
 <a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">)</span>
 </code></pre></div>
 <h3 id="match_sphere_averaged_bms_maximizedother-psd-f_lower-j_max"><code>match_sphere_averaged_bms_maximized(other, psd, f_lower, j_max, ...)</code><a class="headerlink" href="#match_sphere_averaged_bms_maximizedother-psd-f_lower-j_max" title="Permanent link">&para;</a></h3>
-<p>Extended version that additionally optimizes over BMS supertranslation coefficients:</p>
-<div class="arithmatex">\[h'_{\ell m}(u) = h_{\ell m}(u) - \sum_{j,k,p,q} \alpha_{jk} \, \mathcal{G}^{\ell m}_{jk,pq} \, \dot{h}_{pq}(u)\]</div>
-<!-- Modified strain = original strain minus sum over BMS supertranslation modes weighted by Gaunt coefficients -->
-
-<p>Requires the <code>scri</code> package for spin-weighted Gaunt coefficients.</p>
+<p>This extended method performs the optimization over the infinite-dimensional <strong>BMS supertranslation</strong> group at null infinity <span class="arithmatex">\(\mathcal{I}^+\)</span> in addition to the standard rigid rotations and shifts. </p>
+<p>Supertranslations correspond to direction-dependent retarded-time shifts:
+$<span class="arithmatex">\(u' = u - \alpha(\theta, \phi)\)</span>$
+where the supertranslation field <span class="arithmatex">\(\alpha(\theta, \phi)\)</span> is decomposed into scalar spherical harmonics:
+$<span class="arithmatex">\(\alpha(\theta, \phi) = \sum_{j=0}^{j_{\text{max}}} \sum_{k=-j}^{j} \alpha_{jk} \, Y_{jk}(\theta, \phi)\)</span>$
+For small supertranslations, the waveform modes undergo first-order mixing:
+$<span class="arithmatex">\(h'_{\ell m}(u) = h_{\ell m}(u) - \sum_{j=0}^{j_{\text{max}}} \sum_{k=-j}^{j} \sum_{p, q} \alpha_{jk} \, \mathcal{G}^{\ell m}_{jk,pq} \, \dot{h}_{pq}(u)\)</span>$
+where <span class="arithmatex">\(\mathcal{G}^{\ell m}_{jk,pq}\)</span> are the spin-weighted Gaunt coefficients:
+$<span class="arithmatex">\(\mathcal{G}^{\ell m}_{jk,pq} = \int_{S^2} {}^{-2}Y_{\ell m}^*(\Omega) \, Y_{jk}(\Omega) \, {}^{-2}Y_{pq}(\Omega) \, d\Omega\)</span>$</p>
+<p>This method optimizes <span class="arithmatex">\(t_c\)</span>, <span class="arithmatex">\(\phi_c\)</span>, <span class="arithmatex">\(R \in SO(3)\)</span>, and the supertranslation coefficients <span class="arithmatex">\(\alpha_{jk}\)</span> (where <span class="arithmatex">\(j=1\)</span> shifts the coordinate origin to correct for center-of-mass drift, and <span class="arithmatex">\(j \ge 2\)</span> modes correct for proper supertranslations) using a Nelder-Mead simplex solver to find the global minimum mismatch.</p>
+<blockquote>
+<p>[!NOTE]
+The <code>scri</code> package is required to compute the spin-weighted Gaunt coupling coefficients <span class="arithmatex">\(\mathcal{G}^{\ell m}_{jk,pq}\)</span>.</p>
+</blockquote>
 <hr />
 <h2 id="unit-conventions">Unit conventions<a class="headerlink" href="#unit-conventions" title="Permanent link">&para;</a></h2>
 <p>All data stored internally in <code>WaveformModes</code> uses <strong>geometrized, mass-scaled dimensionless
