@@ -29,6 +29,7 @@ MayaCatalog
 from __future__ import annotations
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import collections
@@ -478,7 +479,9 @@ class MayaCatalog(catalog.CatalogBase):
                 instance-level ``self.use_cache`` setting.
         """
         if maya_format:
-            logger.info("...WARNING: you have requested download of data in MAYA format")
+            logger.info(
+                "...WARNING: you have requested download of data in MAYA format"
+            )
         if use_cache is None:
             use_cache = self.use_cache
         file_name = self.waveform_filename_from_simname(sim_name)

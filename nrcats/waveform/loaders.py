@@ -12,6 +12,7 @@ No import of ``WaveformModes`` is needed here, avoiding circular imports.
 """
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import os
@@ -255,11 +256,13 @@ def load_from_targz(cls, file_path, metadata={}, verbosity=0):
         mode_time = mode_data[(ell, em)][:, 0]
         sort_idx = np.argsort(mode_time)
         mode_time = mode_time[sort_idx]
-        
+
         mode_real = mode_data[(ell, em)][sort_idx, 1]
         mode_imag = mode_data[(ell, em)][sort_idx, 2]
         if verbosity > 5:
-            logger.info(f"Interpolating mode {ell}, {em}. Data length: {len(mode_time)}")
+            logger.info(
+                f"Interpolating mode {ell}, {em}. Data length: {len(mode_time)}"
+            )
         mode_real_interp = InterpolatedUnivariateSpline(mode_time, mode_real)
         mode_imag_interp = InterpolatedUnivariateSpline(mode_time, mode_imag)
         data[:, idx] = mode_real_interp(times) + 1j * mode_imag_interp(times)

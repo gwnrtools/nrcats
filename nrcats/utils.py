@@ -43,6 +43,7 @@ amplitude_phase_frequency_from_complex_mode(hlm)
 from __future__ import annotations
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import functools
@@ -141,6 +142,7 @@ def url_exists(link: str, num_retries: int = 5, verbosity: int = 0) -> bool:
         except Exception as exc:
             if isinstance(exc, requests.exceptions.Timeout):
                 import warnings
+
                 warnings.warn(f"Request to {link} timed out after 10 seconds.")
             if attempt < num_retries - 1:
                 delay = min(2**attempt, 30)
@@ -205,6 +207,7 @@ def download_file(
                 except Exception as exc:
                     if isinstance(exc, requests.exceptions.Timeout):
                         import warnings
+
                         warnings.warn(f"Request to {url} timed out after 10 seconds.")
                     last_exc = exc
                     if attempt < num_retries - 1:

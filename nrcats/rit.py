@@ -37,6 +37,7 @@ RITCatalogHelper
 from __future__ import annotations
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import collections
@@ -946,6 +947,7 @@ class RITCatalogHelper(object):
                 except Exception as exc:
                     if isinstance(exc, requests.exceptions.Timeout):
                         import warnings
+
                         warnings.warn(f"Request to {link} timed out after 10 seconds.")
                     last_exc = exc
                     if attempt < num_retries - 1:
@@ -1092,7 +1094,9 @@ class RITCatalogHelper(object):
                     )
                 else:
                     if self.verbosity > 3:
-                        logger.info("...tried and failed to find {}".format(file_path_web))
+                        logger.info(
+                            "...tried and failed to find {}".format(file_path_web)
+                        )
 
             if len(metadata_dict) > 0:
                 # Convert to DataFrame and break loop
@@ -1159,7 +1163,7 @@ class RITCatalogHelper(object):
             logger.info("Found metadata for {} sims".format(len(sims)))
 
         import concurrent.futures
-        
+
         def _fetch_metadata(idx):
             found = False
             possible_sim_tags = self.simtags(idx)
@@ -1190,7 +1194,7 @@ class RITCatalogHelper(object):
                                 name
                             )
                             if f_idx != idx:
-                                continue # just ignore mismatch in parallel
+                                continue  # just ignore mismatch in parallel
                             if self.verbosity > 3:
                                 logger.info(
                                     "...metadata found in DF for {}, {}, {}".format(
@@ -1228,16 +1232,23 @@ class RITCatalogHelper(object):
                 return sim_data
             else:
                 if self.verbosity > 3:
-                    logger.info("...metadata for {} NOT FOUND.".format(possible_sim_tags))
+                    logger.info(
+                        "...metadata for {} NOT FOUND.".format(possible_sim_tags)
+                    )
                 return None
 
         sim_data_list = []
         with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
-            results = list(tqdm(executor.map(_fetch_metadata, range(1, 1 + num_sims_to_crawl)), total=num_sims_to_crawl))
+            results = list(
+                tqdm(
+                    executor.map(_fetch_metadata, range(1, 1 + num_sims_to_crawl)),
+                    total=num_sims_to_crawl,
+                )
+            )
             for res in results:
                 if res is not None:
                     sim_data_list.append(res)
-                    
+
         if sim_data_list:
             if len(sims) > 0:
                 # remove overlap before concat
@@ -1246,7 +1257,7 @@ class RITCatalogHelper(object):
                 sims = sims.drop_duplicates(subset=["simulation_name"], keep="last")
             else:
                 sims = pd.concat(sim_data_list)
-        
+
         self.metadata = sims
         if self.use_cache:
             self.write_metadata_df_to_disk()
@@ -1291,10 +1302,13 @@ class RITCatalogHelper(object):
 
         sims_list = []
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            for sim_data in tqdm(executor.map(_fetch, range(1, 1 + num_sims_to_crawl)), total=num_sims_to_crawl):
+            for sim_data in tqdm(
+                executor.map(_fetch, range(1, 1 + num_sims_to_crawl)),
+                total=num_sims_to_crawl,
+            ):
                 if len(sim_data) > 0:
                     sims_list.append(sim_data)
-        
+
         if sims_list:
             sims = pd.concat(sims_list)
         else:

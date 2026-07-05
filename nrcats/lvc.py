@@ -44,6 +44,7 @@ get_nr_to_lal_rotation_angles(h5_file, sim_metadata, inclination, phi_ref, f_ref
 from __future__ import annotations
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import h5py

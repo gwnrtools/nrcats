@@ -1,6 +1,7 @@
 """WaveformModes class and related helpers."""
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 import warnings
