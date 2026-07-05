@@ -1,5 +1,8 @@
 """WaveformModes class and related helpers."""
 
+import logging
+logger = logging.getLogger(__name__)
+
 import warnings
 
 import h5py
@@ -751,7 +754,7 @@ class WaveformModes(sxs_WaveformModes):
                     "Omega"
                 ]
             except Exception as excep:
-                print(
+                logger.info(
                     "Reference orbital phase not found in simulation metadata."
                     "Proceeding to retrieve from the h5 file..",
                     excep,
@@ -776,7 +779,7 @@ class WaveformModes(sxs_WaveformModes):
     def t_ref_nr(self):
         """Fetch the reference time of the simulation."""
         if not isinstance(self._t_ref_nr, float):
-            print("Computing reference time..")
+            logger.info("Computing reference time..")
             self._compute_reference_time()
         return self._t_ref_nr
 
@@ -1139,7 +1142,7 @@ class WaveformModes(sxs_WaveformModes):
         bounds = [(0, 2 * np.pi), (0, 2 * np.pi), (0, np.pi), (0, 2 * np.pi)]
 
         identity_mismatch = objective_function([0.0, 0.0, 0.0, 0.0])
-        print(
+        logger.info(
             f"      [DEBUG] Sphere-averaged match at Identity Rotation: {1.0 - identity_mismatch:.6f}"
         )
 

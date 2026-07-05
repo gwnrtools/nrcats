@@ -43,6 +43,9 @@ get_nr_to_lal_rotation_angles(h5_file, sim_metadata, inclination, phi_ref, f_ref
 
 from __future__ import annotations
 
+import logging
+logger = logging.getLogger(__name__)
+
 import h5py
 import lal
 import lalsimulation as lalsim
@@ -332,7 +335,7 @@ def check_interp_req(
             elif "relaxed_time" in keys:
                 avail_ref_time = h5_file.attrs["relaxed_time"]
             else:
-                print("Reference time not found in waveform h5 file.")
+                logger.info("Reference time not found in waveform h5 file.")
 
         if not avail_ref_time:
             # If not found, continue search in metadata.
@@ -344,11 +347,11 @@ def check_interp_req(
                 elif "relaxed_time" in keys:
                     avail_ref_time = metadata["relaxed_time"]
                 else:
-                    print("Reference time not found in simulation metadata file.")
+                    logger.info("Reference time not found in simulation metadata file.")
 
         if not avail_ref_time:
             # Then this is GT simulation!
-            print(
+            logger.info(
                 "Reference time should be computed from"
                 "the reference orbital frequency!"
             )
@@ -843,11 +846,11 @@ def get_nr_to_lal_rotation_angles(
                 # Check if interpolation is required
                 interp, avail_ref_time = check_interp_req(h5_file, ref_time=t_ref)
             except Exception as excep:
-                print(
+                logger.info(
                     f"Could not obtain reference time from given reference frequency {f_ref}.",
                     excep,
                 )
-                print("Choosing available reference time")
+                logger.info("Choosing available reference time")
                 interp = False
     else:
         interp, avail_ref_time = check_interp_req(h5_file, ref_time=t_ref)
@@ -993,8 +996,8 @@ def get_nr_to_lal_rotation_angles(
                     psi = 0.0
 
             else:
-                print(f"z_wave_x = {z_wave_x}")
-                print(f"sin(theta) = {np.sin(theta)}")
+                logger.info(f"z_wave_x = {z_wave_x}")
+                logger.info(f"sin(theta) = {np.sin(theta)}")
                 raise ValueError(
                     "Z_x cannot be bigger than sin(theta). Please contact the developers."
                 )
@@ -1012,8 +1015,8 @@ def get_nr_to_lal_rotation_angles(
 
         if abs(y_val - z_wave_y) > (5e3 * tol):
             # LAL tol retained.
-            print(f"orb_phase = {orb_phase}")
-            print(
+            logger.info(f"orb_phase = {orb_phase}")
+            logger.info(
                 f"y_val = {y_val}, z_wave_y = {z_wave_y}, abs(y_val - z_wave_y) = {abs(y_val - z_wave_y)}"
             )
             raise ValueError("Math consistency failure! Please contact the developers.")
@@ -1053,7 +1056,7 @@ def get_nr_to_lal_rotation_angles(
         if calpha_err < tol:
             # This tol could have been much smaller.
             # Just resuing the default for now.
-            print(
+            logger.info(
                 f"Correcting the polarization angle for finite precision error {calpha_err}"
             )
             calpha = calpha / abs(calpha)

@@ -42,6 +42,9 @@ amplitude_phase_frequency_from_complex_mode(hlm)
 
 from __future__ import annotations
 
+import logging
+logger = logging.getLogger(__name__)
+
 import functools
 import os
 import pathlib
@@ -142,13 +145,13 @@ def url_exists(link: str, num_retries: int = 5, verbosity: int = 0) -> bool:
             if attempt < num_retries - 1:
                 delay = min(2**attempt, 30)
                 if verbosity > 0:
-                    print(
+                    logger.info(
                         f"url_exists: attempt {attempt + 1}/{num_retries} failed"
                         f" for {link}; retrying in {delay}s"
                     )
                 time.sleep(delay)
     if verbosity > 0:
-        print(f"url_exists: all {num_retries} attempts failed for {link}")
+        logger.info(f"url_exists: all {num_retries} attempts failed for {link}")
     return False
 
 
@@ -207,7 +210,7 @@ def download_file(
                     if attempt < num_retries - 1:
                         delay = min(2**attempt, 30)
                         if verbosity > 0:
-                            print(
+                            logger.info(
                                 f"download_file: attempt {attempt + 1}/{num_retries}"
                                 f" failed for {url}; retrying in {delay}s"
                             )
@@ -217,9 +220,9 @@ def download_file(
                     f"Failed to download '{url}' after {num_retries} attempts"
                 ) from last_exc
             if r.status_code != 200:
-                print(f"An error occurred when trying to access <{url}>.")
+                logger.info(f"An error occurred when trying to access <{url}>.")
                 try:
-                    print(r.json())
+                    logger.info(r.json())
                 except Exception:
                     pass
                 r.raise_for_status()

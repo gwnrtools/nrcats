@@ -27,6 +27,9 @@ SXSCatalog
 
 from __future__ import annotations
 
+import logging
+logger = logging.getLogger(__name__)
+
 import os
 from pathlib import Path
 import sxs
@@ -164,7 +167,7 @@ class SXSCatalog(catalog.CatalogBase):
         file_path = Path(sim.__file__) / waveform_filename
         if not os.path.exists(file_path):
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )
@@ -195,7 +198,7 @@ class SXSCatalog(catalog.CatalogBase):
         file_path = Path(sim.__file__) / metadata_filename
         if not os.path.exists(file_path):
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )
@@ -227,7 +230,7 @@ class SXSCatalog(catalog.CatalogBase):
         file_path = Path(sim.__file__) / psi4_filename
         if not os.path.exists(file_path):
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )

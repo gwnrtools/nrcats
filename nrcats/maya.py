@@ -28,6 +28,9 @@ MayaCatalog
 
 from __future__ import annotations
 
+import logging
+logger = logging.getLogger(__name__)
+
 import collections
 import functools
 import os
@@ -432,7 +435,7 @@ class MayaCatalog(catalog.CatalogBase):
         )
         if not os.path.exists(file_path):
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )
@@ -475,7 +478,7 @@ class MayaCatalog(catalog.CatalogBase):
                 instance-level ``self.use_cache`` setting.
         """
         if maya_format:
-            print("...WARNING: you have requested download of data in MAYA format")
+            logger.info("...WARNING: you have requested download of data in MAYA format")
         if use_cache is None:
             use_cache = self.use_cache
         file_name = self.waveform_filename_from_simname(sim_name)
@@ -489,20 +492,20 @@ class MayaCatalog(catalog.CatalogBase):
             and os.path.getsize(local_file_path) > 0
         ):
             if self._verbosity > 2:
-                print("...can read from cache: {}".format(str(local_file_path)))
+                logger.info("...can read from cache: {}".format(str(local_file_path)))
             pass
         elif os.path.exists(local_file_path) and os.path.getsize(local_file_path) > 0:
             pass
         else:
             if self._verbosity > 2:
-                print("...writing to cache: {}".format(str(local_file_path)))
+                logger.info("...writing to cache: {}".format(str(local_file_path)))
             if utils.url_exists(file_path_web):
                 if self._verbosity > 2:
-                    print("...downloading {}".format(file_path_web))
+                    logger.info("...downloading {}".format(file_path_web))
                 utils.download_file(file_path_web, local_file_path)
                 if maya_format:
                     if self._verbosity > 2:
-                        print("...exporting to LVCNR catalog format")
+                        logger.info("...exporting to LVCNR catalog format")
                     try:
                         from mayawaves import coalescence as maya_coalescence
                         from mayawaves.utils import (
@@ -524,17 +527,17 @@ class MayaCatalog(catalog.CatalogBase):
                         center_of_mass_correction=True,
                     )
                     if self._verbosity > 2:
-                        print("...removing maya format file")
+                        logger.info("...removing maya format file")
                     os.remove(local_file_path)
                     if self._verbosity > 2:
-                        print("...renaming LVCNR format file in the cache")
+                        logger.info("...renaming LVCNR format file in the cache")
                     os.rename(
                         self.waveform_data_dir / (sim_name + "_LVCNR.h5"),
                         local_file_path,
                     )
             else:
                 if self._verbosity > 2:
-                    print(
+                    logger.info(
                         "... ... but couldnt find link: {}".format(str(file_path_web))
                     )
 

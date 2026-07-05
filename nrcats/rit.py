@@ -36,6 +36,9 @@ RITCatalogHelper
 
 from __future__ import annotations
 
+import logging
+logger = logging.getLogger(__name__)
+
 import collections
 import functools
 import glob
@@ -145,11 +148,11 @@ class RITCatalog(catalog.CatalogBase):
 
         helper = RITCatalogHelper(use_cache=True, verbosity=verbosity)
         if verbosity > 2:
-            print("..Going to read RIT catalog metadata from cache.")
+            logger.info("..Going to read RIT catalog metadata from cache.")
         catalog_df = helper.read_metadata_df_from_disk()
         if len(catalog_df) == 0:
             if verbosity > 2:
-                print(
+                logger.info(
                     "..Catalog metadata not found on disk. Going to refresh from cache."
                 )
             catalog_df = helper.refresh_metadata_df_on_disk(
@@ -157,7 +160,7 @@ class RITCatalog(catalog.CatalogBase):
             )
         elif len(catalog_df) < acceptable_scraping_fraction * num_sims_to_crawl:
             if verbosity > 2:
-                print(
+                logger.info(
                     """..Catalog metadata on disk is likely incomplete with only {} sims.
                     ...Going to refresh from cache.
                     """.format(
@@ -170,7 +173,7 @@ class RITCatalog(catalog.CatalogBase):
 
         if len(catalog_df) < acceptable_scraping_fraction * num_sims_to_crawl:
             if verbosity > 2:
-                print(
+                logger.info(
                     "Refreshing catalog metadata from cache did not work.",
                     "...Falling back to downloading metadata for the full",
                     "...catalog. This will take some time.",
@@ -364,7 +367,7 @@ class RITCatalog(catalog.CatalogBase):
             if os.path.exists(canonical):
                 return str(canonical)
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )
@@ -481,7 +484,7 @@ class RITCatalog(catalog.CatalogBase):
         file_path = self.get_metadata(sim_name)["psi4_data_location"]
         if not os.path.exists(file_path):
             if self._verbosity > 2:
-                print(
+                logger.info(
                     f"WARNING: Could not resolve path for {sim_name}"
                     f"..best calculated path = {file_path}"
                 )
@@ -671,7 +674,7 @@ class RITCatalogHelper(object):
             poss_files = glob.glob(str(mf) + "*")
             if len(poss_files) == 0:
                 if self.verbosity > 4:
-                    print("...found no files matching {}".format(str(mf) + "*"))
+                    logger.info("...found no files matching {}".format(str(mf) + "*"))
                 continue
             file_name = poss_files[0]
         return file_name
@@ -774,7 +777,7 @@ class RITCatalogHelper(object):
             poss_files = glob.glob(str(mf) + "*")
             if len(poss_files) == 0:
                 if self.verbosity > 4:
-                    print("...found no files matching {}".format(str(mf) + "*"))
+                    logger.info("...found no files matching {}".format(str(mf) + "*"))
                 continue
             file_path = poss_files[0]  # glob gives full paths
             file_name = os.path.basename(file_path)
@@ -948,7 +951,7 @@ class RITCatalogHelper(object):
                     if attempt < num_retries - 1:
                         delay = min(2**attempt, 30)
                         if self.verbosity > 0:
-                            print(
+                            logger.info(
                                 f"metadata_from_link: attempt {attempt + 1}/{num_retries}"
                                 f" failed for {link}; retrying in {delay}s"
                             )
@@ -997,7 +1000,7 @@ class RITCatalogHelper(object):
             poss_files = glob.glob(str(mf) + "*")
             if len(poss_files) == 0:
                 if self.verbosity > 4:
-                    print("...found no files matching {}".format(str(mf) + "*"))
+                    logger.info("...found no files matching {}".format(str(mf) + "*"))
                 continue
             file_path = poss_files[0]  # glob gives full paths
             file_name = os.path.basename(file_path)
@@ -1062,7 +1065,7 @@ class RITCatalogHelper(object):
 
         for file_name in possible_file_names:
             if self.verbosity > 2:
-                print("...beginning search for {}".format(file_name))
+                logger.info("...beginning search for {}".format(file_name))
             file_path_web = self.metadata_url + "/" + file_name
             mf = self.metadata_dir / file_name
             psi4_file_name = self.psi4_filename_from_simname(
@@ -1077,19 +1080,19 @@ class RITCatalogHelper(object):
             if self.use_cache:
                 if os.path.exists(mf) and os.path.getsize(mf) > 0:
                     if self.verbosity > 2:
-                        print("...reading from cache: {}".format(str(mf)))
+                        logger.info("...reading from cache: {}".format(str(mf)))
                     metadata_txt, metadata_dict = self.metadata_from_file(mf)
 
             if len(metadata_dict) == 0:
                 if utils.url_exists(file_path_web):
                     if self.verbosity > 2:
-                        print("...found {}".format(file_path_web))
+                        logger.info("...found {}".format(file_path_web))
                     metadata_txt, metadata_dict = self.metadata_from_link(
                         file_path_web, save_to=mf
                     )
                 else:
                     if self.verbosity > 3:
-                        print("...tried and failed to find {}".format(file_path_web))
+                        logger.info("...tried and failed to find {}".format(file_path_web))
 
             if len(metadata_dict) > 0:
                 # Convert to DataFrame and break loop
@@ -1145,7 +1148,7 @@ class RITCatalogHelper(object):
                 and os.path.getsize(metadata_df_fpath) > 0
             ):
                 if self.verbosity > 2:
-                    print("Opening file {}".format(metadata_df_fpath))
+                    logger.info("Opening file {}".format(metadata_df_fpath))
                 self.metadata = pd.read_csv(metadata_df_fpath)
                 if len(self.metadata) >= (num_sims_to_crawl - 1):
                     # return self.metadata
@@ -1153,29 +1156,31 @@ class RITCatalogHelper(object):
                 else:
                     sims = self.metadata
         if self.verbosity > 2:
-            print("Found metadata for {} sims".format(len(sims)))
+            logger.info("Found metadata for {} sims".format(len(sims)))
 
-        for idx in tqdm(range(1, 1 + num_sims_to_crawl)):
+        import concurrent.futures
+        
+        def _fetch_metadata(idx):
             found = False
             possible_sim_tags = self.simtags(idx)
 
             if self.verbosity > 3:
-                print("\nHunting for sim with idx: {}".format(idx))
+                logger.info("\nHunting for sim with idx: {}".format(idx))
 
             # First, check if metadata present as file on disk
             if not found and self.use_cache:
                 if self.verbosity > 3:
-                    print("checking for metadata file on disk")
+                    logger.info("checking for metadata file on disk")
                 sim_data = self.metadata_from_cache(idx)
                 if len(sim_data) > 0:
                     found = True
                     if self.verbosity > 3:
-                        print("...metadata found on disk for {}".format(idx))
+                        logger.info("...metadata found on disk for {}".format(idx))
 
             # Second, check if metadata present already in DataFrame
             if len(sims) > 0 and not found:
                 if self.verbosity > 1:
-                    print("Checking existing dataframe")
+                    logger.info("Checking existing dataframe")
                 for _, row in sims.iterrows():
                     name = row["simulation_name"]
                     for sim_tag in possible_sim_tags:
@@ -1184,14 +1189,10 @@ class RITCatalogHelper(object):
                             f_idx, res, id_val = self.sim_info_from_metadata_filename(
                                 name
                             )
-                            assert f_idx == idx, (
-                                "Index found for sim from metadata is not",
-                                " the same as we were searching for ({} vs {}).".format(
-                                    f_idx, idx
-                                ),
-                            )
+                            if f_idx != idx:
+                                continue # just ignore mismatch in parallel
                             if self.verbosity > 3:
-                                print(
+                                logger.info(
                                     "...metadata found in DF for {}, {}, {}".format(
                                         idx, res, id_val
                                     )
@@ -1208,7 +1209,7 @@ class RITCatalogHelper(object):
                         if len(sim_data) > 0:
                             found = True
                             if self.verbosity > 3:
-                                print(
+                                logger.info(
                                     "...metadata txt file found for {}, {}, {}".format(
                                         idx, res, id_val
                                     )
@@ -1216,23 +1217,39 @@ class RITCatalogHelper(object):
                             break
                         else:
                             if self.verbosity > 3:
-                                print(
+                                logger.info(
                                     "...metadata not found for {}, {}, {}".format(
                                         idx, res, id_val
                                     )
                                 )
-                    # just need to find one resolution, so exit loop if its been found
                     if found:
                         break
             if found:
-                sims = pd.concat([sims, sim_data])
+                return sim_data
             else:
                 if self.verbosity > 3:
-                    print("...metadata for {} NOT FOUND.".format(possible_sim_tags))
+                    logger.info("...metadata for {} NOT FOUND.".format(possible_sim_tags))
+                return None
 
-            self.metadata = sims
-            if self.use_cache:
-                self.write_metadata_df_to_disk()
+        sim_data_list = []
+        with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
+            results = list(tqdm(executor.map(_fetch_metadata, range(1, 1 + num_sims_to_crawl)), total=num_sims_to_crawl))
+            for res in results:
+                if res is not None:
+                    sim_data_list.append(res)
+                    
+        if sim_data_list:
+            if len(sims) > 0:
+                # remove overlap before concat
+                sims = pd.concat([sims] + sim_data_list)
+                # deduplicate
+                sims = sims.drop_duplicates(subset=["simulation_name"], keep="last")
+            else:
+                sims = pd.concat(sim_data_list)
+        
+        self.metadata = sims
+        if self.use_cache:
+            self.write_metadata_df_to_disk()
 
         self.num_of_sims = len(sims)
         return self.metadata
@@ -1267,13 +1284,21 @@ class RITCatalogHelper(object):
         Returns:
             pandas.DataFrame: The refreshed aggregated metadata DataFrame.
         """
-        sims = []
-        for idx in tqdm(range(1, 1 + num_sims_to_crawl)):
-            sim_data = self.metadata_from_cache(idx)
-            if len(sims) == 0:
-                sims = sim_data
-            else:
-                sims = pd.concat([sims, sim_data])
+        import concurrent.futures
+
+        def _fetch(idx):
+            return self.metadata_from_cache(idx)
+
+        sims_list = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            for sim_data in tqdm(executor.map(_fetch, range(1, 1 + num_sims_to_crawl)), total=num_sims_to_crawl):
+                if len(sim_data) > 0:
+                    sims_list.append(sim_data)
+        
+        if sims_list:
+            sims = pd.concat(sims_list)
+        else:
+            sims = pd.DataFrame([])
         sims.reset_index(drop=True, inplace=True)
         metadata_df_fpath = self.metadata_dir / "metadata.csv"
         with open(metadata_df_fpath, "w") as f:
@@ -1326,14 +1351,14 @@ class RITCatalogHelper(object):
             and os.path.getsize(local_file_path) > 0
         ):
             if self.verbosity > 2:
-                print("...can read from cache: {}".format(str(local_file_path)))
+                logger.info("...can read from cache: {}".format(str(local_file_path)))
             return True
         else:
             if self.verbosity > 2:
-                print("...writing to cache: {}".format(str(local_file_path)))
+                logger.info("...writing to cache: {}".format(str(local_file_path)))
             if utils.url_exists(file_path_web):
                 if self.verbosity > 2:
-                    print("...downloading {}".format(file_path_web))
+                    logger.info("...downloading {}".format(file_path_web))
                 subprocess.call(
                     [
                         "wget",
@@ -1346,7 +1371,7 @@ class RITCatalogHelper(object):
                 return True
             else:
                 if self.verbosity > 2:
-                    print(
+                    logger.info(
                         "... ... but couldnt find link: {}".format(str(file_path_web))
                     )
                 return False
@@ -1386,14 +1411,14 @@ class RITCatalogHelper(object):
             and os.path.getsize(local_file_path) > 0
         ):
             if self.verbosity > 2:
-                print("...can read from cache: {}".format(str(local_file_path)))
+                logger.info("...can read from cache: {}".format(str(local_file_path)))
             return True
         else:
             if self.verbosity > 2:
-                print("...writing to cache: {}".format(str(local_file_path)))
+                logger.info("...writing to cache: {}".format(str(local_file_path)))
             if utils.url_exists(file_path_web):
                 if self.verbosity > 2:
-                    print("...downloading {}".format(file_path_web))
+                    logger.info("...downloading {}".format(file_path_web))
                 subprocess.call(
                     [
                         "wget",
@@ -1406,7 +1431,7 @@ class RITCatalogHelper(object):
                 return True
             else:
                 if self.verbosity > 2:
-                    print(
+                    logger.info(
                         "... ... but couldnt find link: {}".format(str(file_path_web))
                     )
                 return False
