@@ -250,8 +250,11 @@ def load_from_targz(cls, file_path, metadata={}, verbosity=0):
     data = np.empty((len(times), len(LM)), dtype=complex)
     for idx, (ell, em) in enumerate(LM):
         mode_time = mode_data[(ell, em)][:, 0]
-        mode_real = mode_data[(ell, em)][:, 1]
-        mode_imag = mode_data[(ell, em)][:, 2]
+        sort_idx = np.argsort(mode_time)
+        mode_time = mode_time[sort_idx]
+        
+        mode_real = mode_data[(ell, em)][sort_idx, 1]
+        mode_imag = mode_data[(ell, em)][sort_idx, 2]
         if verbosity > 5:
             print(f"Interpolating mode {ell}, {em}. Data length: {len(mode_time)}")
         mode_real_interp = InterpolatedUnivariateSpline(mode_time, mode_real)

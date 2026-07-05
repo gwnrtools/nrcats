@@ -108,6 +108,27 @@ class WaveformModes(sxs_WaveformModes):
         self._metadata.setdefault("verbosity", custom_vals.get("verbosity", verbosity))
         return self
 
+    def __getitem__(self, key):
+        """Extract a slice of this object.
+
+        Overrides parent `__getitem__` to fix an issue where slicing `WaveformModes`
+        loses `time_axis` or custom metadata due to how `ndarray.view()` interacts
+        with `__array_finalize__` in some versions of `sxs`.
+        """
+        if isinstance(key, str):
+            return super().__getitem__(key)
+
+        obj, time_key = self._slice(key)
+        if time_key is None:
+            raise ValueError(f"Fancy indexing (with {key}) is not supported")
+
+        result = obj.view(type(self))
+        # Explicitly preserve the metadata that `_slice` carefully constructed.
+        # This prevents `__array_finalize__` from reverting or stripping keys.
+        result._metadata = getattr(obj, "_metadata", {}).copy()
+
+        return result
+
     # -- Attribute-propagation machinery (REQ-3.2) -------------------------
     #
     # All custom state lives in ``_metadata`` so it naturally travels through

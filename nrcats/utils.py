@@ -133,9 +133,12 @@ def url_exists(link: str, num_retries: int = 5, verbosity: int = 0) -> bool:
     requests.packages.urllib3.disable_warnings()
     for attempt in range(num_retries):
         try:
-            response = requests.head(link, verify=False)
+            response = requests.head(link, verify=False, timeout=10)
             return response.status_code == requests.codes.ok
-        except Exception:
+        except Exception as exc:
+            if isinstance(exc, requests.exceptions.Timeout):
+                import warnings
+                warnings.warn(f"Request to {link} timed out after 10 seconds.")
             if attempt < num_retries - 1:
                 delay = min(2**attempt, 30)
                 if verbosity > 0:
@@ -193,10 +196,13 @@ def download_file(
             for attempt in range(num_retries):
                 try:
                     r = requests.get(
-                        url, verify=False, stream=True, allow_redirects=True
+                        url, verify=False, stream=True, allow_redirects=True, timeout=10
                     )
                     break
                 except Exception as exc:
+                    if isinstance(exc, requests.exceptions.Timeout):
+                        import warnings
+                        warnings.warn(f"Request to {url} timed out after 10 seconds.")
                     last_exc = exc
                     if attempt < num_retries - 1:
                         delay = min(2**attempt, 30)

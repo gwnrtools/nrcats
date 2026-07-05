@@ -938,9 +938,12 @@ class RITCatalogHelper(object):
             response = None
             for attempt in range(num_retries):
                 try:
-                    response = requests.get(link, verify=False)
+                    response = requests.get(link, verify=False, timeout=10)
                     break
                 except Exception as exc:
+                    if isinstance(exc, requests.exceptions.Timeout):
+                        import warnings
+                        warnings.warn(f"Request to {link} timed out after 10 seconds.")
                     last_exc = exc
                     if attempt < num_retries - 1:
                         delay = min(2**attempt, 30)
