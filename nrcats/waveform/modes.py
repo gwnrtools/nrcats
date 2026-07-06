@@ -391,6 +391,7 @@ class WaveformModes(sxs_WaveformModes):
         to_pycbc=True,
         delta_t_seconds=None,
         delta_t_Msun=None,
+        t_relax=None,
     ):
         """Return a single (ℓ, m) waveform mode, rescaled to physical units.
 
@@ -412,6 +413,8 @@ class WaveformModes(sxs_WaveformModes):
             *Deprecated.* Use ``delta_t_seconds`` or ``delta_t_Msun`` instead.
         to_pycbc : bool, optional
             Return a ``pycbc.types.TimeSeries`` (default True).
+        t_relax : float, optional
+            Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation.
 
         Returns
         -------
@@ -448,7 +451,10 @@ class WaveformModes(sxs_WaveformModes):
                 dt_physical = delta_t
                 dt_dimless = delta_t / m_secs
 
-        new_time = np.arange(min(self.time), max(self.time), dt_dimless)
+        new_time_start = min(self.time)
+        if t_relax is not None:
+            new_time_start = max(new_time_start, float(t_relax))
+        new_time = np.arange(new_time_start, max(self.time), dt_dimless)
 
         mode_data = np.array(self.data[:, self.index(ell, em)], dtype=complex)
         mode_ts = sxs_TimeSeries(mode_data, time=self.time)
@@ -580,6 +586,7 @@ class WaveformModes(sxs_WaveformModes):
         lal_convention=False,
         delta_t_seconds=None,
         delta_t_Msun=None,
+        t_relax=None,
     ):
         """Sum over modes and return GW polarizations rescaled to physical units.
 
@@ -602,6 +609,8 @@ class WaveformModes(sxs_WaveformModes):
         lal_convention : bool, optional
             If True, return h₊ − i h× (LAL convention).  Default returns
             h₊ + i h× (imaginary part = +h×).
+        t_relax : float, optional
+            Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation.
 
         Returns
         -------
@@ -635,7 +644,11 @@ class WaveformModes(sxs_WaveformModes):
                 dt_dimless = delta_t
             else:
                 dt_dimless = delta_t / m_secs
-        new_time = np.arange(min(self.time), max(self.time), dt_dimless)
+
+        new_time_start = min(self.time)
+        if t_relax is not None:
+            new_time_start = max(new_time_start, float(t_relax))
+        new_time = np.arange(new_time_start, max(self.time), dt_dimless)
 
         angles = self.get_angles(
             inclination=inclination,
@@ -1350,3 +1363,85 @@ class WaveformModes(sxs_WaveformModes):
         x0 = [0.0] * (5 + len(alpha_jk_indices))
         result = minimize(objective_function, x0, method="Nelder-Mead")
         return 1.0 - result.fun
+
+    def match(self, other, time_window=None, phase_align=True):
+        """Calculate the relative L2 error norm between self and another waveform object.
+
+        Parameters
+        ----------
+        other : WaveformModes
+            The other waveform object.
+        time_window : tuple, optional
+            The time window (t_min, t_max) to restrict the calculation.
+        phase_align : bool, optional
+            Whether to phase align the waveforms by finding a constant phase shift that minimizes the error.
+
+        Returns
+        -------
+        float
+            The relative L2 error norm (i.e. ||self - other|| / ||self||).
+        """
+        import numpy as np
+
+        t_min = max(self.time[0], other.time[0])
+        t_max = min(self.time[-1], other.time[-1])
+        if time_window is not None:
+            t_min = max(t_min, time_window[0])
+            t_max = min(t_max, time_window[1])
+
+        if t_min >= t_max:
+            return float("nan")
+
+        mask1 = (self.time >= t_min) & (self.time <= t_max)
+        t1 = self.time[mask1]
+
+        if len(t1) < 2:
+            return float("nan")
+
+        data1 = self.data[mask1, :]
+        other_interp = other.interpolate(t1)
+        data2 = other_interp.data
+
+        common_modes = set(map(tuple, self.LM)) & set(map(tuple, other.LM))
+        if not common_modes:
+            return float("nan")
+
+        idx1 = [self.index(*lm) for lm in common_modes]
+        idx2 = [other_interp.index(*lm) for lm in common_modes]
+
+        d1 = data1[:, idx1]
+        d2 = data2[:, idx2]
+
+        if phase_align:
+            from scipy.optimize import minimize_scalar
+
+            C_m = {}
+            for i, lm in enumerate(common_modes):
+                ell, m = lm
+                C_m[m] = C_m.get(m, 0) + np.trapz(d1[:, i] * np.conj(d2[:, i]), x=t1)
+
+            def obj(dphi):
+                val = 0.0
+                for m, C in C_m.items():
+                    val += np.real(np.exp(-1j * m * dphi) * C)
+                return -val
+
+            res = minimize_scalar(obj, bounds=(0, 2 * np.pi), method="bounded")
+            dphi = res.x
+
+            for i, lm in enumerate(common_modes):
+                ell, m = lm
+                d2[:, i] *= np.exp(1j * m * dphi)
+
+        diff = d1 - d2
+        error_norm_sq = np.sum(
+            [np.trapz(np.abs(diff[:, i]) ** 2, x=t1) for i in range(len(common_modes))]
+        )
+        norm1_sq = np.sum(
+            [np.trapz(np.abs(d1[:, i]) ** 2, x=t1) for i in range(len(common_modes))]
+        )
+
+        if norm1_sq == 0:
+            return float("nan")
+
+        return float(np.sqrt(max(0, error_norm_sq) / max(0, norm1_sq)))
