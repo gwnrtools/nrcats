@@ -60,6 +60,14 @@ get_nr_to_lal_rotation_angles(h5_file, sim_metadata, inclination, phi_ref, f_ref
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ### `get_lal_mode_dictionary`
 
 ```python

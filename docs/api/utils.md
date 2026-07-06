@@ -63,6 +63,7 @@ amplitude_phase_frequency_from_complex_mode(hlm)
 
 | Name | Value |
 |---|---|
+| `logger` | `logging.getLogger(__name__)` |
 | `nrcatalog_cache_dir` | `pathlib.Path(os.getenv('NR_CATALOG_CACHE')).expanduser().resolve()` |
 | `nr_group_tags` | `{}` |
 | `rit_catalog_info` | `{}` |

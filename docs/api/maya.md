@@ -45,6 +45,14 @@ MayaCatalog
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ## *class* `MayaCatalog`
 
 Bases: `catalog.CatalogBase`

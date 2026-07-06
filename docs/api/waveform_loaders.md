@@ -30,6 +30,14 @@ No import of ``WaveformModes`` is needed here, avoiding circular imports.
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ### `load_from_h5`
 
 ```python

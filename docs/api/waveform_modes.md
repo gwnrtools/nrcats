@@ -20,6 +20,14 @@ WaveformModes class and related helpers.
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ## *class* `WaveformModes`
 
 Bases: `sxs_WaveformModes`
@@ -145,7 +153,7 @@ get_mode_data(ell, em)
 ### `get_mode`
 
 ```python
-get_mode(ell, em, total_mass=1.0, distance=1.0, delta_t=None, to_pycbc=True, delta_t_seconds=None, delta_t_Msun=None)
+get_mode(ell, em, total_mass=1.0, distance=1.0, delta_t=None, to_pycbc=True, delta_t_seconds=None, delta_t_Msun=None, t_relax=None)
 ```
 
 Return a single (ℓ, m) waveform mode, rescaled to physical units.
@@ -162,6 +170,7 @@ Return a single (ℓ, m) waveform mode, rescaled to physical units.
 | `delta_t_Msun` | `float` | Sample spacing in dimensionless M units. Mutually exclusive with ``delta_t_seconds``. |
 | `delta_t` | `float` | *Deprecated.* Use ``delta_t_seconds`` or ``delta_t_Msun`` instead. |
 | `to_pycbc` | `bool` | Return a ``pycbc.types.TimeSeries`` (default True). |
+| `t_relax` | `float` | Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation. |
 
 #### Returns
 
@@ -259,7 +268,7 @@ Sum over modes and return plus/cross GW polarizations.
 ### `get_td_waveform`
 
 ```python
-get_td_waveform(total_mass, distance, inclination, coa_phase, delta_t=None, f_ref=None, t_ref=None, k=3, kind=None, tol=1e-06, lal_convention=False, delta_t_seconds=None, delta_t_Msun=None)
+get_td_waveform(total_mass, distance, inclination, coa_phase, delta_t=None, f_ref=None, t_ref=None, k=3, kind=None, tol=1e-06, lal_convention=False, delta_t_seconds=None, delta_t_Msun=None, t_relax=None)
 ```
 
 Sum over modes and return GW polarizations rescaled to physical units.
@@ -276,6 +285,7 @@ Sum over modes and return GW polarizations rescaled to physical units.
 | `delta_t_Msun` | `float` | Sample spacing in dimensionless M units. |
 | `delta_t` | `float` | *Deprecated.* Use ``delta_t_seconds`` or ``delta_t_Msun`` instead. |
 | `lal_convention` | `bool` | If True, return h₊ − i h× (LAL convention). Default returns h₊ + i h× (imaginary part = +h×). |
+| `t_relax` | `float` | Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation. |
 
 #### Returns
 
@@ -592,6 +602,30 @@ standard time shift, phase shift, and SO(3) rotation.
 | Name | Type | Description |
 |---|---|---|
 |  | `float` | Maximum match value in $[0, 1]$. |
+
+---
+
+### `match`
+
+```python
+match(other, time_window=None, phase_align=True)
+```
+
+Calculate the relative L2 error norm between self and another waveform object.
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| `other` | `WaveformModes` | The other waveform object. |
+| `time_window` | `tuple` | The time window (t_min, t_max) to restrict the calculation. |
+| `phase_align` | `bool` | Whether to phase align the waveforms by finding a constant phase shift that minimizes the error. |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+|  | `float` | The relative L2 error norm (i.e. \|\|self - other\|\| / \|\|self\|\|). |
 
 ---
 

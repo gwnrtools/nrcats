@@ -53,6 +53,14 @@ RITCatalogHelper
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ## *class* `RITCatalog`
 
 Bases: `catalog.CatalogBase`

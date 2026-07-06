@@ -48,6 +48,14 @@ get_source_parameters_from_metadata(metadata, total_mass)
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ### `RIT_KEYS`
 
 Mapping from canonical quantity names to RIT metadata keys (hyphenated).

@@ -44,6 +44,14 @@ SXSCatalog
 
 ---
 
+## Constants
+
+| Name | Value |
+|---|---|
+| `logger` | `logging.getLogger(__name__)` |
+
+---
+
 ## *class* `SXSCatalog`
 
 Bases: `catalog.CatalogBase`
