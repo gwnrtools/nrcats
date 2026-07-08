@@ -605,10 +605,10 @@ standard time shift, phase shift, and SO(3) rotation.
 
 ---
 
-### `match`
+### `diff_l2_norm`
 
 ```python
-match(other, time_window=None, phase_align=True)
+diff_l2_norm(other, time_window=None, phase_align=True)
 ```
 
 Calculate the relative L2 error norm between self and another waveform object.

@@ -1364,7 +1364,7 @@ class WaveformModes(sxs_WaveformModes):
         result = minimize(objective_function, x0, method="Nelder-Mead")
         return 1.0 - result.fun
 
-    def match(self, other, time_window=None, phase_align=True):
+    def diff_l2_norm(self, other, time_window=None, phase_align=True):
         """Calculate the relative L2 error norm between self and another waveform object.
 
         Parameters
