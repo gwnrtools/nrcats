@@ -1,0 +1,559 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(1)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(1) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(3) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(1) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list > li.nav-list-item:nth-child(1) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Loading a waveform | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Loading a waveform" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/tutorials/load-waveform.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/tutorials/load-waveform.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Loading a waveform" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"Loading a waveform","url":"https://gwnrtools.github.io/nrcats/tutorials/load-waveform.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/tutorials/">Tutorials</a></li>
+    <li class="breadcrumb-nav-list-item"><span>Loading a waveform</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 id="tutorial-loading-and-plotting-a-waveform">
+  
+  
+    <a href="#tutorial-loading-and-plotting-a-waveform" class="anchor-heading" aria-labelledby="tutorial-loading-and-plotting-a-waveform"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Tutorial: Loading and Plotting a Waveform
+  
+  
+</h1>
+    
+
+<p>This tutorial walks through loading a binary black-hole merger waveform from the RIT catalog,
+inspecting its metadata, extracting physically-scaled strain modes, and plotting the
+time-domain polarizations.</p>
+<h2 id="prerequisites">
+  
+  
+    <a href="#prerequisites" class="anchor-heading" aria-labelledby="prerequisites"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Prerequisites
+  
+  
+</h2>
+    
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>nrcats matplotlib
+</code></pre></div></div><hr />
+<h2 id="1-load-the-rit-catalog">
+  
+  
+    <a href="#1-load-the-rit-catalog" class="anchor-heading" aria-labelledby="1-load-the-rit-catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 1. Load the RIT catalog
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">nrcats</span> <span class="k">as</span> <span class="n">nrcat</span>
+
+<span class="n">cat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="p">.</span><span class="n">RITCatalog</span><span class="p">.</span><span class="nf">load</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Loaded </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">cat</span><span class="p">.</span><span class="n">simulations_list</span><span class="p">)</span><span class="si">}</span><span class="s"> RIT simulations</span><span class="sh">"</span><span class="p">)</span>
+<span class="c1"># Loaded 1879 RIT simulations
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">RITCatalog.load()</code> reads the aggregated metadata CSV from your local cache
+(<code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/metadata.csv</code>).  On first run it scrapes ~1900 per-simulation
+metadata files from <code class="language-plaintext highlighter-rouge">ccrgpages.rit.edu</code>, which takes about 30–60 s.  Subsequent calls
+are instant.</p><hr />
+<h2 id="2-browse-the-simulation-list">
+  
+  
+    <a href="#2-browse-the-simulation-list" class="anchor-heading" aria-labelledby="2-browse-the-simulation-list"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 2. Browse the simulation list
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">[:</span><span class="mi">5</span><span class="p">].</span><span class="nf">tolist</span><span class="p">())</span>
+<span class="c1"># ['RIT:BBH:0001-n100-id3', 'RIT:BBH:0002-n100-id0', ...]
+</span>
+<span class="c1"># Filter: equal-mass, non-spinning (q ≈ 1, |χ| &lt; 0.05)
+</span><span class="n">q_col</span> <span class="o">=</span> <span class="sh">"</span><span class="s">relaxed-mass-ratio-1-over-2</span><span class="sh">"</span>
+<span class="n">chi_cols</span> <span class="o">=</span> <span class="p">[</span><span class="sh">"</span><span class="s">relaxed-chi1z</span><span class="sh">"</span><span class="p">,</span> <span class="sh">"</span><span class="s">relaxed-chi2z</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="n">mask_q</span>   <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">q_col</span><span class="p">].</span><span class="nf">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">).</span><span class="nf">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.02</span>
+<span class="n">mask_chi</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">chi_cols</span><span class="p">].</span><span class="nf">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">).</span><span class="nf">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.05</span><span class="p">).</span><span class="nf">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">mask_q</span> <span class="o">&amp;</span> <span class="n">mask_chi</span>
+<span class="n">q1_nospin</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">mask</span><span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Found </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">q1_nospin</span><span class="p">)</span><span class="si">}</span><span class="s"> q≈1 non-spinning simulations</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div><hr />
+<h2 id="3-inspect-simulation-metadata">
+  
+  
+    <a href="#3-inspect-simulation-metadata" class="anchor-heading" aria-labelledby="3-inspect-simulation-metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 3. Inspect simulation metadata
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sim_name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">RIT:BBH:0001-n100-id3</span><span class="sh">"</span>
+<span class="n">meta</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="nf">get_metadata</span><span class="p">(</span><span class="n">sim_name</span><span class="p">)</span>
+
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Mass ratio:    </span><span class="si">{</span><span class="n">meta</span><span class="p">[</span><span class="sh">'</span><span class="s">relaxed-mass-ratio-1-over-2</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">χ₁z:           </span><span class="si">{</span><span class="n">meta</span><span class="p">[</span><span class="sh">'</span><span class="s">relaxed-chi1z</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">χ₂z:           </span><span class="si">{</span><span class="n">meta</span><span class="p">[</span><span class="sh">'</span><span class="s">relaxed-chi2z</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Eccentricity:  </span><span class="si">{</span><span class="n">meta</span><span class="p">[</span><span class="sh">'</span><span class="s">eccentricity</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">f_start (22):  </span><span class="si">{</span><span class="n">meta</span><span class="p">[</span><span class="sh">'</span><span class="s">freq-start-22</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>   <span class="c1"># dimensionless M·Hz
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">get_metadata()</code> returns the raw per-simulation dict with catalog-native key names
+(hyphens for RIT).  To get a PyCBC-compatible parameter dict in physical units, use
+<code class="language-plaintext highlighter-rouge">get_parameters()</code> instead:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">params</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="nf">get_parameters</span><span class="p">(</span><span class="n">sim_name</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">60.0</span><span class="p">)</span>
+<span class="c1"># {'mass1': 30.0, 'mass2': 30.0, 'spin1x': 0.0, ...,
+#  'f_lower': 23.4, 'approximant': 'NR_hdf5'}
+</span><span class="nf">print</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</code></pre></div></div><hr />
+<h2 id="4-load-the-waveform">
+  
+  
+    <a href="#4-load-the-waveform" class="anchor-heading" aria-labelledby="4-load-the-waveform"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 4. Load the waveform
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wfm</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">sim_name</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Mode pairs available: </span><span class="si">{</span><span class="n">wfm</span><span class="p">.</span><span class="n">LM</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+<span class="c1"># [(2, -2), (2, -1), (2, 0), (2, 1), (2, 2), (3, -3), ...]
+</span><span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Time array length: </span><span class="si">{</span><span class="nf">len</span><span class="p">(</span><span class="n">wfm</span><span class="p">.</span><span class="n">time</span><span class="p">)</span><span class="si">}</span><span class="s"> samples</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Time range: [</span><span class="si">{</span><span class="n">wfm</span><span class="p">.</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">, </span><span class="si">{</span><span class="n">wfm</span><span class="p">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s">] M</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>On first call <code class="language-plaintext highlighter-rouge">cat.get()</code> downloads the HDF5 waveform file from the RIT server
+(<code class="language-plaintext highlighter-rouge">~50 MB</code>) into <code class="language-plaintext highlighter-rouge">~/.cache/RIT/data/</code>.  Subsequent calls use the cached file.</p><hr />
+<h2 id="5-extract-a-physically-scaled-22-mode">
+  
+  
+    <a href="#5-extract-a-physically-scaled-22-mode" class="anchor-heading" aria-labelledby="5-extract-a-physically-scaled-22-mode"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 5. Extract a physically-scaled \((2,2)\) mode
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">TOTAL_MASS</span> <span class="o">=</span> <span class="mf">60.0</span>    <span class="c1"># M_sun
+</span><span class="n">DISTANCE</span>   <span class="o">=</span> <span class="mf">100.0</span>   <span class="c1"># Mpc
+</span><span class="n">DELTA_T</span>    <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">4096</span> <span class="c1"># seconds  (4096 Hz sampling rate)
+</span>
+<span class="n">mode22</span> <span class="o">=</span> <span class="n">wfm</span><span class="p">.</span><span class="nf">get_mode</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span>
+                      <span class="n">total_mass</span><span class="o">=</span><span class="n">TOTAL_MASS</span><span class="p">,</span>
+                      <span class="n">distance</span><span class="o">=</span><span class="n">DISTANCE</span><span class="p">,</span>
+                      <span class="n">delta_t_seconds</span><span class="o">=</span><span class="n">DELTA_T</span><span class="p">)</span>
+
+<span class="c1"># mode22 is a complex pycbc.types.TimeSeries
+# .real()  ≈  h_plus  (in strain units)
+# .imag()  ≈  h_cross (sign convention: +h_cross, not −h_cross)
+</span><span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Duration:  </span><span class="si">{</span><span class="n">mode22</span><span class="p">.</span><span class="n">duration</span><span class="si">:</span><span class="p">.</span><span class="mi">3</span><span class="n">f</span><span class="si">}</span><span class="s"> s</span><span class="sh">"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">Peak amplitude: </span><span class="si">{</span><span class="nf">abs</span><span class="p">(</span><span class="n">mode22</span><span class="p">).</span><span class="nf">max</span><span class="p">()</span><span class="si">:</span><span class="p">.</span><span class="mi">3</span><span class="n">e</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">get_mode()</code> scales the amplitude by \(G M_\text{tot} / (c^2 \cdot d_\text{Mpc} \cdot \text{Mpc})\)
+and sets \(t=0\) at the peak of the \((2,2)\) mode.</p><hr />
+<h2 id="6-compute-polarizations">
+  
+  
+    <a href="#6-compute-polarizations" class="anchor-heading" aria-labelledby="6-compute-polarizations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 6. Compute polarizations
+  
+  
+</h2>
+    
+
+<p>For a sky-averaged strain summed over all modes, use <code class="language-plaintext highlighter-rouge">get_td_waveform()</code>:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pols</span> <span class="o">=</span> <span class="n">wfm</span><span class="p">.</span><span class="nf">get_td_waveform</span><span class="p">(</span>
+    <span class="n">total_mass</span><span class="o">=</span><span class="n">TOTAL_MASS</span><span class="p">,</span>
+    <span class="n">distance</span><span class="o">=</span><span class="n">DISTANCE</span><span class="p">,</span>
+    <span class="n">inclination</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>    <span class="c1"># face-on: strongest signal
+</span>    <span class="n">coa_phase</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">delta_t_seconds</span><span class="o">=</span><span class="n">DELTA_T</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">hp</span> <span class="o">=</span> <span class="n">pols</span><span class="p">.</span><span class="nf">real</span><span class="p">()</span>       <span class="c1"># h_plus
+</span><span class="n">hc</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">pols</span><span class="p">.</span><span class="nf">imag</span><span class="p">()</span>  <span class="c1"># h_cross  (negate because of package convention)
+</span></code></pre></div></div>
+
+<blockquote>
+  <p><strong>Polarization sign convention</strong><br />
+<code class="language-plaintext highlighter-rouge">get_td_waveform()</code> returns <code class="language-plaintext highlighter-rouge">conjugate(h)</code>, so <code class="language-plaintext highlighter-rouge">.real()</code> = \(h_+\) and <code class="language-plaintext highlighter-rouge">.imag()</code> = \(+h_\times\).
+Multiply <code class="language-plaintext highlighter-rouge">.imag()</code> by \(-1\) to match the LAL sign convention where \(h_\times &gt; 0\) for
+a face-on binary early in the inspiral.</p>
+</blockquote><hr />
+<h2 id="7-plot">
+  
+  
+    <a href="#7-plot" class="anchor-heading" aria-labelledby="7-plot"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 7. Plot
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+
+<span class="n">t</span> <span class="o">=</span> <span class="n">hp</span><span class="p">.</span><span class="n">sample_times</span>   <span class="c1"># seconds, t=0 at (2,2) peak
+</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="nf">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">hp</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">"</span><span class="s">steelblue</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">$h_+$</span><span class="sh">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">"</span><span class="s">gray</span><span class="sh">"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="sh">"</span><span class="s">--</span><span class="sh">"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sh">"</span><span class="s">merger</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nf">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">hc</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">"</span><span class="s">darkorange</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="sh">"</span><span class="s">$h_\times$</span><span class="sh">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">set_xlabel</span><span class="p">(</span><span class="sh">"</span><span class="s">Time [s]</span><span class="sh">"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nf">axvline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="sh">"</span><span class="s">gray</span><span class="sh">"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="sh">"</span><span class="s">--</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">.</span><span class="nf">suptitle</span><span class="p">(</span>
+    <span class="sa">f</span><span class="sh">"</span><span class="s">RIT:BBH:0001-n100-id3  —  $M=</span><span class="si">{</span><span class="n">TOTAL_MASS</span><span class="si">}</span><span class="se">\\</span><span class="s">,M_</span><span class="se">\\</span><span class="s">odot$, $d=</span><span class="si">{</span><span class="n">DISTANCE</span><span class="si">}</span><span class="se">\\</span><span class="s">,$Mpc</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">savefig</span><span class="p">(</span><span class="sh">"</span><span class="s">rit_bbh_0001_waveform.png</span><span class="sh">"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="nf">show</span><span class="p">()</span>
+</code></pre></div></div><hr />
+<h2 id="8-trim-to-the-relaxation-epoch">
+  
+  
+    <a href="#8-trim-to-the-relaxation-epoch" class="anchor-heading" aria-labelledby="8-trim-to-the-relaxation-epoch"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> 8. Trim to the relaxation epoch
+  
+  
+</h2>
+    
+
+<p>NR waveforms contain junk radiation in the first ~100–200 M (due to the initial
+data not being exactly on the constraint manifold).  Use <code class="language-plaintext highlighter-rouge">trim_to_relaxation_time()</code>
+to discard it:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wfm_clean</span> <span class="o">=</span> <span class="n">wfm</span><span class="p">.</span><span class="nf">trim_to_relaxation_time</span><span class="p">(</span><span class="n">total_mass</span><span class="o">=</span><span class="n">TOTAL_MASS</span><span class="p">)</span>
+
+<span class="c1"># Get the GW frequency at the relaxation epoch (call on the original WaveformModes)
+</span><span class="n">f_start</span> <span class="o">=</span> <span class="n">wfm</span><span class="p">.</span><span class="nf">f_lower_at_relaxation</span><span class="p">(</span><span class="n">total_mass</span><span class="o">=</span><span class="n">TOTAL_MASS</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">f_lower at relaxation: </span><span class="si">{</span><span class="n">f_start</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> Hz</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div><hr />
+<h2 id="summary">
+  
+  
+    <a href="#summary" class="anchor-heading" aria-labelledby="summary"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Summary
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>Method</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Load catalog</td>
+      <td><code class="language-plaintext highlighter-rouge">RITCatalog.load()</code></td>
+    </tr>
+    <tr>
+      <td>Browse simulations</td>
+      <td><code class="language-plaintext highlighter-rouge">cat.simulations_dataframe</code></td>
+    </tr>
+    <tr>
+      <td>Inspect metadata</td>
+      <td><code class="language-plaintext highlighter-rouge">cat.get_metadata(sim_name)</code></td>
+    </tr>
+    <tr>
+      <td>PyCBC-compatible params</td>
+      <td><code class="language-plaintext highlighter-rouge">cat.get_parameters(sim_name, total_mass=M)</code></td>
+    </tr>
+    <tr>
+      <td>Load waveform</td>
+      <td><code class="language-plaintext highlighter-rouge">cat.get(sim_name)</code></td>
+    </tr>
+    <tr>
+      <td>Physical mode</td>
+      <td><code class="language-plaintext highlighter-rouge">wfm.get_mode(ell, m, total_mass, distance, delta_t)</code></td>
+    </tr>
+    <tr>
+      <td>Polarizations</td>
+      <td><code class="language-plaintext highlighter-rouge">wfm.get_td_waveform(total_mass, distance, inclination, coa_phase, delta_t)</code></td>
+    </tr>
+    <tr>
+      <td>Trim junk</td>
+      <td><code class="language-plaintext highlighter-rouge">wfm.trim_to_relaxation_time(total_mass)</code></td>
+    </tr>
+    <tr>
+      <td>Starting frequency</td>
+      <td><code class="language-plaintext highlighter-rouge">wfm.f_lower_at_relaxation(total_mass)</code> — call on original <code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p>The same workflow works for SXS and MAYA — just replace <code class="language-plaintext highlighter-rouge">RITCatalog</code> with
+<code class="language-plaintext highlighter-rouge">SXSCatalog</code> or <code class="language-plaintext highlighter-rouge">MayaCatalog</code> and use the appropriate simulation name.</p>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

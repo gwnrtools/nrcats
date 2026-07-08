@@ -1,0 +1,531 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(3)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(3) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(3) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(3) > ul > li:nth-child(3) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(3) > ul.nav-list > li.nav-list-item:nth-child(3) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>NR vs surrogate comparison | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="NR vs surrogate comparison" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/tutorials/surrogate-comparison.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/tutorials/surrogate-comparison.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="NR vs surrogate comparison" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"NR vs surrogate comparison","url":"https://gwnrtools.github.io/nrcats/tutorials/surrogate-comparison.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/tutorials/">Tutorials</a></li>
+    <li class="breadcrumb-nav-list-item"><span>NR vs surrogate comparison</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 class="no_toc" id="tutorial-nr-vs-surrogate-nrsur7dq4-comparison">
+  
+  
+    <a href="#tutorial-nr-vs-surrogate-nrsur7dq4-comparison" class="anchor-heading" aria-labelledby="tutorial-nr-vs-surrogate-nrsur7dq4-comparison"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Tutorial: NR vs Surrogate (NRSur7dq4) Comparison
+  
+  
+</h1>
+    
+
+<p>This tutorial validates the NRSur7dq4 surrogate model against a catalog simulation by
+computing per-mode noise-weighted matches — the workflow used for waveform-model
+calibration and accuracy studies.</p>
+<h2 class="no_toc text-delta" id="table-of-contents">
+  
+  
+    <a href="#table-of-contents" class="anchor-heading" aria-labelledby="table-of-contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Table of contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#prerequisites" id="markdown-toc-prerequisites">Prerequisites</a></li>
+  <li><a href="#the-one-call-pipeline" id="markdown-toc-the-one-call-pipeline">The one-call pipeline</a></li>
+  <li><a href="#step-1-load-the-nr-waveform-and-its-parameters" id="markdown-toc-step-1-load-the-nr-waveform-and-its-parameters">Step 1: Load the NR waveform and its parameters</a></li>
+  <li><a href="#step-2-check-the-surrogate-prior" id="markdown-toc-step-2-check-the-surrogate-prior">Step 2: Check the surrogate prior</a></li>
+  <li><a href="#step-3-generate-surrogate-modes" id="markdown-toc-step-3-generate-surrogate-modes">Step 3: Generate surrogate modes</a></li>
+  <li><a href="#step-4-extract-the-matching-nr-modes" id="markdown-toc-step-4-extract-the-matching-nr-modes">Step 4: Extract the matching NR modes</a></li>
+  <li><a href="#step-5-compute-per-mode-matches" id="markdown-toc-step-5-compute-per-mode-matches">Step 5: Compute per-mode matches</a></li>
+  <li><a href="#step-6-optional-optimize-over-frame-rotations" id="markdown-toc-step-6-optional-optimize-over-frame-rotations">Step 6 (optional): Optimize over frame rotations</a></li>
+  <li><a href="#interpreting-the-results" id="markdown-toc-interpreting-the-results">Interpreting the results</a></li>
+</ol><hr />
+<h2 id="prerequisites">
+  
+  
+    <a href="#prerequisites" class="anchor-heading" aria-labelledby="prerequisites"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Prerequisites
+  
+  
+</h2>
+    
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pip <span class="nb">install </span>nrcats gwsurrogate matplotlib
+</code></pre></div></div>
+
+<blockquote class="note">
+  <p><code class="language-plaintext highlighter-rouge">gwsurrogate</code> is an optional dependency of <code class="language-plaintext highlighter-rouge">nrcats</code>. The NRSur7dq4 model
+data is downloaded automatically on first use. NRSur7dq4 is valid for mass ratios
+\(q \le 4\) and spin magnitudes \(|\chi_{1,2}| \le 0.8\); use
+<a href="/nrcats/api/surrogate.html"><code class="language-plaintext highlighter-rouge">check_surrogate_prior()</code></a> before comparing.</p>
+</blockquote>
+<h2 id="the-one-call-pipeline">
+  
+  
+    <a href="#the-one-call-pipeline" class="anchor-heading" aria-labelledby="the-one-call-pipeline"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> The one-call pipeline
+  
+  
+</h2>
+    
+
+<p><a href="/nrcats/api/comparisons.html"><code class="language-plaintext highlighter-rouge">compare_sim_vs_surrogate()</code></a> runs the full comparison for a
+single simulation — loads the NR waveform, generates matching surrogate modes, computes
+per-mode matches and phase-drift metrics, and writes a CSV plus a diagnostic figure:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">nrcats.comparisons</span> <span class="kn">import</span> <span class="n">compare_sim_vs_surrogate</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="nf">compare_sim_vs_surrogate</span><span class="p">(</span>
+    <span class="n">catalog_name</span><span class="o">=</span><span class="sh">"</span><span class="s">SXS</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">sim_name</span><span class="o">=</span><span class="sh">"</span><span class="s">SXS:BBH:0001</span><span class="sh">"</span><span class="p">,</span>
+    <span class="n">total_mass</span><span class="o">=</span><span class="mf">40.0</span><span class="p">,</span>                     <span class="c1"># M_sun
+</span>    <span class="n">psd_name</span><span class="o">=</span><span class="sh">"</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">"</span><span class="p">,</span>    <span class="c1"># any PyCBC analytic PSD
+</span><span class="p">)</span>
+
+<span class="nf">for </span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">),</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="p">.</span><span class="nf">items</span><span class="p">():</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">(</span><span class="si">{</span><span class="n">ell</span><span class="si">}</span><span class="s">,</span><span class="si">{</span><span class="n">em</span><span class="si">}</span><span class="s">): match=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="sh">'</span><span class="s">match</span><span class="sh">'</span><span class="p">]</span><span class="si">:</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="si">}</span><span class="s">  </span><span class="sh">"</span>
+          <span class="sa">f</span><span class="sh">"</span><span class="s">f_lower=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="sh">'</span><span class="s">f_lower_mode</span><span class="sh">'</span><span class="p">]</span><span class="si">:</span><span class="p">.</span><span class="mi">1</span><span class="n">f</span><span class="si">}</span><span class="s"> Hz  </span><span class="sh">"</span>
+          <span class="sa">f</span><span class="sh">"</span><span class="s">dphi/cycle=</span><span class="si">{</span><span class="n">r</span><span class="p">[</span><span class="sh">'</span><span class="s">phase_diff_per_cycle</span><span class="sh">'</span><span class="p">]</span><span class="si">}</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Outputs land in <code class="language-plaintext highlighter-rouge">./results/&lt;sim_id&gt;_mode_matches.csv</code> and <code class="language-plaintext highlighter-rouge">./figs/</code> (override with the
+<code class="language-plaintext highlighter-rouge">outdir</code> / <code class="language-plaintext highlighter-rouge">figsdir</code> arguments). For <strong>precessing</strong> simulations, the pipeline
+automatically enables the \(SO(3)\)-rotation-optimized match (<code class="language-plaintext highlighter-rouge">rotate=True</code>), which
+aligns the surrogate frame with the NR frame before matching; you can also request it
+explicitly for aligned-spin runs.</p>
+
+<p>The rest of this tutorial builds the same comparison step by step, so you can customize
+each stage.</p>
+<h2 id="step-1-load-the-nr-waveform-and-its-parameters">
+  
+  
+    <a href="#step-1-load-the-nr-waveform-and-its-parameters" class="anchor-heading" aria-labelledby="step-1-load-the-nr-waveform-and-its-parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 1: Load the NR waveform and its parameters
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">nrcats</span> <span class="k">as</span> <span class="n">nrcat</span>
+
+<span class="n">cat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="p">.</span><span class="nf">load_catalog</span><span class="p">(</span><span class="sh">"</span><span class="s">SXS</span><span class="sh">"</span><span class="p">)</span>
+<span class="n">sim_name</span> <span class="o">=</span> <span class="sh">"</span><span class="s">SXS:BBH:0001</span><span class="sh">"</span>
+
+<span class="n">wfm</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">sim_name</span><span class="p">)</span>
+<span class="n">total_mass</span> <span class="o">=</span> <span class="mf">40.0</span>
+<span class="n">params</span> <span class="o">=</span> <span class="n">cat</span><span class="p">.</span><span class="nf">get_parameters</span><span class="p">(</span><span class="n">sim_name</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="n">total_mass</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<span class="c1"># {'mass1': ..., 'mass2': ..., 'spin1x': ..., ..., 'f_lower': ...}
+</span></code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">get_parameters()</code> returns a PyCBC-compatible dict — exactly the format the surrogate
+helpers consume.</p>
+<h2 id="step-2-check-the-surrogate-prior">
+  
+  
+    <a href="#step-2-check-the-surrogate-prior" class="anchor-heading" aria-labelledby="step-2-check-the-surrogate-prior"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 2: Check the surrogate prior
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">nrcats.surrogate</span> <span class="kn">import</span> <span class="n">check_surrogate_prior</span>
+
+<span class="k">assert</span> <span class="nf">check_surrogate_prior</span><span class="p">(</span><span class="n">params</span><span class="p">),</span> \
+    <span class="sa">f</span><span class="sh">"</span><span class="si">{</span><span class="n">sim_name</span><span class="si">}</span><span class="s"> lies outside the NRSur7dq4 validity volume</span><span class="sh">"</span>
+</code></pre></div></div>
+
+<p>To pre-filter an entire catalog instead, use
+<code class="language-plaintext highlighter-rouge">nrcat.filter_by_surrogate_prior</code> (see the <a href="/nrcats/api/">API index</a>).</p>
+<h2 id="step-3-generate-surrogate-modes">
+  
+  
+    <a href="#step-3-generate-surrogate-modes" class="anchor-heading" aria-labelledby="step-3-generate-surrogate-modes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 3: Generate surrogate modes
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">nrcats.surrogate</span> <span class="kn">import</span> <span class="n">generate_surrogate_modes</span>
+
+<span class="n">delta_t</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">4096</span>  <span class="c1"># seconds
+</span>
+<span class="n">h_sur</span><span class="p">,</span> <span class="n">f_low_eff</span> <span class="o">=</span> <span class="nf">generate_surrogate_modes</span><span class="p">(</span>
+    <span class="n">params</span><span class="p">,</span>
+    <span class="n">total_mass</span><span class="o">=</span><span class="n">total_mass</span><span class="p">,</span>
+    <span class="n">distance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>           <span class="c1"># amplitude-irrelevant for matches
+</span>    <span class="n">delta_t_seconds</span><span class="o">=</span><span class="n">delta_t</span><span class="p">,</span>
+    <span class="n">sim_name</span><span class="o">=</span><span class="n">sim_name</span><span class="p">,</span>      <span class="c1"># enables epoch-aligned spins for precessing SXS runs
+</span>    <span class="n">catalog</span><span class="o">=</span><span class="n">cat</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="c1"># h_sur: {(ell, em): pycbc.types.TimeSeries}, epoch at the (2,2) amplitude peak
+</span></code></pre></div></div>
+<h2 id="step-4-extract-the-matching-nr-modes">
+  
+  
+    <a href="#step-4-extract-the-matching-nr-modes" class="anchor-heading" aria-labelledby="step-4-extract-the-matching-nr-modes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 4: Extract the matching NR modes
+  
+  
+</h2>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">nrcats.surrogate</span> <span class="kn">import</span> <span class="n">SURROGATE_MODES</span>
+
+<span class="n">h_nr</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">):</span> <span class="n">wfm</span><span class="p">.</span><span class="nf">get_mode</span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">,</span>
+                            <span class="n">total_mass</span><span class="o">=</span><span class="n">total_mass</span><span class="p">,</span>
+                            <span class="n">distance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                            <span class="n">delta_t_seconds</span><span class="o">=</span><span class="n">delta_t</span><span class="p">)</span>
+    <span class="nf">for </span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SURROGATE_MODES</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Both dictionaries now hold complex <code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code> in physical units with a
+common epoch convention (peak of the (2,2) amplitude at \(t = 0\)).</p>
+<h2 id="step-5-compute-per-mode-matches">
+  
+  
+    <a href="#step-5-compute-per-mode-matches" class="anchor-heading" aria-labelledby="step-5-compute-per-mode-matches"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 5: Compute per-mode matches
+  
+  
+</h2>
+    
+
+<p>Each mode \((\ell, m)\) oscillates at roughly \(m/2\) times the orbital frequency, so
+its lower frequency cutoff must be scaled accordingly before matching:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="n">nrcats.waveform.matching</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">compute_mode_match</span><span class="p">,</span>
+    <span class="n">compute_phase_diff_per_cycle</span><span class="p">,</span>
+    <span class="n">mode_f_lower</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">f_lower</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="sh">"</span><span class="s">f_lower</span><span class="sh">"</span><span class="p">]</span>
+
+<span class="nf">for </span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span> <span class="ow">in</span> <span class="n">SURROGATE_MODES</span><span class="p">:</span>
+    <span class="n">f_low_mode</span> <span class="o">=</span> <span class="nf">mode_f_lower</span><span class="p">(</span><span class="n">f_lower</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="nf">compute_mode_match</span><span class="p">(</span>
+        <span class="n">h_nr</span><span class="p">[(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)],</span> <span class="n">h_sur</span><span class="p">[(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)],</span>
+        <span class="n">f_lower_mode</span><span class="o">=</span><span class="n">f_low_mode</span><span class="p">,</span>
+        <span class="n">psd_name</span><span class="o">=</span><span class="sh">"</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">dphi</span><span class="p">,</span> <span class="n">n_cycles</span> <span class="o">=</span> <span class="nf">compute_phase_diff_per_cycle</span><span class="p">(</span><span class="n">h_nr</span><span class="p">[(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)],</span>
+                                                  <span class="n">h_sur</span><span class="p">[(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)])</span>
+    <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="sh">"</span><span class="s">(</span><span class="si">{</span><span class="n">ell</span><span class="si">}</span><span class="s">,</span><span class="si">{</span><span class="n">em</span><span class="si">}</span><span class="s">): match=</span><span class="si">{</span><span class="k">match</span><span class="si">:</span><span class="p">.</span><span class="mi">5</span><span class="n">f</span><span class="si">}</span><span class="s">, </span><span class="sh">"</span>
+          <span class="sa">f</span><span class="sh">"</span><span class="s">phase drift/cycle=</span><span class="si">{</span><span class="n">dphi</span><span class="si">:</span><span class="p">.</span><span class="mi">2</span><span class="n">e</span><span class="si">}</span><span class="s"> rad over </span><span class="si">{</span><span class="n">n_cycles</span><span class="si">:</span><span class="p">.</span><span class="mi">0</span><span class="n">f</span><span class="si">}</span><span class="s"> cycles</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">compute_mode_match()</code> maximizes over relative time and phase shifts and weights by the
+chosen detector noise PSD; a match of 1 means the surrogate reproduces the NR mode
+perfectly up to time/phase/amplitude conventions.</p>
+<h2 id="step-6-optional-optimize-over-frame-rotations">
+  
+  
+    <a href="#step-6-optional-optimize-over-frame-rotations" class="anchor-heading" aria-labelledby="step-6-optional-optimize-over-frame-rotations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Step 6 (optional): Optimize over frame rotations
+  
+  
+</h2>
+    
+
+<p>For precessing systems the NR and surrogate frames generally differ by an unknown
+\(SO(3)\) rotation. <a href="/nrcats/api/waveform_matching.html"><code class="language-plaintext highlighter-rouge">apply_wigner_rotation_to_mode_dict()</code></a>
+rotates a whole mode dictionary via Wigner D-matrices:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">quaternionic</span>
+<span class="kn">from</span> <span class="n">nrcats.waveform.matching</span> <span class="kn">import</span> <span class="n">apply_wigner_rotation_to_mode_dict</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="n">quaternionic</span><span class="p">.</span><span class="n">array</span><span class="p">.</span><span class="nf">from_euler_angles</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">)</span>
+<span class="n">h_sur_rot</span> <span class="o">=</span> <span class="nf">apply_wigner_rotation_to_mode_dict</span><span class="p">(</span><span class="n">h_sur</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">ell_max</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Maximizing the sphere-averaged match over \((\alpha, \beta, \gamma)\) is what
+<code class="language-plaintext highlighter-rouge">compare_sim_vs_surrogate(..., rotate=True)</code> does internally (and enables automatically
+for precessing runs); see <a href="/nrcats/goal.html">Scientific Goal</a> for the formalism.</p>
+<h2 id="interpreting-the-results">
+  
+  
+    <a href="#interpreting-the-results" class="anchor-heading" aria-labelledby="interpreting-the-results"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Interpreting the results
+  
+  
+</h2>
+    
+
+<ul>
+  <li><strong>Match \(\gtrsim 0.999\)</strong> for the dominant (2,2) mode is typical inside the
+surrogate’s calibration region.</li>
+  <li><strong>Higher modes</strong> — (3,3), (4,4), and especially (2,1) — carry less power and show
+lower matches; their <code class="language-plaintext highlighter-rouge">f_lower_mode</code> scaling also exposes them to more noise-weighted
+low-frequency content.</li>
+  <li><strong>Phase drift per cycle</strong> separates secular dephasing (modeling error) from
+overall time/phase offsets, which the match already maximizes over.</li>
+  <li>The <strong>total mass matters</strong>: it sets where the waveform sits in the detector band, so
+quote matches together with <code class="language-plaintext highlighter-rouge">total_mass</code> and the PSD used.</li>
+</ul>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

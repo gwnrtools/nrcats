@@ -1,0 +1,3194 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(2)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(2) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(2) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(2) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.rit | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.rit" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/rit.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/rit.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.rit" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.rit","url":"https://gwnrtools.github.io/nrcats/api/rit.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.rit</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatsrit">
+  
+  
+    <a href="#nrcatsrit" class="anchor-heading" aria-labelledby="nrcatsrit"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.rit</code>
+  
+  
+</h1>
+    
+
+<p>RIT catalog interface.</p>
+
+<p>Provides access to the Rochester Institute of Technology (RIT) catalog of
+numerical-relativity BBH waveforms generated with the LazEv code.</p>
+
+<p>Metadata is scraped from the RIT web server
+(<code class="language-plaintext highlighter-rouge">https://ccrgpages.rit.edu/~RITCatalog/Metadata/</code>) as individual
+<code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> files, aggregated into a Pandas DataFrame, and cached
+at <code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/metadata.csv</code>.  Waveform (HDF5) and psi4
+(tar.gz) data are downloaded on demand.</p>
+
+<p>Both quasicircular BBH (<code class="language-plaintext highlighter-rouge">RIT:BBH:NNNN-nRRR-idI</code>) and eccentric BBH
+(<code class="language-plaintext highlighter-rouge">RIT:eBBH:NNNN-nRRR-ecc</code>) simulation names are supported.</p>
+<h2 id="key-design-decisions">
+  
+  
+    <a href="#key-design-decisions" class="anchor-heading" aria-labelledby="key-design-decisions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Key design decisions
+  
+  
+</h2>
+    
+<ul>
+  <li>
+    <p><strong>Singleton pattern</strong> – <code class="language-plaintext highlighter-rouge">RITCatalog.load()</code> stores its result in a
+module-level singleton to avoid the <code class="language-plaintext highlighter-rouge">lru_cache</code> stale-result bug
+(keyed on all arguments, a <code class="language-plaintext highlighter-rouge">load(download=True)</code> call after an earlier
+<code class="language-plaintext highlighter-rouge">load(download=False)</code> would have returned the stale cached result).</p>
+  </li>
+  <li>
+    <p><strong>Two-class design</strong> – <code class="language-plaintext highlighter-rouge">RITCatalog</code> exposes the public
+<code class="language-plaintext highlighter-rouge">CatalogBase</code> interface and delegates all scraping/caching/file-naming
+logic to <code class="language-plaintext highlighter-rouge">RITCatalogHelper</code>, which can be instantiated and tested
+independently.</p>
+  </li>
+</ul>
+<h2 id="public-classes">
+  
+  
+    <a href="#public-classes" class="anchor-heading" aria-labelledby="public-classes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Public classes
+  
+  
+</h2>
+    
+<p>RITCatalog
+    Registered under the tag <code class="language-plaintext highlighter-rouge">"RIT"</code> in the catalog plugin registry.
+RITCatalogHelper
+    Internal helper; handles metadata scraping, caching, and filename
+    conventions.  Not part of the public API but documented here because
+    it is the main complexity in this module.</p>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatsrit" id="markdown-toc-nrcatsrit"><code class="language-plaintext highlighter-rouge">nrcats.rit</code></a>    <ol>
+      <li><a href="#key-design-decisions" id="markdown-toc-key-design-decisions">Key design decisions</a></li>
+      <li><a href="#public-classes" id="markdown-toc-public-classes">Public classes</a></li>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a></li>
+      <li><a href="#class-ritcatalog" id="markdown-toc-class-ritcatalog"><em>class</em> <code class="language-plaintext highlighter-rouge">RITCatalog</code></a>        <ol>
+          <li><a href="#classmethod-load" id="markdown-toc-classmethod-load"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">load</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+            </ol>
+          </li>
+          <li><a href="#classmethod-reload" id="markdown-toc-classmethod-reload"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">reload</code></a></li>
+          <li><a href="#property-simulations_dataframe" id="markdown-toc-property-simulations_dataframe"><em>property</em> <code class="language-plaintext highlighter-rouge">simulations_dataframe</code></a>            <ol>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#property-files" id="markdown-toc-property-files"><em>property</em> <code class="language-plaintext highlighter-rouge">files</code></a>            <ol>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_filename_from_simname" id="markdown-toc-metadata_filename_from_simname"><code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_filepath_from_simname" id="markdown-toc-metadata_filepath_from_simname"><code class="language-plaintext highlighter-rouge">metadata_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+              <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a></li>
+              <li><a href="#raises" id="markdown-toc-raises">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_url_from_simname" id="markdown-toc-metadata_url_from_simname"><code class="language-plaintext highlighter-rouge">metadata_url_from_simname</code></a>            <ol>
+              <li><a href="#parameters-3" id="markdown-toc-parameters-3">Parameters</a></li>
+              <li><a href="#returns-4" id="markdown-toc-returns-4">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_filename_from_simname" id="markdown-toc-waveform_filename_from_simname"><code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-4" id="markdown-toc-parameters-4">Parameters</a></li>
+              <li><a href="#returns-5" id="markdown-toc-returns-5">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_filepath_from_simname" id="markdown-toc-waveform_filepath_from_simname"><code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-5" id="markdown-toc-parameters-5">Parameters</a></li>
+              <li><a href="#returns-6" id="markdown-toc-returns-6">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_url_from_simname" id="markdown-toc-waveform_url_from_simname"><code class="language-plaintext highlighter-rouge">waveform_url_from_simname</code></a>            <ol>
+              <li><a href="#parameters-6" id="markdown-toc-parameters-6">Parameters</a></li>
+              <li><a href="#returns-7" id="markdown-toc-returns-7">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#refresh_metadata_df_on_disk" id="markdown-toc-refresh_metadata_df_on_disk"><code class="language-plaintext highlighter-rouge">refresh_metadata_df_on_disk</code></a>            <ol>
+              <li><a href="#parameters-7" id="markdown-toc-parameters-7">Parameters</a></li>
+              <li><a href="#returns-8" id="markdown-toc-returns-8">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_data_for_catalog" id="markdown-toc-download_data_for_catalog"><code class="language-plaintext highlighter-rouge">download_data_for_catalog</code></a>            <ol>
+              <li><a href="#parameters-8" id="markdown-toc-parameters-8">Parameters</a></li>
+              <li><a href="#returns-9" id="markdown-toc-returns-9">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#write_metadata_df_to_disk" id="markdown-toc-write_metadata_df_to_disk"><code class="language-plaintext highlighter-rouge">write_metadata_df_to_disk</code></a></li>
+          <li><a href="#download_waveform_data" id="markdown-toc-download_waveform_data"><code class="language-plaintext highlighter-rouge">download_waveform_data</code></a>            <ol>
+              <li><a href="#parameters-9" id="markdown-toc-parameters-9">Parameters</a></li>
+              <li><a href="#returns-10" id="markdown-toc-returns-10">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_filename_from_simname" id="markdown-toc-psi4_filename_from_simname"><code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-10" id="markdown-toc-parameters-10">Parameters</a></li>
+              <li><a href="#returns-11" id="markdown-toc-returns-11">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_filepath_from_simname" id="markdown-toc-psi4_filepath_from_simname"><code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-11" id="markdown-toc-parameters-11">Parameters</a></li>
+              <li><a href="#returns-12" id="markdown-toc-returns-12">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_url_from_simname" id="markdown-toc-psi4_url_from_simname"><code class="language-plaintext highlighter-rouge">psi4_url_from_simname</code></a>            <ol>
+              <li><a href="#parameters-12" id="markdown-toc-parameters-12">Parameters</a></li>
+              <li><a href="#returns-13" id="markdown-toc-returns-13">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_psi4_data" id="markdown-toc-download_psi4_data"><code class="language-plaintext highlighter-rouge">download_psi4_data</code></a>            <ol>
+              <li><a href="#parameters-13" id="markdown-toc-parameters-13">Parameters</a></li>
+              <li><a href="#returns-14" id="markdown-toc-returns-14">Returns</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+      <li><a href="#class-ritcataloghelper" id="markdown-toc-class-ritcataloghelper"><em>class</em> <code class="language-plaintext highlighter-rouge">RITCatalogHelper</code></a>        <ol>
+          <li><a href="#metadata_filenames" id="markdown-toc-metadata_filenames"><code class="language-plaintext highlighter-rouge">metadata_filenames</code></a>            <ol>
+              <li><a href="#parameters-14" id="markdown-toc-parameters-14">Parameters</a></li>
+              <li><a href="#returns-15" id="markdown-toc-returns-15">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#sim_info_from_metadata_filename" id="markdown-toc-sim_info_from_metadata_filename"><code class="language-plaintext highlighter-rouge">sim_info_from_metadata_filename</code></a></li>
+        </ol>
+      </li>
+      <li><a href="#input" id="markdown-toc-input">Input:</a></li>
+      <li><a href="#output" id="markdown-toc-output">Output:</a>        <ol>
+          <li><a href="#simname_from_metadata_filename" id="markdown-toc-simname_from_metadata_filename"><code class="language-plaintext highlighter-rouge">simname_from_metadata_filename</code></a></li>
+        </ol>
+      </li>
+      <li><a href="#input-1" id="markdown-toc-input-1">Input:</a></li>
+      <li><a href="#output-1" id="markdown-toc-output-1">Output:</a>        <ol>
+          <li><a href="#metadata_filename_from_simname-1" id="markdown-toc-metadata_filename_from_simname-1"><code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code></a></li>
+          <li><a href="#metadata_filename_from_cache" id="markdown-toc-metadata_filename_from_cache"><code class="language-plaintext highlighter-rouge">metadata_filename_from_cache</code></a>            <ol>
+              <li><a href="#parameters-15" id="markdown-toc-parameters-15">Parameters</a></li>
+              <li><a href="#returns-16" id="markdown-toc-returns-16">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_filename_from_simname-1" id="markdown-toc-psi4_filename_from_simname-1"><code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code></a></li>
+          <li><a href="#psi4_filename_from_cache" id="markdown-toc-psi4_filename_from_cache"><code class="language-plaintext highlighter-rouge">psi4_filename_from_cache</code></a>            <ol>
+              <li><a href="#parameters-16" id="markdown-toc-parameters-16">Parameters</a></li>
+              <li><a href="#returns-17" id="markdown-toc-returns-17">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_filename_from_simname-1" id="markdown-toc-waveform_filename_from_simname-1"><code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code></a></li>
+          <li><a href="#waveform_filename_from_cache" id="markdown-toc-waveform_filename_from_cache"><code class="language-plaintext highlighter-rouge">waveform_filename_from_cache</code></a>            <ol>
+              <li><a href="#parameters-17" id="markdown-toc-parameters-17">Parameters</a></li>
+              <li><a href="#returns-18" id="markdown-toc-returns-18">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#simname_from_cache" id="markdown-toc-simname_from_cache"><code class="language-plaintext highlighter-rouge">simname_from_cache</code></a>            <ol>
+              <li><a href="#parameters-18" id="markdown-toc-parameters-18">Parameters</a></li>
+              <li><a href="#returns-19" id="markdown-toc-returns-19">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#simnames" id="markdown-toc-simnames"><code class="language-plaintext highlighter-rouge">simnames</code></a>            <ol>
+              <li><a href="#parameters-19" id="markdown-toc-parameters-19">Parameters</a></li>
+              <li><a href="#returns-20" id="markdown-toc-returns-20">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#simtags" id="markdown-toc-simtags"><code class="language-plaintext highlighter-rouge">simtags</code></a>            <ol>
+              <li><a href="#parameters-20" id="markdown-toc-parameters-20">Parameters</a></li>
+              <li><a href="#returns-21" id="markdown-toc-returns-21">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#parse_metadata_txt" id="markdown-toc-parse_metadata_txt"><code class="language-plaintext highlighter-rouge">parse_metadata_txt</code></a>            <ol>
+              <li><a href="#parameters-21" id="markdown-toc-parameters-21">Parameters</a></li>
+              <li><a href="#returns-22" id="markdown-toc-returns-22">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_from_link" id="markdown-toc-metadata_from_link"><code class="language-plaintext highlighter-rouge">metadata_from_link</code></a>            <ol>
+              <li><a href="#parameters-22" id="markdown-toc-parameters-22">Parameters</a></li>
+              <li><a href="#returns-23" id="markdown-toc-returns-23">Returns</a></li>
+              <li><a href="#raises-1" id="markdown-toc-raises-1">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_from_file" id="markdown-toc-metadata_from_file"><code class="language-plaintext highlighter-rouge">metadata_from_file</code></a>            <ol>
+              <li><a href="#parameters-23" id="markdown-toc-parameters-23">Parameters</a></li>
+              <li><a href="#returns-24" id="markdown-toc-returns-24">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_from_cache" id="markdown-toc-metadata_from_cache"><code class="language-plaintext highlighter-rouge">metadata_from_cache</code></a>            <ol>
+              <li><a href="#parameters-24" id="markdown-toc-parameters-24">Parameters</a></li>
+              <li><a href="#returns-25" id="markdown-toc-returns-25">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_metadata" id="markdown-toc-download_metadata"><code class="language-plaintext highlighter-rouge">download_metadata</code></a>            <ol>
+              <li><a href="#parameters-25" id="markdown-toc-parameters-25">Parameters</a></li>
+              <li><a href="#returns-26" id="markdown-toc-returns-26">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_metadata_for_catalog" id="markdown-toc-download_metadata_for_catalog"><code class="language-plaintext highlighter-rouge">download_metadata_for_catalog</code></a></li>
+          <li><a href="#write_metadata_df_to_disk-1" id="markdown-toc-write_metadata_df_to_disk-1"><code class="language-plaintext highlighter-rouge">write_metadata_df_to_disk</code></a></li>
+          <li><a href="#refresh_metadata_df_on_disk-1" id="markdown-toc-refresh_metadata_df_on_disk-1"><code class="language-plaintext highlighter-rouge">refresh_metadata_df_on_disk</code></a>            <ol>
+              <li><a href="#parameters-26" id="markdown-toc-parameters-26">Parameters</a></li>
+              <li><a href="#returns-27" id="markdown-toc-returns-27">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#read_metadata_df_from_disk" id="markdown-toc-read_metadata_df_from_disk"><code class="language-plaintext highlighter-rouge">read_metadata_df_from_disk</code></a>            <ol>
+              <li><a href="#returns-28" id="markdown-toc-returns-28">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_psi4_data-1" id="markdown-toc-download_psi4_data-1"><code class="language-plaintext highlighter-rouge">download_psi4_data</code></a>            <ol>
+              <li><a href="#parameters-27" id="markdown-toc-parameters-27">Parameters</a></li>
+              <li><a href="#returns-29" id="markdown-toc-returns-29">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_waveform_data-1" id="markdown-toc-download_waveform_data-1"><code class="language-plaintext highlighter-rouge">download_waveform_data</code></a>            <ol>
+              <li><a href="#parameters-28" id="markdown-toc-parameters-28">Parameters</a></li>
+              <li><a href="#returns-30" id="markdown-toc-returns-30">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#fetch_waveform_data_from_cache" id="markdown-toc-fetch_waveform_data_from_cache"><code class="language-plaintext highlighter-rouge">fetch_waveform_data_from_cache</code></a>            <ol>
+              <li><a href="#parameters-29" id="markdown-toc-parameters-29">Parameters</a></li>
+              <li><a href="#raises-2" id="markdown-toc-raises-2">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_data_for_catalog-1" id="markdown-toc-download_data_for_catalog-1"><code class="language-plaintext highlighter-rouge">download_data_for_catalog</code></a>            <ol>
+              <li><a href="#parameters-30" id="markdown-toc-parameters-30">Parameters</a></li>
+              <li><a href="#returns-31" id="markdown-toc-returns-31">Returns</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td><code class="language-plaintext highlighter-rouge">logging.getLogger(__name__)</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="class-ritcatalog">
+  
+  
+    <a href="#class-ritcatalog" class="anchor-heading" aria-labelledby="class-ritcatalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">RITCatalog</code>
+  
+  
+</h2>
+    
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">catalog.CatalogBase</code></p>
+
+<p>Catalog interface for the RIT (LazEv) NR waveform collection.</p>
+
+<p>Delegates all file-naming, URL-construction, caching, and web-crawling
+logic to <code class="language-plaintext highlighter-rouge">RITCatalogHelper</code>.  <code class="language-plaintext highlighter-rouge">RITCatalog</code> itself provides the
+<code class="language-plaintext highlighter-rouge">CatalogBase</code>-compatible public API (<code class="language-plaintext highlighter-rouge">load()</code>, <code class="language-plaintext highlighter-rouge">get()</code>,
+<code class="language-plaintext highlighter-rouge">get_metadata()</code>, <code class="language-plaintext highlighter-rouge">get_parameters()</code>, etc.).</p>
+
+<p>Key design points:</p>
+
+<ul>
+  <li>Metadata is scraped from <code class="language-plaintext highlighter-rouge">https://ccrgpages.rit.edu/~RITCatalog/</code>
+on first load and aggregated into <code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/metadata.csv</code>.</li>
+  <li>Waveform HDF5 files (<code class="language-plaintext highlighter-rouge">ExtrapStrain_RIT-BBH-*.h5</code>) are downloaded
+to <code class="language-plaintext highlighter-rouge">~/.cache/RIT/data/</code> on demand.</li>
+  <li>Psi4 data is available as <code class="language-plaintext highlighter-rouge">.tar.gz</code> archives via
+<code class="language-plaintext highlighter-rouge">download_psi4_data()</code> / <code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname()</code>.</li>
+  <li>A module-level singleton prevents redundant catalog loads when
+<code class="language-plaintext highlighter-rouge">load()</code> is called multiple times in the same process.</li>
+</ul>
+
+<p>Example:
+    »&gt; import nrcats as nrcat
+    »&gt; cat = nrcat.RITCatalog.load(verbosity=0)
+    »&gt; wfm = cat.get(“RIT:BBH:0001-n100-id3”)</p>
+<h3 id="classmethod-load">
+  
+  
+    <a href="#classmethod-load" class="anchor-heading" aria-labelledby="classmethod-load"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">load</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load</span><span class="p">(</span><span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">acceptable_scraping_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.7</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RITCatalog</span>
+</code></pre></div></div>
+
+<p>Load the RIT catalog.</p>
+
+<p>The result is cached in a module-level singleton after the first
+successful load.  Subsequent calls return the cached instance without
+re-reading disk or the network, unless <code class="language-plaintext highlighter-rouge">download=True</code> is passed.</p>
+
+<p>Pass <code class="language-plaintext highlighter-rouge">download=True</code> to force a fresh download and replace the
+singleton, or call <code class="language-plaintext highlighter-rouge">RITCatalog.reload()</code> for the same effect.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">download</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(None, bool)</code></td>
+      <td>If False, this function will look for the catalog in the cache and raise an error if it is not found. If True, this function will download the catalog and raise an error if the download fails. If None (the default), it will try to download the file, warn but fall back to the cache if that fails, and only raise an error if the catalog is not found in the cache.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<blockquote>
+  <p><strong>See Also</strong>
+RITCatalog.reload : Force a fresh download and replace the singleton.
+nrcats.utils.rit_catalog_info : Catalog info, including cache directory.</p>
+</blockquote><hr />
+<h3 id="classmethod-reload">
+  
+  
+    <a href="#classmethod-reload" class="anchor-heading" aria-labelledby="classmethod-reload"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">reload</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">reload</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RITCatalog</span>
+</code></pre></div></div>
+
+<p>Force a fresh download and replace the cached singleton.</p>
+
+<p>Equivalent to <code class="language-plaintext highlighter-rouge">RITCatalog.load(download=True, **kwargs)</code>.</p><hr />
+<h3 id="property-simulations_dataframe">
+  
+  
+    <a href="#property-simulations_dataframe" class="anchor-heading" aria-labelledby="property-simulations_dataframe"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">simulations_dataframe</code>
+  
+  
+</h3>
+    
+
+<p>All simulations as a Pandas DataFrame indexed by simulation name.</p>
+
+<p>Removes any unnamed index columns left over from CSV round-trips and
+sets <code class="language-plaintext highlighter-rouge">simulation_name</code> as both the index and an explicit column.</p>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: DataFrame with one row per simulation and</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>metadata fields as columns.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="property-files">
+  
+  
+    <a href="#property-files" class="anchor-heading" aria-labelledby="property-files"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">files</code>
+  
+  
+</h3>
+    
+
+<p>Map of waveform and psi4 filenames to file-info dicts.</p>
+
+<p>Each value is a dict with keys: <code class="language-plaintext highlighter-rouge">checksum</code> (None), <code class="language-plaintext highlighter-rouge">filename</code>,
+<code class="language-plaintext highlighter-rouge">filesize</code> (bytes; 0 if not cached), <code class="language-plaintext highlighter-rouge">download</code> (remote URL), and
+<code class="language-plaintext highlighter-rouge">truepath</code> (canonical local filename after deduplication).</p>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>dict[str, dict]: Mapping from bare filename to file-info dict.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_filename_from_simname">
+  
+  
+    <a href="#metadata_filename_from_simname" class="anchor-heading" aria-labelledby="metadata_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename of the RIT metadata text file for <em>sim_name</em>.</p>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename string, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3_Metadata.txt"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_filepath_from_simname">
+  
+  
+    <a href="#metadata_filepath_from_simname" class="anchor-heading" aria-labelledby="metadata_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local path to the metadata file for <em>sim_name</em>.</p>
+<h4 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Absolute path string to the cached <code class="language-plaintext highlighter-rouge">.txt</code> metadata file.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="raises">
+  
+  
+    <a href="#raises" class="anchor-heading" aria-labelledby="raises"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">RuntimeError</code></td>
+      <td>If the path stored in the metadata dict does not exist on disk.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_url_from_simname">
+  
+  
+    <a href="#metadata_url_from_simname" class="anchor-heading" aria-labelledby="metadata_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_url_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the remote URL for the metadata text file for <em>sim_name</em>.</p>
+<h4 id="parameters-3">
+  
+  
+    <a href="#parameters-3" class="anchor-heading" aria-labelledby="parameters-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-4">
+  
+  
+    <a href="#returns-4" class="anchor-heading" aria-labelledby="returns-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full URL string on the RIT web server.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_filename_from_simname">
+  
+  
+    <a href="#waveform_filename_from_simname" class="anchor-heading" aria-labelledby="waveform_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename of the RIT waveform HDF5 file for <em>sim_name</em>.</p>
+<h4 id="parameters-4">
+  
+  
+    <a href="#parameters-4" class="anchor-heading" aria-labelledby="parameters-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-5">
+  
+  
+    <a href="#returns-5" class="anchor-heading" aria-labelledby="returns-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename string, e.g. <code class="language-plaintext highlighter-rouge">"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_filepath_from_simname">
+  
+  
+    <a href="#waveform_filepath_from_simname" class="anchor-heading" aria-labelledby="waveform_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local cache path to the waveform HDF5 for <em>sim_name</em>.</p>
+
+<p>Falls back to re-anchoring the filename under the current cache directory
+when the stored path (from a shared CSV) belongs to a different machine.</p>
+<h4 id="parameters-5">
+  
+  
+    <a href="#parameters-5" class="anchor-heading" aria-labelledby="parameters-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-6">
+  
+  
+    <a href="#returns-6" class="anchor-heading" aria-labelledby="returns-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Absolute path string to the local <code class="language-plaintext highlighter-rouge">.h5</code> waveform file. Returns the</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>stored (possibly stale) path if the file is not yet downloaded.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_url_from_simname">
+  
+  
+    <a href="#waveform_url_from_simname" class="anchor-heading" aria-labelledby="waveform_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_url_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the remote URL of the waveform HDF5 file for <em>sim_name</em>.</p>
+<h4 id="parameters-6">
+  
+  
+    <a href="#parameters-6" class="anchor-heading" aria-labelledby="parameters-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-7">
+  
+  
+    <a href="#returns-7" class="anchor-heading" aria-labelledby="returns-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full URL string on the RIT web server.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="refresh_metadata_df_on_disk">
+  
+  
+    <a href="#refresh_metadata_df_on_disk" class="anchor-heading" aria-labelledby="refresh_metadata_df_on_disk"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">refresh_metadata_df_on_disk</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">refresh_metadata_df_on_disk</span><span class="p">(</span><span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Delegate to <code class="language-plaintext highlighter-rouge">RITCatalogHelper.refresh_metadata_df_on_disk()</code>.</p>
+<h4 id="parameters-7">
+  
+  
+    <a href="#parameters-7" class="anchor-heading" aria-labelledby="parameters-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">num_sims_to_crawl</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Upper bound on the simulation index. Defaults to 2000.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-8">
+  
+  
+    <a href="#returns-8" class="anchor-heading" aria-labelledby="returns-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: Refreshed aggregated metadata DataFrame.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_data_for_catalog">
+  
+  
+    <a href="#download_data_for_catalog" class="anchor-heading" aria-labelledby="download_data_for_catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_data_for_catalog</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_data_for_catalog</span><span class="p">(</span><span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">which_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">waveform</span><span class="sh">'</span><span class="p">,</span> <span class="n">possible_res</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">max_id_in_name</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Download waveform or psi4 data for all simulations in the catalog.</p>
+<h4 id="parameters-8">
+  
+  
+    <a href="#parameters-8" class="anchor-heading" aria-labelledby="parameters-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">num_sims_to_crawl</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum number of simulations to process. Defaults to 2000.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">which_data</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"waveform"</code> or <code class="language-plaintext highlighter-rouge">"psi4"</code>. Defaults to <code class="language-plaintext highlighter-rouge">"waveform"</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">possible_res</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list[int] or None</code></td>
+      <td>Resolution values to try. Defaults to the list in <code class="language-plaintext highlighter-rouge">utils.rit_catalog_info</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">max_id_in_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum ID suffix to search for. Defaults to <code class="language-plaintext highlighter-rouge">-1</code> (uses the value in <code class="language-plaintext highlighter-rouge">utils.rit_catalog_info</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Skip download if a non-empty file exists locally. Defaults to True.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-9">
+  
+  
+    <a href="#returns-9" class="anchor-heading" aria-labelledby="returns-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>dict[str, pathlib.Path]: Mapping from simulation name to the</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>local file path for each successfully downloaded file.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="write_metadata_df_to_disk">
+  
+  
+    <a href="#write_metadata_df_to_disk" class="anchor-heading" aria-labelledby="write_metadata_df_to_disk"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">write_metadata_df_to_disk</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">write_metadata_df_to_disk</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Write the current aggregated metadata DataFrame to <code class="language-plaintext highlighter-rouge">metadata.csv</code>.</p>
+
+<p>Delegates to <code class="language-plaintext highlighter-rouge">RITCatalogHelper.write_metadata_df_to_disk()</code>.</p><hr />
+<h3 id="download_waveform_data">
+  
+  
+    <a href="#download_waveform_data" class="anchor-heading" aria-labelledby="download_waveform_data"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_waveform_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_waveform_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Download the waveform HDF5 file for <em>sim_name</em>.</p>
+<h4 id="parameters-9">
+  
+  
+    <a href="#parameters-9" class="anchor-heading" aria-labelledby="parameters-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool or None</code></td>
+      <td>Use the cached file if present. Defaults to None (uses helper’s default).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-10">
+  
+  
+    <a href="#returns-10" class="anchor-heading" aria-labelledby="returns-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>True if the file is available locally after the call.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_filename_from_simname">
+  
+  
+    <a href="#psi4_filename_from_simname" class="anchor-heading" aria-labelledby="psi4_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename of the RIT psi4 tar.gz archive for <em>sim_name</em>.</p>
+<h4 id="parameters-10">
+  
+  
+    <a href="#parameters-10" class="anchor-heading" aria-labelledby="parameters-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-11">
+  
+  
+    <a href="#returns-11" class="anchor-heading" aria-labelledby="returns-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename string, e.g.</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_filepath_from_simname">
+  
+  
+    <a href="#psi4_filepath_from_simname" class="anchor-heading" aria-labelledby="psi4_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local path to the psi4 archive for <em>sim_name</em>.</p>
+<h4 id="parameters-11">
+  
+  
+    <a href="#parameters-11" class="anchor-heading" aria-labelledby="parameters-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-12">
+  
+  
+    <a href="#returns-12" class="anchor-heading" aria-labelledby="returns-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Absolute path string, or an empty string if the file is not yet</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>downloaded.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_url_from_simname">
+  
+  
+    <a href="#psi4_url_from_simname" class="anchor-heading" aria-labelledby="psi4_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_url_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the remote URL of the psi4 archive for <em>sim_name</em>.</p>
+<h4 id="parameters-12">
+  
+  
+    <a href="#parameters-12" class="anchor-heading" aria-labelledby="parameters-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-13">
+  
+  
+    <a href="#returns-13" class="anchor-heading" aria-labelledby="returns-13"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full URL string on the RIT web server.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_psi4_data">
+  
+  
+    <a href="#download_psi4_data" class="anchor-heading" aria-labelledby="download_psi4_data"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_psi4_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_psi4_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Download the psi4 tar.gz archive for <em>sim_name</em>.</p>
+<h4 id="parameters-13">
+  
+  
+    <a href="#parameters-13" class="anchor-heading" aria-labelledby="parameters-13"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool | None</code></td>
+      <td>Skip download if a non-empty file exists locally. Defaults to None (uses helper’s default).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-14">
+  
+  
+    <a href="#returns-14" class="anchor-heading" aria-labelledby="returns-14"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>True if the file is available locally after the call.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="class-ritcataloghelper">
+  
+  
+    <a href="#class-ritcataloghelper" class="anchor-heading" aria-labelledby="class-ritcataloghelper"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">RITCatalogHelper</code>
+  
+  
+</h2>
+    
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">object</code></p>
+
+<p>Internal helper for RIT catalog scraping, caching, and file naming.</p>
+
+<p>Handles all the catalog-specific complexity that <code class="language-plaintext highlighter-rouge">RITCatalog</code> delegates:</p>
+
+<ul>
+  <li><strong>File naming</strong> – converts simulation name tags (e.g.
+<code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>) to metadata filenames, waveform filenames,
+and psi4 filenames in the formats used on the RIT web server.</li>
+  <li><strong>Metadata scraping</strong> – downloads <code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> files from the RIT
+web server one-by-one, parses them with <code class="language-plaintext highlighter-rouge">parse_metadata_txt()</code>, and
+aggregates them into a Pandas DataFrame.</li>
+  <li><strong>Disk caching</strong> – reads/writes the aggregated DataFrame as
+<code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/metadata.csv</code> and stores individual
+<code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> files in <code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/</code>.</li>
+  <li><strong>Data downloads</strong> – downloads waveform HDF5 and psi4 tar.gz files via
+<code class="language-plaintext highlighter-rouge">wget</code> into <code class="language-plaintext highlighter-rouge">~/.cache/RIT/data/</code>.</li>
+</ul>
+
+<p>This class is not part of the public API; use <code class="language-plaintext highlighter-rouge">RITCatalog</code> instead.</p>
+<h3 id="metadata_filenames">
+  
+  
+    <a href="#metadata_filenames" class="anchor-heading" aria-labelledby="metadata_filenames"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filenames</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filenames</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">id_val</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span>
+</code></pre></div></div>
+
+<p>Return all candidate metadata filenames for simulation <em>idx</em>.</p>
+
+<p>Returns one name for the quasicircular BBH format and one for the
+eccentric BBH format, since a given index may correspond to either.</p>
+<h4 id="parameters-14">
+  
+  
+    <a href="#parameters-14" class="anchor-heading" aria-labelledby="parameters-14"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index (e.g. <code class="language-plaintext highlighter-rouge">1</code> for <code class="language-plaintext highlighter-rouge">0001</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">res</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Numerical resolution tag (e.g. <code class="language-plaintext highlighter-rouge">100</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">id_val</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>ID suffix for quasicircular simulations (e.g. <code class="language-plaintext highlighter-rouge">3</code>).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-15">
+  
+  
+    <a href="#returns-15" class="anchor-heading" aria-labelledby="returns-15"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>list[str]: Two candidate filenames:</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>``[“RIT:BBH:NNNN-nRRR-idI_Metadata.txt”,</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>“RIT:eBBH:NNNN-nRRR-ecc_Metadata.txt”]``.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="sim_info_from_metadata_filename">
+  
+  
+    <a href="#sim_info_from_metadata_filename" class="anchor-heading" aria-labelledby="sim_info_from_metadata_filename"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">sim_info_from_metadata_filename</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">sim_info_from_metadata_filename</span><span class="p">(</span><span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+<h2 id="input">
+  
+  
+    <a href="#input" class="anchor-heading" aria-labelledby="input"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Input:
+  
+  
+</h2>
+    
+<p>file_name: name (not path) of metadata file as hosted on the web</p>
+<h2 id="output">
+  
+  
+    <a href="#output" class="anchor-heading" aria-labelledby="output"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Output:
+  
+  
+</h2>
+    
+<ul>
+  <li>simulation number</li>
+  <li>resolution as indicated with an integer</li>
+  <li>ID value (only for non-eccentric simulations)</li>
+</ul><hr />
+<h3 id="simname_from_metadata_filename">
+  
+  
+    <a href="#simname_from_metadata_filename" class="anchor-heading" aria-labelledby="simname_from_metadata_filename"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">simname_from_metadata_filename</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">simname_from_metadata_filename</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+<h2 id="input-1">
+  
+  
+    <a href="#input-1" class="anchor-heading" aria-labelledby="input-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Input:
+  
+  
+</h2>
+    
+<ul>
+  <li>filename: name (not path) of metadata file as hosted on the web</li>
+</ul>
+<h2 id="output-1">
+  
+  
+    <a href="#output-1" class="anchor-heading" aria-labelledby="output-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Output:
+  
+  
+</h2>
+    
+<ul>
+  <li>Simulation Name Tag (Class uses this tag for internal indexing)</li>
+</ul><hr />
+<h3 id="metadata_filename_from_simname-1">
+  
+  
+    <a href="#metadata_filename_from_simname-1" class="anchor-heading" aria-labelledby="metadata_filename_from_simname-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>We assume the sim names are either of the format:
+(1) RIT:eBBH:1109-n100-ecc
+(2) RIT:BBH:1109-n100-id1</p><hr />
+<h3 id="metadata_filename_from_cache">
+  
+  
+    <a href="#metadata_filename_from_cache" class="anchor-heading" aria-labelledby="metadata_filename_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filename_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filename_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the path of the cached metadata file for simulation <em>idx</em>.</p>
+
+<p>Searches the local metadata cache directory for any file whose name
+starts with either the BBH or eBBH sim-tag prefix for this index.</p>
+<h4 id="parameters-15">
+  
+  
+    <a href="#parameters-15" class="anchor-heading" aria-labelledby="parameters-15"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-16">
+  
+  
+    <a href="#returns-16" class="anchor-heading" aria-labelledby="returns-16"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full path of the first matching cached file, or <code class="language-plaintext highlighter-rouge">""</code> if no</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>cached file is found.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_filename_from_simname-1">
+  
+  
+    <a href="#psi4_filename_from_simname-1" class="anchor-heading" aria-labelledby="psi4_filename_from_simname-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>We assume the sim names are either of the format:
+(1) RIT:eBBH:1109-n100-ecc
+(2) RIT:BBH:1109-n100-id1</p><hr />
+<h3 id="psi4_filename_from_cache">
+  
+  
+    <a href="#psi4_filename_from_cache" class="anchor-heading" aria-labelledby="psi4_filename_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filename_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filename_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the psi4 filename for simulation <em>idx</em> via the cache.</p>
+
+<p>Looks up the cached metadata filename for <em>idx</em>, derives the
+simulation name from it, and then computes the psi4 filename.</p>
+<h4 id="parameters-16">
+  
+  
+    <a href="#parameters-16" class="anchor-heading" aria-labelledby="parameters-16"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-17">
+  
+  
+    <a href="#returns-17" class="anchor-heading" aria-labelledby="returns-17"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Psi4 filename, e.g.</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_filename_from_simname-1">
+  
+  
+    <a href="#waveform_filename_from_simname-1" class="anchor-heading" aria-labelledby="waveform_filename_from_simname-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>ExtrapStrain_RIT-BBH-0005-n100.h5 –&gt;
+ExtrapStrain_RIT-eBBH-1843-n100.h5
+RIT:eBBH:1843-n100-ecc_Metadata.txt</p><hr />
+<h3 id="waveform_filename_from_cache">
+  
+  
+    <a href="#waveform_filename_from_cache" class="anchor-heading" aria-labelledby="waveform_filename_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filename_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filename_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the waveform HDF5 filename for simulation <em>idx</em> via the cache.</p>
+
+<p>Looks up the cached metadata filename for <em>idx</em>, derives the
+simulation name from it, and then computes the waveform filename.</p>
+<h4 id="parameters-17">
+  
+  
+    <a href="#parameters-17" class="anchor-heading" aria-labelledby="parameters-17"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-18">
+  
+  
+    <a href="#returns-18" class="anchor-heading" aria-labelledby="returns-18"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Waveform filename, e.g.</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"ExtrapStrain_RIT-BBH-0001-n100.h5"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="simname_from_cache">
+  
+  
+    <a href="#simname_from_cache" class="anchor-heading" aria-labelledby="simname_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">simname_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">simname_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the simulation name tag for <em>idx</em> by inspecting the cache.</p>
+
+<p>Searches the metadata cache directory for a file matching either the
+BBH or eBBH prefix, then derives the simulation name from the
+filename.</p>
+<h4 id="parameters-18">
+  
+  
+    <a href="#parameters-18" class="anchor-heading" aria-labelledby="parameters-18"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-19">
+  
+  
+    <a href="#returns-19" class="anchor-heading" aria-labelledby="returns-19"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Simulation name tag (e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>), or</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">""</code> if no cached metadata file is found for <em>idx</em>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="simnames">
+  
+  
+    <a href="#simnames" class="anchor-heading" aria-labelledby="simnames"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">simnames</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">simnames</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">id_val</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span>
+</code></pre></div></div>
+
+<p>Return candidate simulation name tags for <em>idx</em> at <em>res</em> and <em>id_val</em>.</p>
+<h4 id="parameters-19">
+  
+  
+    <a href="#parameters-19" class="anchor-heading" aria-labelledby="parameters-19"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">res</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Numerical resolution tag.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">id_val</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>ID suffix for quasicircular simulations.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-20">
+  
+  
+    <a href="#returns-20" class="anchor-heading" aria-labelledby="returns-20"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>list[str]: Two candidate simulation names (BBH and eBBH formats).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="simtags">
+  
+  
+    <a href="#simtags" class="anchor-heading" aria-labelledby="simtags"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">simtags</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">simtags</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span>
+</code></pre></div></div>
+
+<p>Return the filename-prefix tags used to glob-search for <em>idx</em>.</p>
+
+<p>Returns one prefix for the BBH format and one for the eBBH format,
+which are used to search for cached metadata files with
+<code class="language-plaintext highlighter-rouge">glob(prefix + "*")</code>.</p>
+<h4 id="parameters-20">
+  
+  
+    <a href="#parameters-20" class="anchor-heading" aria-labelledby="parameters-20"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-21">
+  
+  
+    <a href="#returns-21" class="anchor-heading" aria-labelledby="returns-21"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>list[str]: Two prefix strings, e.g.</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td><code class="language-plaintext highlighter-rouge">["RIT:BBH:0001", "RIT:eBBH:0001"]</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="parse_metadata_txt">
+  
+  
+    <a href="#parse_metadata_txt" class="anchor-heading" aria-labelledby="parse_metadata_txt"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">parse_metadata_txt</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">parse_metadata_txt</span><span class="p">(</span><span class="n">raw</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Parses raw RIT metadata</p>
+<h4 id="parameters-21">
+  
+  
+    <a href="#parameters-21" class="anchor-heading" aria-labelledby="parameters-21"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">raw</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list(str)</code></td>
+      <td>List of lines read in from RIT metadata</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-22">
+  
+  
+    <a href="#returns-22" class="anchor-heading" aria-labelledby="returns-22"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Original metadata with empty lines removed</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>Parsed metadata as a dictionary</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_from_link">
+  
+  
+    <a href="#metadata_from_link" class="anchor-heading" aria-labelledby="metadata_from_link"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_from_link</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_from_link</span><span class="p">(</span><span class="n">link</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">save_to</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">num_retries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Fetch and parse a single RIT metadata file from a URL.</p>
+
+<p>If <em>save_to</em> is given, downloads the file to disk and then parses it
+with <code class="language-plaintext highlighter-rouge">metadata_from_file()</code>.  Otherwise performs an in-memory HTTP
+GET and parses the response body directly.</p>
+<h4 id="parameters-22">
+  
+  
+    <a href="#parameters-22" class="anchor-heading" aria-labelledby="parameters-22"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">link</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full HTTP(S) URL to the <code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> file.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">save_to</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str or pathlib.Path or None</code></td>
+      <td>If provided, save the downloaded text to this path before parsing. Defaults to None.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">num_retries</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Number of request attempts with exponential backoff. Defaults to 5.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-23">
+  
+  
+    <a href="#returns-23" class="anchor-heading" aria-labelledby="returns-23"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>tuple[list[str], dict]: The output of <code class="language-plaintext highlighter-rouge">parse_metadata_txt()</code>:</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>a list of non-empty metadata lines and a dict of parsed fields.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="raises-1">
+  
+  
+    <a href="#raises-1" class="anchor-heading" aria-labelledby="raises-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ConnectionError</code></td>
+      <td>If all retry attempts fail.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_from_file">
+  
+  
+    <a href="#metadata_from_file" class="anchor-heading" aria-labelledby="metadata_from_file"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_from_file</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_from_file</span><span class="p">(</span><span class="n">file_path</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Parse a locally cached RIT metadata text file.</p>
+<h4 id="parameters-23">
+  
+  
+    <a href="#parameters-23" class="anchor-heading" aria-labelledby="parameters-23"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">file_path</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str or pathlib.Path</code></td>
+      <td>Path to the <code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> file on disk.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-24">
+  
+  
+    <a href="#returns-24" class="anchor-heading" aria-labelledby="returns-24"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>tuple[list[str], dict]: The output of <code class="language-plaintext highlighter-rouge">parse_metadata_txt()</code>:</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>a list of non-empty metadata lines and a dict of parsed fields.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_from_cache">
+  
+  
+    <a href="#metadata_from_cache" class="anchor-heading" aria-labelledby="metadata_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Build a single-row DataFrame from a cached metadata file for <em>idx</em>.</p>
+
+<p>Searches the local metadata cache for any file matching the BBH or
+eBBH prefix for <em>idx</em>.  If found, parses it and enriches the result
+with the simulation name, metadata/psi4/waveform URLs and local paths.</p>
+<h4 id="parameters-24">
+  
+  
+    <a href="#parameters-24" class="anchor-heading" aria-labelledby="parameters-24"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-25">
+  
+  
+    <a href="#returns-25" class="anchor-heading" aria-labelledby="returns-25"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: Single-row DataFrame with all metadata fields</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>plus <code class="language-plaintext highlighter-rouge">simulation_name</code>, <code class="language-plaintext highlighter-rouge">metadata_link</code>, <code class="language-plaintext highlighter-rouge">metadata_location</code>,</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">psi4_data_link</code>, <code class="language-plaintext highlighter-rouge">psi4_data_location</code>, <code class="language-plaintext highlighter-rouge">waveform_data_link</code>,</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>and <code class="language-plaintext highlighter-rouge">waveform_data_location</code> columns. Returns an empty DataFrame</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>if no cached file is found for <em>idx</em>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_metadata">
+  
+  
+    <a href="#download_metadata" class="anchor-heading" aria-labelledby="download_metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_metadata</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_metadata</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">res</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">id_val</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Download (or read from cache) metadata for one simulation.</p>
+
+<p>Tries the BBH filename format first, then the eBBH format.  For each
+candidate filename, checks the local cache first (if <code class="language-plaintext highlighter-rouge">use_cache</code> is
+True) before making an HTTP request.  The downloaded file is saved
+to the metadata cache directory.</p>
+<h4 id="parameters-25">
+  
+  
+    <a href="#parameters-25" class="anchor-heading" aria-labelledby="parameters-25"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">res</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Numerical resolution tag (e.g. <code class="language-plaintext highlighter-rouge">100</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">id_val</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>ID suffix for quasicircular simulations. Defaults to <code class="language-plaintext highlighter-rouge">-1</code> (triggers the eccentric filename format as fallback).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-26">
+  
+  
+    <a href="#returns-26" class="anchor-heading" aria-labelledby="returns-26"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: Single-row DataFrame (same schema as</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_from_cache()</code>), or an empty DataFrame if neither</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>filename is found locally or remotely.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_metadata_for_catalog">
+  
+  
+    <a href="#download_metadata_for_catalog" class="anchor-heading" aria-labelledby="download_metadata_for_catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_metadata_for_catalog</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_metadata_for_catalog</span><span class="p">(</span><span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">possible_res</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">max_id_in_name</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>We crawl the webdirectory where RIT metadata usually lives,
+and try to read metadata for as many simulations as we can</p><hr />
+<h3 id="write_metadata_df_to_disk-1">
+  
+  
+    <a href="#write_metadata_df_to_disk-1" class="anchor-heading" aria-labelledby="write_metadata_df_to_disk-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">write_metadata_df_to_disk</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">write_metadata_df_to_disk</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Write the current <code class="language-plaintext highlighter-rouge">self.metadata</code> DataFrame to <code class="language-plaintext highlighter-rouge">metadata.csv</code>.</p>
+
+<p>Saves to <code class="language-plaintext highlighter-rouge">~/.cache/RIT/metadata/metadata.csv</code> (or the path
+configured via <code class="language-plaintext highlighter-rouge">NR_CATALOG_CACHE</code>).  Called automatically after
+each simulation’s metadata is downloaded during a catalog crawl.</p><hr />
+<h3 id="refresh_metadata_df_on_disk-1">
+  
+  
+    <a href="#refresh_metadata_df_on_disk-1" class="anchor-heading" aria-labelledby="refresh_metadata_df_on_disk-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">refresh_metadata_df_on_disk</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">refresh_metadata_df_on_disk</span><span class="p">(</span><span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Rebuild the metadata CSV from cached <code class="language-plaintext highlighter-rouge">*_Metadata.txt</code> files.</p>
+
+<p>Iterates over simulation indices 1 … <em>num_sims_to_crawl</em>, reads each
+simulation’s metadata from the local file cache (does <strong>not</strong> make
+network requests), concatenates the results, and writes the aggregated
+DataFrame to <code class="language-plaintext highlighter-rouge">metadata.csv</code>.</p>
+<h4 id="parameters-26">
+  
+  
+    <a href="#parameters-26" class="anchor-heading" aria-labelledby="parameters-26"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">num_sims_to_crawl</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Upper bound on the simulation index to scan. Defaults to 2000.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-27">
+  
+  
+    <a href="#returns-27" class="anchor-heading" aria-labelledby="returns-27"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: The refreshed aggregated metadata DataFrame.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="read_metadata_df_from_disk">
+  
+  
+    <a href="#read_metadata_df_from_disk" class="anchor-heading" aria-labelledby="read_metadata_df_from_disk"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">read_metadata_df_from_disk</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">read_metadata_df_from_disk</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Load the aggregated metadata DataFrame from <code class="language-plaintext highlighter-rouge">metadata.csv</code>.</p>
+
+<p>If the CSV file does not exist or is empty, sets <code class="language-plaintext highlighter-rouge">self.metadata</code> to
+an empty DataFrame and returns it.</p>
+<h4 id="returns-28">
+  
+  
+    <a href="#returns-28" class="anchor-heading" aria-labelledby="returns-28"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>pandas.DataFrame: The previously saved aggregated metadata, or an</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>empty DataFrame if the cache file is absent.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_psi4_data-1">
+  
+  
+    <a href="#download_psi4_data-1" class="anchor-heading" aria-labelledby="download_psi4_data-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_psi4_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_psi4_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Download the psi4 tar.gz file for <em>sim_name</em> via <code class="language-plaintext highlighter-rouge">wget</code>.</p>
+
+<p>Skips the download if <code class="language-plaintext highlighter-rouge">use_cache</code> is True and a non-empty local
+file already exists.</p>
+<h4 id="parameters-27">
+  
+  
+    <a href="#parameters-27" class="anchor-heading" aria-labelledby="parameters-27"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool or None</code></td>
+      <td>Use cached file if present. If <code class="language-plaintext highlighter-rouge">None</code>, falls back to the instance-level <code class="language-plaintext highlighter-rouge">self.use_cache</code>. Defaults to True.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-29">
+  
+  
+    <a href="#returns-29" class="anchor-heading" aria-labelledby="returns-29"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>True if the file is available locally (either from cache or</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>after a successful download), False if the URL was not found.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_waveform_data-1">
+  
+  
+    <a href="#download_waveform_data-1" class="anchor-heading" aria-labelledby="download_waveform_data-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_waveform_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_waveform_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Download the waveform HDF5 file for <em>sim_name</em> via <code class="language-plaintext highlighter-rouge">wget</code>.</p>
+
+<p>Skips the download if <code class="language-plaintext highlighter-rouge">use_cache</code> is True and a non-empty local
+file already exists.</p>
+
+<p>Possible file formats:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">https://ccrgpages.rit.edu/~RITCatalog/Data/ExtrapStrain_RIT-BBH-0193-n100.h5</code></li>
+  <li><code class="language-plaintext highlighter-rouge">https://ccrgpages.rit.edu/~RITCatalog/Data/ExtrapStrain_RIT-eBBH-1911-n100.h5</code></li>
+</ul>
+<h4 id="parameters-28">
+  
+  
+    <a href="#parameters-28" class="anchor-heading" aria-labelledby="parameters-28"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>RIT simulation name tag, e.g. <code class="language-plaintext highlighter-rouge">"RIT:BBH:0001-n100-id3"</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool or None</code></td>
+      <td>Use cached file if present. If <code class="language-plaintext highlighter-rouge">None</code>, falls back to the instance-level <code class="language-plaintext highlighter-rouge">self.use_cache</code>. Defaults to True.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-30">
+  
+  
+    <a href="#returns-30" class="anchor-heading" aria-labelledby="returns-30"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>True if the file is available locally (either from cache or</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>after a successful download), False if the URL was not found.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="fetch_waveform_data_from_cache">
+  
+  
+    <a href="#fetch_waveform_data_from_cache" class="anchor-heading" aria-labelledby="fetch_waveform_data_from_cache"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">fetch_waveform_data_from_cache</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">fetch_waveform_data_from_cache</span><span class="p">(</span><span class="n">idx</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Not yet implemented.</p>
+<h4 id="parameters-29">
+  
+  
+    <a href="#parameters-29" class="anchor-heading" aria-labelledby="parameters-29"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">idx</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Four-digit simulation index.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="raises-2">
+  
+  
+    <a href="#raises-2" class="anchor-heading" aria-labelledby="raises-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NotImplementedError</code></td>
+      <td>Always.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_data_for_catalog-1">
+  
+  
+    <a href="#download_data_for_catalog-1" class="anchor-heading" aria-labelledby="download_data_for_catalog-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_data_for_catalog</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_data_for_catalog</span><span class="p">(</span><span class="n">num_sims_to_crawl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2000</span><span class="p">,</span> <span class="n">which_data</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">waveform</span><span class="sh">'</span><span class="p">,</span> <span class="n">possible_res</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">max_id_in_name</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">use_cache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Download waveform or psi4 data for all simulations in the catalog.</p>
+
+<p>Crawls the RIT web directory for waveform or psi4 data files and
+downloads each one.  Refreshes the on-disk metadata DataFrame first
+if it is out of date.</p>
+<h4 id="parameters-30">
+  
+  
+    <a href="#parameters-30" class="anchor-heading" aria-labelledby="parameters-30"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">num_sims_to_crawl</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum number of simulations to process. Defaults to 2000.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">which_data</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">"waveform"</code> or <code class="language-plaintext highlighter-rouge">"psi4"</code>. Defaults to <code class="language-plaintext highlighter-rouge">"waveform"</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">possible_res</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>Resolution values to try. Defaults to the list in <code class="language-plaintext highlighter-rouge">utils.rit_catalog_info</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">max_id_in_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum ID suffix to search. Defaults to <code class="language-plaintext highlighter-rouge">-1</code> (uses the value in <code class="language-plaintext highlighter-rouge">utils.rit_catalog_info</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">use_cache</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Skip download if a non-empty file exists locally. Defaults to True.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-31">
+  
+  
+    <a href="#returns-31" class="anchor-heading" aria-labelledby="returns-31"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>dict[str, pathlib.Path]: Mapping from simulation name to the</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>local file path for each successfully downloaded file.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

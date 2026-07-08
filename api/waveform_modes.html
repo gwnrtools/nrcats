@@ -1,0 +1,1826 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(5)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(5) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(5) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(5) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.waveform.modes | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.waveform.modes" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/waveform_modes.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/waveform_modes.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.waveform.modes" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.waveform.modes","url":"https://gwnrtools.github.io/nrcats/api/waveform_modes.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.waveform.modes</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatswaveformmodes">
+  
+  
+    <a href="#nrcatswaveformmodes" class="anchor-heading" aria-labelledby="nrcatswaveformmodes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.waveform.modes</code>
+  
+  
+</h1>
+    
+
+<p>WaveformModes class and related helpers.</p>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatswaveformmodes" id="markdown-toc-nrcatswaveformmodes"><code class="language-plaintext highlighter-rouge">nrcats.waveform.modes</code></a>    <ol>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a></li>
+      <li><a href="#class-waveformmodes" id="markdown-toc-class-waveformmodes"><em>class</em> <code class="language-plaintext highlighter-rouge">WaveformModes</code></a>        <ol>
+          <li><a href="#classmethod-load_from_h5" id="markdown-toc-classmethod-load_from_h5"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">load_from_h5</code></a></li>
+          <li><a href="#classmethod-load_from_targz" id="markdown-toc-classmethod-load_from_targz"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">load_from_targz</code></a></li>
+          <li><a href="#property-filepath" id="markdown-toc-property-filepath"><em>property</em> <code class="language-plaintext highlighter-rouge">filepath</code></a></li>
+          <li><a href="#property-sim_metadata" id="markdown-toc-property-sim_metadata"><em>property</em> <code class="language-plaintext highlighter-rouge">sim_metadata</code></a></li>
+          <li><a href="#property-metadata" id="markdown-toc-property-metadata"><em>property</em> <code class="language-plaintext highlighter-rouge">metadata</code></a></li>
+          <li><a href="#property-label" id="markdown-toc-property-label"><em>property</em> <code class="language-plaintext highlighter-rouge">label</code></a></li>
+          <li><a href="#property-label_nolatex" id="markdown-toc-property-label_nolatex"><em>property</em> <code class="language-plaintext highlighter-rouge">label_nolatex</code></a></li>
+          <li><a href="#get_parameters" id="markdown-toc-get_parameters"><code class="language-plaintext highlighter-rouge">get_parameters</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_mode_data" id="markdown-toc-get_mode_data"><code class="language-plaintext highlighter-rouge">get_mode_data</code></a></li>
+          <li><a href="#get_mode" id="markdown-toc-get_mode"><code class="language-plaintext highlighter-rouge">get_mode</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#f_lower_at_1msun" id="markdown-toc-f_lower_at_1msun"><code class="language-plaintext highlighter-rouge">f_lower_at_1Msun</code></a>            <ol>
+              <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+              <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#trim_to_relaxation_time" id="markdown-toc-trim_to_relaxation_time"><code class="language-plaintext highlighter-rouge">trim_to_relaxation_time</code></a>            <ol>
+              <li><a href="#parameters-3" id="markdown-toc-parameters-3">Parameters</a></li>
+              <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#f_lower_at_relaxation" id="markdown-toc-f_lower_at_relaxation"><code class="language-plaintext highlighter-rouge">f_lower_at_relaxation</code></a>            <ol>
+              <li><a href="#parameters-4" id="markdown-toc-parameters-4">Parameters</a></li>
+              <li><a href="#returns-4" id="markdown-toc-returns-4">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_polarizations" id="markdown-toc-get_polarizations"><code class="language-plaintext highlighter-rouge">get_polarizations</code></a>            <ol>
+              <li><a href="#parameters-5" id="markdown-toc-parameters-5">Parameters</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_td_waveform" id="markdown-toc-get_td_waveform"><code class="language-plaintext highlighter-rouge">get_td_waveform</code></a>            <ol>
+              <li><a href="#parameters-6" id="markdown-toc-parameters-6">Parameters</a></li>
+              <li><a href="#returns-5" id="markdown-toc-returns-5">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_angles" id="markdown-toc-get_angles"><code class="language-plaintext highlighter-rouge">get_angles</code></a>            <ol>
+              <li><a href="#parameters-7" id="markdown-toc-parameters-7">Parameters</a></li>
+              <li><a href="#returns-6" id="markdown-toc-returns-6">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#to_pycbc" id="markdown-toc-to_pycbc"><code class="language-plaintext highlighter-rouge">to_pycbc</code></a></li>
+          <li><a href="#get_nr_coa_phase" id="markdown-toc-get_nr_coa_phase"><code class="language-plaintext highlighter-rouge">get_nr_coa_phase</code></a></li>
+          <li><a href="#get_obs_phi_ref_from_obs_coa_phase" id="markdown-toc-get_obs_phi_ref_from_obs_coa_phase"><code class="language-plaintext highlighter-rouge">get_obs_phi_ref_from_obs_coa_phase</code></a></li>
+          <li><a href="#to_lal" id="markdown-toc-to_lal"><code class="language-plaintext highlighter-rouge">to_lal</code></a></li>
+          <li><a href="#to_astropy" id="markdown-toc-to_astropy"><code class="language-plaintext highlighter-rouge">to_astropy</code></a></li>
+          <li><a href="#property-t_ref_nr" id="markdown-toc-property-t_ref_nr"><em>property</em> <code class="language-plaintext highlighter-rouge">t_ref_nr</code></a></li>
+          <li><a href="#property-peak_time_22" id="markdown-toc-property-peak_time_22"><em>property</em> <code class="language-plaintext highlighter-rouge">peak_time_22</code></a></li>
+          <li><a href="#rotated" id="markdown-toc-rotated"><code class="language-plaintext highlighter-rouge">rotated</code></a>            <ol>
+              <li><a href="#parameters-8" id="markdown-toc-parameters-8">Parameters</a></li>
+              <li><a href="#returns-7" id="markdown-toc-returns-7">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#rotate_frame" id="markdown-toc-rotate_frame"><code class="language-plaintext highlighter-rouge">rotate_frame</code></a></li>
+          <li><a href="#align_to_j_frame" id="markdown-toc-align_to_j_frame"><code class="language-plaintext highlighter-rouge">align_to_j_frame</code></a>            <ol>
+              <li><a href="#parameters-9" id="markdown-toc-parameters-9">Parameters</a></li>
+              <li><a href="#returns-8" id="markdown-toc-returns-8">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#match_single_mode" id="markdown-toc-match_single_mode"><code class="language-plaintext highlighter-rouge">match_single_mode</code></a>            <ol>
+              <li><a href="#parameters-10" id="markdown-toc-parameters-10">Parameters</a></li>
+              <li><a href="#returns-9" id="markdown-toc-returns-9">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#match_sphere_averaged" id="markdown-toc-match_sphere_averaged"><code class="language-plaintext highlighter-rouge">match_sphere_averaged</code></a>            <ol>
+              <li><a href="#parameters-11" id="markdown-toc-parameters-11">Parameters</a></li>
+              <li><a href="#returns-10" id="markdown-toc-returns-10">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#match_sphere_averaged_bms_maximized" id="markdown-toc-match_sphere_averaged_bms_maximized"><code class="language-plaintext highlighter-rouge">match_sphere_averaged_bms_maximized</code></a>            <ol>
+              <li><a href="#parameters-12" id="markdown-toc-parameters-12">Parameters</a></li>
+              <li><a href="#returns-11" id="markdown-toc-returns-11">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#diff_l2_norm" id="markdown-toc-diff_l2_norm"><code class="language-plaintext highlighter-rouge">diff_l2_norm</code></a>            <ol>
+              <li><a href="#parameters-13" id="markdown-toc-parameters-13">Parameters</a></li>
+              <li><a href="#returns-12" id="markdown-toc-returns-12">Returns</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td><code class="language-plaintext highlighter-rouge">logging.getLogger(__name__)</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="class-waveformmodes">
+  
+  
+    <a href="#class-waveformmodes" class="anchor-heading" aria-labelledby="class-waveformmodes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">WaveformModes</code>
+  
+  
+</h2>
+    
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">sxs_WaveformModes</code></p>
+
+<p>Catalog-agnostic container for spin-weighted spherical-harmonic waveform modes.</p>
+
+<p>Inherits from <code class="language-plaintext highlighter-rouge">sxs.WaveformModes</code> (itself an <code class="language-plaintext highlighter-rouge">numpy.ndarray</code> subclass)
+so that instances <em>are</em> NumPy arrays.  This is an <strong>intentional design
+choice</strong>, not technical debt, motivated by three requirements:</p>
+
+<ol>
+  <li>
+    <p><strong>Zero-copy performance.</strong>  Mismatch calculations (<code class="language-plaintext highlighter-rouge">match_single_mode</code>,
+<code class="language-plaintext highlighter-rouge">match_sphere_averaged</code>, BMS supertranslation optimization) pass mode
+data directly to PyCBC and SciPy routines that expect array-protocol
+objects.  Inheritance lets NumPy hand them the underlying buffer without
+an intermediate copy.</p>
+  </li>
+  <li>
+    <p><strong>Wigner-rotation reuse.</strong>  The parent class exposes <code class="language-plaintext highlighter-rouge">evaluate()</code>,
+<code class="language-plaintext highlighter-rouge">index()</code>, <code class="language-plaintext highlighter-rouge">LM</code>, and Wigner-D rotation infrastructure from the
+<code class="language-plaintext highlighter-rouge">sxs</code> / <code class="language-plaintext highlighter-rouge">spherical</code> stack.  Inheriting avoids re-implementing or
+wrapping that non-trivial mathematics.</p>
+  </li>
+  <li>
+    <p><strong>Downstream compatibility.</strong>  Research workflows in PyCBC, <code class="language-plaintext highlighter-rouge">scri</code>,
+and user scripts rely on <code class="language-plaintext highlighter-rouge">isinstance(wfm, sxs.WaveformModes)</code>
+checks and on standard NumPy slicing semantics.  Breaking that
+contract would impose migration costs across the gravitational-wave
+community.</p>
+  </li>
+</ol>
+
+<p><strong>Attribute propagation.</strong>  Because <code class="language-plaintext highlighter-rouge">numpy.ndarray</code> subclasses lose
+plain instance attributes during slicing and view-casting, all custom
+state (<code class="language-plaintext highlighter-rouge">_filepath</code>, <code class="language-plaintext highlighter-rouge">_present_modes</code>, <code class="language-plaintext highlighter-rouge">_peak_time_22</code>,
+<code class="language-plaintext highlighter-rouge">_t_ref_nr</code>, <code class="language-plaintext highlighter-rouge">verbosity</code>) is stored inside the <code class="language-plaintext highlighter-rouge">_metadata</code> dict
+that <code class="language-plaintext highlighter-rouge">sxs.TimeSeries</code> already propagates.  Property descriptors
+provide transparent read/write access.  See <code class="language-plaintext highlighter-rouge">_custom_meta_keys</code>,
+<code class="language-plaintext highlighter-rouge">__array_finalize__</code>, <code class="language-plaintext highlighter-rouge">__copy__</code>, and <code class="language-plaintext highlighter-rouge">__deepcopy__</code> for details.</p>
+<h3 id="classmethod-load_from_h5">
+  
+  
+    <a href="#classmethod-load_from_h5" class="anchor-heading" aria-labelledby="classmethod-load_from_h5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">load_from_h5</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load_from_h5</span><span class="p">(</span><span class="n">file_path_or_open_file</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Load SWSH waveform modes from an HDF5 file (RIT/MAYA catalog format).</p>
+
+<p>See <code class="language-plaintext highlighter-rouge">nrcats.waveform.loaders.load_from_h5</code> for full docs.</p><hr />
+<h3 id="classmethod-load_from_targz">
+  
+  
+    <a href="#classmethod-load_from_targz" class="anchor-heading" aria-labelledby="classmethod-load_from_targz"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">load_from_targz</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load_from_targz</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="p">{},</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Load SWSH waveform modes from a <code class="language-plaintext highlighter-rouge">.tar.gz</code> archive (RIT psi4 format).</p>
+
+<p>See <code class="language-plaintext highlighter-rouge">nrcats.waveform.loaders.load_from_targz</code> for full docs.</p><hr />
+<h3 id="property-filepath">
+  
+  
+    <a href="#property-filepath" class="anchor-heading" aria-labelledby="property-filepath"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">filepath</code>
+  
+  
+</h3>
+    
+
+<p>Return the data file path</p><hr />
+<h3 id="property-sim_metadata">
+  
+  
+    <a href="#property-sim_metadata" class="anchor-heading" aria-labelledby="property-sim_metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">sim_metadata</code>
+  
+  
+</h3>
+    
+
+<p>Return the simulation metadata dictionary</p><hr />
+<h3 id="property-metadata">
+  
+  
+    <a href="#property-metadata" class="anchor-heading" aria-labelledby="property-metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">metadata</code>
+  
+  
+</h3>
+    
+
+<p>Return the simulation metadata dictionary</p><hr />
+<h3 id="property-label">
+  
+  
+    <a href="#property-label" class="anchor-heading" aria-labelledby="property-label"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">label</code>
+  
+  
+</h3>
+    
+
+<p>Return a LaTeX label summarizing key simulation parameters.</p><hr />
+<h3 id="property-label_nolatex">
+  
+  
+    <a href="#property-label_nolatex" class="anchor-heading" aria-labelledby="property-label_nolatex"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">label_nolatex</code>
+  
+  
+</h3>
+    
+
+<p>Return a plain-text label summarizing key simulation parameters.</p><hr />
+<h3 id="get_parameters">
+  
+  
+    <a href="#get_parameters" class="anchor-heading" aria-labelledby="get_parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_parameters</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_parameters</span><span class="p">(</span><span class="n">total_mass</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Return the initial physical parameters for the simulation.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total Mass of Binary (solar masses).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>Initial binary parameters compatible with PyCBC.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_mode_data">
+  
+  
+    <a href="#get_mode_data" class="anchor-heading" aria-labelledby="get_mode_data"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_mode_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_mode_data</span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>No docstring.</em></p><hr />
+<h3 id="get_mode">
+  
+  
+    <a href="#get_mode" class="anchor-heading" aria-labelledby="get_mode"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_mode</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_mode</span><span class="p">(</span><span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">to_pycbc</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">delta_t_seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delta_t_Msun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">t_relax</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Return a single (ℓ, m) waveform mode, rescaled to physical units.</p>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ell</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Spherical-harmonic indices.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">em</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Spherical-harmonic indices.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total mass in solar masses (default 1).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distance</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Luminosity distance in Mpc (default 1).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t_seconds</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in physical seconds. Mutually exclusive with <code class="language-plaintext highlighter-rouge">delta_t_Msun</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t_Msun</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in dimensionless M units. Mutually exclusive with <code class="language-plaintext highlighter-rouge">delta_t_seconds</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td><em>Deprecated.</em> Use <code class="language-plaintext highlighter-rouge">delta_t_seconds</code> or <code class="language-plaintext highlighter-rouge">delta_t_Msun</code> instead.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">to_pycbc</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Return a <code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code> (default True).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_relax</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries or sxs.TimeSeries</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="f_lower_at_1msun">
+  
+  
+    <a href="#f_lower_at_1msun" class="anchor-heading" aria-labelledby="f_lower_at_1msun"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">f_lower_at_1Msun</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">f_lower_at_1Msun</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Return the instantaneous GW frequency of the (2,2) mode at 1 M☉.</p>
+<h4 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float or None</code></td>
+      <td>Evaluation time in dimensionless M units. If None, returns the frequency at the first sample.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>GW frequency in Hz at 1 M☉. Divide by <code class="language-plaintext highlighter-rouge">total_mass</code> [M☉] to get physical Hz.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="trim_to_relaxation_time">
+  
+  
+    <a href="#trim_to_relaxation_time" class="anchor-heading" aria-labelledby="trim_to_relaxation_time"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">trim_to_relaxation_time</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">trim_to_relaxation_time</span><span class="p">(</span><span class="n">total_mass</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">4096</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Return the (2,2) mode trimmed to start at the relaxation epoch.</p>
+<h4 id="parameters-3">
+  
+  
+    <a href="#parameters-3" class="anchor-heading" aria-labelledby="parameters-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total mass of the binary (solar masses).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in seconds (default 1/4096).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="f_lower_at_relaxation">
+  
+  
+    <a href="#f_lower_at_relaxation" class="anchor-heading" aria-labelledby="f_lower_at_relaxation"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">f_lower_at_relaxation</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">f_lower_at_relaxation</span><span class="p">(</span><span class="n">total_mass</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Return the GW frequency at the relaxation epoch, in Hz.</p>
+<h4 id="parameters-4">
+  
+  
+    <a href="#parameters-4" class="anchor-heading" aria-labelledby="parameters-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total mass of the binary (solar masses).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-4">
+  
+  
+    <a href="#returns-4" class="anchor-heading" aria-labelledby="returns-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_polarizations">
+  
+  
+    <a href="#get_polarizations" class="anchor-heading" aria-labelledby="get_polarizations"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_polarizations</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_polarizations</span><span class="p">(</span><span class="n">inclination</span><span class="p">,</span> <span class="n">coa_phase</span><span class="p">,</span> <span class="n">f_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">t_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Sum over modes and return plus/cross GW polarizations.</p>
+<h4 id="parameters-5">
+  
+  
+    <a href="#parameters-5" class="anchor-heading" aria-labelledby="parameters-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Inclination angle (radians).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">coa_phase</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Coalescence orbital phase (radians).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tol</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Floating-point tolerance for rotation angle computation (1e-6).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_td_waveform">
+  
+  
+    <a href="#get_td_waveform" class="anchor-heading" aria-labelledby="get_td_waveform"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_td_waveform</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_td_waveform</span><span class="p">(</span><span class="n">total_mass</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">inclination</span><span class="p">,</span> <span class="n">coa_phase</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">f_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">t_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">,</span> <span class="n">lal_convention</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">delta_t_seconds</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delta_t_Msun</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">t_relax</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Sum over modes and return GW polarizations rescaled to physical units.</p>
+<h4 id="parameters-6">
+  
+  
+    <a href="#parameters-6" class="anchor-heading" aria-labelledby="parameters-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total mass (solar masses).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distance</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Luminosity distance (megaparsecs).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Inclination angle (radians).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">coa_phase</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Coalescence orbital phase (radians).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t_seconds</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in physical seconds.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t_Msun</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in dimensionless M units.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td><em>Deprecated.</em> Use <code class="language-plaintext highlighter-rouge">delta_t_seconds</code> or <code class="language-plaintext highlighter-rouge">delta_t_Msun</code> instead.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lal_convention</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>If True, return h₊ − i h× (LAL convention). Default returns h₊ + i h× (imaginary part = +h×).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_relax</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Time (in dimensionless M units) before which the waveform is sliced off to remove junk radiation.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-5">
+  
+  
+    <a href="#returns-5" class="anchor-heading" aria-labelledby="returns-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries(complex128)</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_angles">
+  
+  
+    <a href="#get_angles" class="anchor-heading" aria-labelledby="get_angles"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_angles</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_angles</span><span class="p">(</span><span class="n">inclination</span><span class="p">,</span> <span class="n">coa_phase</span><span class="p">,</span> <span class="n">f_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">t_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-06</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Get the inclination, azimuthal and polarization angles
+of the observer in the NR source frame.</p>
+<h4 id="parameters-7">
+  
+  
+    <a href="#parameters-7" class="anchor-heading" aria-labelledby="parameters-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Inclination angle in the LAL source frame.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">coa_phase</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Coalescence phase.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference frequency and time.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference frequency and time.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tol</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Tolerance for rotation angle computation (1e-6).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-6">
+  
+  
+    <a href="#returns-6" class="anchor-heading" aria-labelledby="returns-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>Angles dict with keys <code class="language-plaintext highlighter-rouge">theta</code>, <code class="language-plaintext highlighter-rouge">psi</code>, <code class="language-plaintext highlighter-rouge">alpha</code>, and optionally <code class="language-plaintext highlighter-rouge">t_ref</code>, <code class="language-plaintext highlighter-rouge">f_ref</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="to_pycbc">
+  
+  
+    <a href="#to_pycbc" class="anchor-heading" aria-labelledby="to_pycbc"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">to_pycbc</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">to_pycbc</span><span class="p">(</span><span class="n">input_array</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">epoch</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><em>No docstring.</em></p><hr />
+<h3 id="get_nr_coa_phase">
+  
+  
+    <a href="#get_nr_coa_phase" class="anchor-heading" aria-labelledby="get_nr_coa_phase"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_nr_coa_phase</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_nr_coa_phase</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Get the NR coalescence orbital phase from the (2,2) mode.</p><hr />
+<h3 id="get_obs_phi_ref_from_obs_coa_phase">
+  
+  
+    <a href="#get_obs_phi_ref_from_obs_coa_phase" class="anchor-heading" aria-labelledby="get_obs_phi_ref_from_obs_coa_phase"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_obs_phi_ref_from_obs_coa_phase</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_obs_phi_ref_from_obs_coa_phase</span><span class="p">(</span><span class="n">coa_phase</span><span class="p">,</span> <span class="n">t_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">f_ref</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Get the observer reference phase given the observer coalescence phase.</p><hr />
+<h3 id="to_lal">
+  
+  
+    <a href="#to_lal" class="anchor-heading" aria-labelledby="to_lal"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">to_lal</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">to_lal</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><em>No docstring.</em></p><hr />
+<h3 id="to_astropy">
+  
+  
+    <a href="#to_astropy" class="anchor-heading" aria-labelledby="to_astropy"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">to_astropy</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">to_astropy</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><em>No docstring.</em></p><hr />
+<h3 id="property-t_ref_nr">
+  
+  
+    <a href="#property-t_ref_nr" class="anchor-heading" aria-labelledby="property-t_ref_nr"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">t_ref_nr</code>
+  
+  
+</h3>
+    
+
+<p>Fetch the reference time of the simulation.</p><hr />
+<h3 id="property-peak_time_22">
+  
+  
+    <a href="#property-peak_time_22" class="anchor-heading" aria-labelledby="property-peak_time_22"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">peak_time_22</code>
+  
+  
+</h3>
+    
+
+<p>Dimensionless time of the peak amplitude of the (2,2) mode.</p><hr />
+<h3 id="rotated">
+  
+  
+    <a href="#rotated" class="anchor-heading" aria-labelledby="rotated"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">rotated</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">rotated</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Rotate the waveform modes.</p>
+<h4 id="parameters-8">
+  
+  
+    <a href="#parameters-8" class="anchor-heading" aria-labelledby="parameters-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">R</code></td>
+      <td><code class="language-plaintext highlighter-rouge">quaternionic.array</code></td>
+      <td>Unit quaternion representing the rotation.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-7">
+  
+  
+    <a href="#returns-7" class="anchor-heading" aria-labelledby="returns-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="rotate_frame">
+  
+  
+    <a href="#rotate_frame" class="anchor-heading" aria-labelledby="rotate_frame"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">rotate_frame</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">rotate_frame</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Alias for <code class="language-plaintext highlighter-rouge">rotated(R)</code> for coordinate transform naming consistency.</p><hr />
+<h3 id="align_to_j_frame">
+  
+  
+    <a href="#align_to_j_frame" class="anchor-heading" aria-labelledby="align_to_j_frame"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">align_to_j_frame</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">align_to_j_frame</span><span class="p">(</span><span class="n">J_vector</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Rotate the waveform modes such that the given angular momentum vector
+is aligned with the z-axis.</p>
+<h4 id="parameters-9">
+  
+  
+    <a href="#parameters-9" class="anchor-heading" aria-labelledby="parameters-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">J_vector</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array_like</code></td>
+      <td>A 3D vector representing the angular momentum [Jx, Jy, Jz].</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-8">
+  
+  
+    <a href="#returns-8" class="anchor-heading" aria-labelledby="returns-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td>A new WaveformModes object rotated to the J-frame.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="match_single_mode">
+  
+  
+    <a href="#match_single_mode" class="anchor-heading" aria-labelledby="match_single_mode"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">match_single_mode</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">match_single_mode</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ell</span><span class="p">,</span> <span class="n">em</span><span class="p">,</span> <span class="n">psd</span><span class="p">,</span> <span class="n">f_lower</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">f_upper</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Compute the noise-weighted match for a single spherical harmonic mode.</p>
+<h4 id="parameters-10">
+  
+  
+    <a href="#parameters-10" class="anchor-heading" aria-labelledby="parameters-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">other</code></td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes or dict</code></td>
+      <td>The second waveform.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ell</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Spherical harmonic indices.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">em</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Spherical harmonic indices.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries</code></td>
+      <td>One-sided noise PSD.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Orbital reference frequency in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in physical seconds (default 1/4096).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Upper frequency cutoff in Hz.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-9">
+  
+  
+    <a href="#returns-9" class="anchor-heading" aria-labelledby="returns-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Match value in [0, 1].</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="match_sphere_averaged">
+  
+  
+    <a href="#match_sphere_averaged" class="anchor-heading" aria-labelledby="match_sphere_averaged"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">match_sphere_averaged</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">match_sphere_averaged</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">psd</span><span class="p">,</span> <span class="n">f_lower</span><span class="p">,</span> <span class="n">f_upper</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">delta_t</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">return_rotation</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">total_mass</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">distance</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Calculate the match (noise-weighted overlap) between this waveform
+and another, integrated over all observer directions on the sphere
+(sky-averaged) and maximized over time shift, phase shift, and
+active/passive SO(3) coordinate rotation of the source frame.</p>
+
+<blockquote>
+  <p><strong>Mathematical Formulation</strong>
+The full multi-mode gravitational-wave strain field $H(t, \theta, \phi) = h_+ - i h_\times$
+as observed at polar angles $(\theta, \phi)$ in the source frame is:
+\(H(t, \theta, \phi) = \sum_{\ell=2}^{\infty} \sum_{m=-\ell}^{\ell}
+h_{\ell m}(t) \, {}^{-2}Y_{\ell m}(\theta, \phi)\)
+where ${}^{-2}Y_{\ell m}$ are the spin-weight $-2$ spherical harmonics.</p>
+
+  <p>The global overlap between two waveforms $h_1$ and $h_2$, integrated over the entire
+sphere of possible observer directions (sky locations), is defined as:
+\(\mathcal{O}_{\text{sphere}}(h_1, h_2) =
+\frac{\int_{S^2} \langle h_1(t, \Omega) \mid h_2(t, \Omega) \rangle_t \, d\Omega}{
+\sqrt{\left[ \int_{S^2} \langle h_1(t, \Omega) \mid h_1(t, \Omega) \rangle_t \,
+d\Omega \right] \left[ \int_{S^2} \langle h_2(t, \Omega) \mid h_2(t, \Omega) \rangle_t \,
+d\Omega \right]}}\)
+where $\langle \cdot \mid \cdot \rangle_t$ is the standard frequency-domain noise-weighted
+inner product:
+\(\langle u \mid v \rangle_t = 4 \, \mathrm{Re}
+\int_{f_{\mathrm{min}}}^{f_{\mathrm{max}}}
+\frac{\tilde{u}(f) \, \tilde{v}^*(f)}{S_n(f)} \, df\)</p>
+
+  <p>By utilizing the orthonormality of the spin-weighted spherical harmonics:
+\(\int_{S^2} {}^{-2}Y_{\ell m}^*(\Omega) \, {}^{-2}Y_{\ell' m'}(\Omega) \, d\Omega
+= \delta_{\ell \ell'} \, \delta_{m m'}\)
+the angular integral decouples, simplifying the sphere-integrated inner product
+into a simple sum over all common modes $(\ell, m)$:
+\(\int_{S^2} \langle h_1(t, \Omega) \mid h_2(t, \Omega) \rangle_t \, d\Omega
+= \sum_{\ell, m} \langle h_{1, \ell m} \mid h_{2, \ell m} \rangle_t\)</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Coordinate Frame Optimization</strong>
+Because the two waveforms may be defined in different coordinate systems (source frames)
+and have arbitrary reference times/phases, we align the target waveform $h_2$ to $h_1$
+by active/passive rigid rotation $R \in SO(3)$, time translation $t_c$, and coalescence phase shift $\phi_c$:</p>
+  <ol>
+    <li>
+      <p><strong>Rotation ($R$)</strong>: Rotates the modes using Wigner D-matrices:
+\(h_{2, \ell m}^{\mathrm{rot}}(t) = \sum_{m'=-\ell}^{\ell} h_{2, \ell m'}(t) \, D^{\ell}_{m' m}(R)\)</p>
+    </li>
+    <li><strong>Time Shift ($t_c$)</strong>: Shifts time via $t \to t - t_c$,
+implemented efficiently as a linear phase in the frequency domain.</li>
+    <li><strong>Phase Shift ($\phi_c$)</strong>: Twist around the rotated $z$-axis via:
+\(h_{2, \ell m}^{\mathrm{rot, shifted}}(t) \to e^{-i m \phi_c} \, h_{2, \ell m}^{\mathrm{rot}}(t - t_c)\)</li>
+  </ol>
+
+  <p>The method then returns the maximized match (overlap):</p>
+
+\[\mathcal{O}_{\mathrm{max}} = \max_{t_c, \phi_c, R \in SO(3)} \left[
+\frac{
+    \sum_{\ell, m} \langle h_{1, \ell m} \mid
+    h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, \phi_c, R) \rangle_t
+}{
+    \sqrt{
+        \left( \sum_{\ell, m} \langle h_{1, \ell m} \mid
+        h_{1, \ell m} \rangle_t \right)
+        \left( \sum_{\ell, m} \langle h_{2, \ell m} \mid
+        h_{2, \ell m} \rangle_t \right)
+    }
+} \right]\]
+
+  <p>The maximization over $t_c$ is performed efficiently using Fast Fourier Transforms (FFTs),
+$\phi_c$ is maximized analytically, and the SO(3) rotation $R$ (parameterized by
+Euler angles $\alpha, \beta, \gamma$) is optimized using the differential evolution algorithm.</p>
+</blockquote>
+<h4 id="parameters-11">
+  
+  
+    <a href="#parameters-11" class="anchor-heading" aria-labelledby="parameters-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">other</code></td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes or dict</code></td>
+      <td>The second waveform to compare against. Can be a <code class="language-plaintext highlighter-rouge">WaveformModes</code> object or a dict of PyCBC TimeSeries modes.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries</code></td>
+      <td>One-sided noise power spectral density (PSD).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Lower frequency cutoff in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Upper frequency cutoff in Hz. If None, the Nyquist frequency of the PSD is used.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in physical seconds (default 1/4096).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">return_rotation</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>If True, returns a tuple <code class="language-plaintext highlighter-rouge">(match, R_opt)</code> containing the maximum match and the optimal quaternionic rotation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total mass of the binary system in solar masses (default 1.0).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distance</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Luminosity distance to the source in Mpc (default 1.0).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-10">
+  
+  
+    <a href="#returns-10" class="anchor-heading" aria-labelledby="returns-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float or tuple</code></td>
+      <td>If <code class="language-plaintext highlighter-rouge">return_rotation</code> is False, returns the maximum match value in $[0, 1]$. If <code class="language-plaintext highlighter-rouge">return_rotation</code> is True, returns <code class="language-plaintext highlighter-rouge">(match, R_opt)</code> where <code class="language-plaintext highlighter-rouge">R_opt</code> is the optimal <code class="language-plaintext highlighter-rouge">quaternionic.array</code> unit quaternion representing the rotation.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="match_sphere_averaged_bms_maximized">
+  
+  
+    <a href="#match_sphere_averaged_bms_maximized" class="anchor-heading" aria-labelledby="match_sphere_averaged_bms_maximized"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">match_sphere_averaged_bms_maximized</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">match_sphere_averaged_bms_maximized</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">psd</span><span class="p">,</span> <span class="n">f_lower</span><span class="p">,</span> <span class="n">f_upper</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">j_max</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Calculate the match maximized over BMS supertranslations in addition to
+standard time shift, phase shift, and SO(3) rotation.</p>
+
+<blockquote>
+  <p><strong>BMS Supertranslation Mathematical Formulation</strong>
+At null infinity $\mathcal{I}^+$, the asymptotic symmetry group of General Relativity
+is the infinite-dimensional Bondi-Metzner-Sachs (BMS) group. This group is the
+semi-direct product of the Lorentz group and the abelian group of <strong>supertranslations</strong>,
+which correspond to direction-dependent shifts in the retarded time coordinate $u$:
+\(u' = u - \alpha(\theta, \phi)\)
+where the supertranslation field $\alpha(\theta, \phi)$ is an arbitrary smooth real
+function on the sphere, decomposed into scalar spherical harmonics $Y_{j k}$:
+\(\alpha(\theta, \phi) = \sum_{j=0}^{j_{\mathrm{max}}} \sum_{k=-j}^{j} \alpha_{j k} \, Y_{j k}(\theta, \phi)\)
+Here, $j=0$ corresponds to a global time translation ($t_c$), $j=1$ corresponds to
+spatial translations (origin shifts), and $j \ge 2$ modes correspond to proper
+supertranslations.</p>
+
+  <p>Under a small supertranslation, the strain waveform modes $h_{\ell m}(u)$ undergo
+first-order mode mixing:
+\(h'_{\ell m}(u) \approx h_{\ell m}(u) -
+\sum_{j=0}^{j_{\mathrm{max}}} \sum_{k=-j}^{j} \sum_{p, q}
+\alpha_{j k} \, \mathcal{G}^{\ell m}_{j k, p q} \, \dot{h}_{p q}(u)\)
+where $\dot{h}<em>{p q}(u) = \partial h</em>{p q} / \partial u$, and $\mathcal{G}^{\ell m}_{j k, p q}$
+are the spin-weighted Gaunt coefficients (integrals of products of three spherical harmonics):
+\(\mathcal{G}^{\ell m}_{j k, p q} = \int_{S^2}
+{}^{-2}Y_{\ell m}^*(\Omega) \, Y_{j k}(\Omega) \,
+{}^{-2}Y_{p q}(\Omega) \, d\Omega\)</p>
+
+  <p>This method optimizes both the rigid rotation $R \in SO(3)$, time translation $t_c$,
+phase shift $\phi_c$, and the supertranslation coefficients $\alpha_{j k}$ for $j \ge 1$
+up to <code class="language-plaintext highlighter-rouge">j_max</code> using the Nelder-Mead downhill simplex algorithm to minimize the mismatch
+(maximize the overlap).</p>
+</blockquote>
+<h4 id="parameters-12">
+  
+  
+    <a href="#parameters-12" class="anchor-heading" aria-labelledby="parameters-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">other</code></td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td>The second waveform to compare against.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries</code></td>
+      <td>One-sided noise power spectral density (PSD).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Lower frequency cutoff in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Upper frequency cutoff in Hz. If None, the Nyquist frequency of the PSD is used.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">j_max</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum spherical-harmonic order of the supertranslation field to optimize (default 1, which corresponds to time translation + spatial translation).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-11">
+  
+  
+    <a href="#returns-11" class="anchor-heading" aria-labelledby="returns-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Maximum match value in $[0, 1]$.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="diff_l2_norm">
+  
+  
+    <a href="#diff_l2_norm" class="anchor-heading" aria-labelledby="diff_l2_norm"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">diff_l2_norm</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">diff_l2_norm</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">time_window</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">phase_align</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Calculate the relative L2 error norm between self and another waveform object.</p>
+<h4 id="parameters-13">
+  
+  
+    <a href="#parameters-13" class="anchor-heading" aria-labelledby="parameters-13"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">other</code></td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td>The other waveform object.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">time_window</code></td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>The time window (t_min, t_max) to restrict the calculation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">phase_align</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Whether to phase align the waveforms by finding a constant phase shift that minimizes the error.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-12">
+  
+  
+    <a href="#returns-12" class="anchor-heading" aria-labelledby="returns-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The relative L2 error norm (i.e. ||self - other|| / ||self||).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

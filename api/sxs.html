@@ -1,0 +1,1306 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(3)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(3) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(3) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(3) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.sxs | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.sxs" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/sxs.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/sxs.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.sxs" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.sxs","url":"https://gwnrtools.github.io/nrcats/api/sxs.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.sxs</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatssxs">
+  
+  
+    <a href="#nrcatssxs" class="anchor-heading" aria-labelledby="nrcatssxs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.sxs</code>
+  
+  
+</h1>
+    
+
+<p>SXS catalog interface.</p>
+
+<p>Wraps the <code class="language-plaintext highlighter-rouge">sxs</code> package (≥ 2025.0.0) to provide access to the
+Simulating eXtreme Spacetimes (SXS) catalog of numerical-relativity BBH
+waveforms stored on Zenodo.</p>
+<h2 id="key-design-decisions">
+  
+  
+    <a href="#key-design-decisions" class="anchor-heading" aria-labelledby="key-design-decisions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Key design decisions
+  
+  
+</h2>
+    
+<ul>
+  <li>
+    <p><strong>Singleton pattern</strong> – <code class="language-plaintext highlighter-rouge">load()</code> stores its result in <code class="language-plaintext highlighter-rouge">_sxs_catalog_singleton</code>
+so that repeated calls don’t re-parse the ~2000-entry catalog JSON.  Pass
+<code class="language-plaintext highlighter-rouge">download=True</code> or call <code class="language-plaintext highlighter-rouge">reload()</code> to force a fresh download.</p>
+  </li>
+  <li>
+    <p><strong>Lazy path resolution</strong> – individual simulation file paths are resolved on
+demand via <code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname()</code> rather than upfront (which
+would require ~2000 <code class="language-plaintext highlighter-rouge">sxs.load()</code> calls at catalog-load time).  The
+<code class="language-plaintext highlighter-rouge">_add_paths_to_metadata()</code> helper seeds stub empty strings so downstream
+code that checks for key presence never sees a <code class="language-plaintext highlighter-rouge">KeyError</code>.</p>
+  </li>
+  <li>
+    <p><strong>Auto-supersede</strong> – <code class="language-plaintext highlighter-rouge">get()</code> passes <code class="language-plaintext highlighter-rouge">auto_supersede=True</code> to
+<code class="language-plaintext highlighter-rouge">sxs.load()</code> so deprecated simulation IDs are resolved transparently.</p>
+  </li>
+</ul>
+<h2 id="public-classes">
+  
+  
+    <a href="#public-classes" class="anchor-heading" aria-labelledby="public-classes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Public classes
+  
+  
+</h2>
+    
+<p>SXSCatalog
+    Registered under the tag <code class="language-plaintext highlighter-rouge">"SXS"</code> in the catalog plugin registry.</p>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatssxs" id="markdown-toc-nrcatssxs"><code class="language-plaintext highlighter-rouge">nrcats.sxs</code></a>    <ol>
+      <li><a href="#key-design-decisions" id="markdown-toc-key-design-decisions">Key design decisions</a></li>
+      <li><a href="#public-classes" id="markdown-toc-public-classes">Public classes</a></li>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a></li>
+      <li><a href="#class-sxscatalog" id="markdown-toc-class-sxscatalog"><em>class</em> <code class="language-plaintext highlighter-rouge">SXSCatalog</code></a>        <ol>
+          <li><a href="#classmethod-load" id="markdown-toc-classmethod-load"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">load</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+            </ol>
+          </li>
+          <li><a href="#classmethod-reload" id="markdown-toc-classmethod-reload"><em>classmethod</em> <code class="language-plaintext highlighter-rouge">reload</code></a></li>
+          <li><a href="#waveform_filename_from_simname" id="markdown-toc-waveform_filename_from_simname"><code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_filepath_from_simname" id="markdown-toc-waveform_filepath_from_simname"><code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_filename_from_simname" id="markdown-toc-metadata_filename_from_simname"><code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-3" id="markdown-toc-parameters-3">Parameters</a></li>
+              <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_filepath_from_simname" id="markdown-toc-metadata_filepath_from_simname"><code class="language-plaintext highlighter-rouge">metadata_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-4" id="markdown-toc-parameters-4">Parameters</a></li>
+              <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_filename_from_simname" id="markdown-toc-psi4_filename_from_simname"><code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code></a>            <ol>
+              <li><a href="#parameters-5" id="markdown-toc-parameters-5">Parameters</a></li>
+              <li><a href="#returns-4" id="markdown-toc-returns-4">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_filepath_from_simname" id="markdown-toc-psi4_filepath_from_simname"><code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname</code></a>            <ol>
+              <li><a href="#parameters-6" id="markdown-toc-parameters-6">Parameters</a></li>
+              <li><a href="#returns-5" id="markdown-toc-returns-5">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#psi4_url_from_simname" id="markdown-toc-psi4_url_from_simname"><code class="language-plaintext highlighter-rouge">psi4_url_from_simname</code></a>            <ol>
+              <li><a href="#parameters-7" id="markdown-toc-parameters-7">Parameters</a></li>
+              <li><a href="#returns-6" id="markdown-toc-returns-6">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_psi4_data" id="markdown-toc-download_psi4_data"><code class="language-plaintext highlighter-rouge">download_psi4_data</code></a>            <ol>
+              <li><a href="#parameters-8" id="markdown-toc-parameters-8">Parameters</a></li>
+            </ol>
+          </li>
+          <li><a href="#get" id="markdown-toc-get"><code class="language-plaintext highlighter-rouge">get</code></a>            <ol>
+              <li><a href="#parameters-9" id="markdown-toc-parameters-9">Parameters</a></li>
+              <li><a href="#returns-7" id="markdown-toc-returns-7">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#download_waveform_data" id="markdown-toc-download_waveform_data"><code class="language-plaintext highlighter-rouge">download_waveform_data</code></a>            <ol>
+              <li><a href="#parameters-10" id="markdown-toc-parameters-10">Parameters</a></li>
+              <li><a href="#returns-8" id="markdown-toc-returns-8">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#waveform_url_from_simname" id="markdown-toc-waveform_url_from_simname"><code class="language-plaintext highlighter-rouge">waveform_url_from_simname</code></a>            <ol>
+              <li><a href="#raises" id="markdown-toc-raises">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#metadata_url_from_simname" id="markdown-toc-metadata_url_from_simname"><code class="language-plaintext highlighter-rouge">metadata_url_from_simname</code></a>            <ol>
+              <li><a href="#raises-1" id="markdown-toc-raises-1">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#to_sxs" id="markdown-toc-to_sxs"><code class="language-plaintext highlighter-rouge">to_sxs</code></a></li>
+          <li><a href="#property-simulations_dataframe" id="markdown-toc-property-simulations_dataframe"><em>property</em> <code class="language-plaintext highlighter-rouge">simulations_dataframe</code></a></li>
+          <li><a href="#property-table" id="markdown-toc-property-table"><em>property</em> <code class="language-plaintext highlighter-rouge">table</code></a></li>
+          <li><a href="#property-tag" id="markdown-toc-property-tag"><em>property</em> <code class="language-plaintext highlighter-rouge">tag</code></a></li>
+          <li><a href="#property-published_at" id="markdown-toc-property-published_at"><em>property</em> <code class="language-plaintext highlighter-rouge">published_at</code></a></li>
+          <li><a href="#property-modified" id="markdown-toc-property-modified"><em>property</em> <code class="language-plaintext highlighter-rouge">modified</code></a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td><code class="language-plaintext highlighter-rouge">logging.getLogger(__name__)</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="class-sxscatalog">
+  
+  
+    <a href="#class-sxscatalog" class="anchor-heading" aria-labelledby="class-sxscatalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">SXSCatalog</code>
+  
+  
+</h2>
+    
+
+<p>Bases: <code class="language-plaintext highlighter-rouge">catalog.CatalogBase</code></p>
+
+<p>Catalog interface for the SXS (SpEC) NR waveform collection.</p>
+
+<p>Wraps the <code class="language-plaintext highlighter-rouge">sxs</code> package to provide a <code class="language-plaintext highlighter-rouge">CatalogBase</code>-compatible
+interface over the SXS Zenodo-hosted catalog.  Key design points:</p>
+
+<ul>
+  <li>Metadata is loaded via <code class="language-plaintext highlighter-rouge">sxs.load("catalog", download=None)</code>,
+which returns a <code class="language-plaintext highlighter-rouge">sxs.Catalog</code> dict of all ~2000 simulations.</li>
+  <li>Path columns in the metadata are set to empty strings at load
+time (lazy stub) because resolving real on-disk paths would
+require one <code class="language-plaintext highlighter-rouge">sxs.load()</code> call per simulation (~2000 requests).
+Paths are resolved on demand inside <code class="language-plaintext highlighter-rouge">get()</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">get()</code> delegates to <code class="language-plaintext highlighter-rouge">sxs.load(sim_name, auto_supersede=True)</code>
+and wraps the returned <code class="language-plaintext highlighter-rouge">sxs.WaveformModes</code> in the local
+<code class="language-plaintext highlighter-rouge">WaveformModes</code> subclass.</li>
+  <li>A module-level singleton prevents redundant catalog loads when
+<code class="language-plaintext highlighter-rouge">load()</code> is called multiple times in the same process.</li>
+</ul>
+
+<p>Example:
+    »&gt; import nrcats as nrcat
+    »&gt; cat = nrcat.SXSCatalog.load(download=False)
+    »&gt; wfm = cat.get(“SXS:BBH:0001”)</p>
+<h3 id="classmethod-load">
+  
+  
+    <a href="#classmethod-load" class="anchor-heading" aria-labelledby="classmethod-load"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">load</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load</span><span class="p">(</span><span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">verbosity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SXSCatalog</span>
+</code></pre></div></div>
+
+<p>Load the SXS catalog.</p>
+
+<p>This is a wrapper around <code class="language-plaintext highlighter-rouge">sxs.load</code>.  The result is cached in a
+module-level singleton; pass <code class="language-plaintext highlighter-rouge">download=True</code> or call
+<code class="language-plaintext highlighter-rouge">SXSCatalog.reload()</code> to force a fresh download.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">download</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(None, bool)</code></td>
+      <td>If False, this function will look for the catalog in the cache and raise an error if it is not found. If True, this function will download the catalog and raise an error if the download fails. If None (the default), it will try to download the file, warn but fall back to the cache if that fails, and only raise an error if the catalog is not found in the cache.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="classmethod-reload">
+  
+  
+    <a href="#classmethod-reload" class="anchor-heading" aria-labelledby="classmethod-reload"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>classmethod</em> <code class="language-plaintext highlighter-rouge">reload</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">reload</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SXSCatalog</span>
+</code></pre></div></div>
+
+<p>Force a fresh download and replace the cached singleton.</p>
+
+<p>Equivalent to calling <code class="language-plaintext highlighter-rouge">sxs.Simulations.reload()</code> and then reloading.</p><hr />
+<h3 id="waveform_filename_from_simname">
+  
+  
+    <a href="#waveform_filename_from_simname" class="anchor-heading" aria-labelledby="waveform_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename for the strain waveform file.</p>
+
+<p>Resolves the path on demand by calling <code class="language-plaintext highlighter-rouge">sxs.load(sim_name,
+download=False)</code> and extracting <code class="language-plaintext highlighter-rouge">sim.strain_path[0]</code>.</p>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename component only (no directory).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_filepath_from_simname">
+  
+  
+    <a href="#waveform_filepath_from_simname" class="anchor-heading" aria-labelledby="waveform_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local path for the strain waveform file.</p>
+
+<p>Path resolution is lazy: this calls <code class="language-plaintext highlighter-rouge">sxs.load(sim_name,
+download=False)</code> each time it is invoked.  The file may not yet
+exist locally if it has never been downloaded.</p>
+<h4 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>POSIX-style absolute path string.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_filename_from_simname">
+  
+  
+    <a href="#metadata_filename_from_simname" class="anchor-heading" aria-labelledby="metadata_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename for the per-simulation metadata file.</p>
+<h4 id="parameters-3">
+  
+  
+    <a href="#parameters-3" class="anchor-heading" aria-labelledby="parameters-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename component only (no directory).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_filepath_from_simname">
+  
+  
+    <a href="#metadata_filepath_from_simname" class="anchor-heading" aria-labelledby="metadata_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local path for the per-simulation metadata file.</p>
+<h4 id="parameters-4">
+  
+  
+    <a href="#parameters-4" class="anchor-heading" aria-labelledby="parameters-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>POSIX-style absolute path string.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_filename_from_simname">
+  
+  
+    <a href="#psi4_filename_from_simname" class="anchor-heading" aria-labelledby="psi4_filename_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filename_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filename_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the bare filename for the psi4 data file.</p>
+<h4 id="parameters-5">
+  
+  
+    <a href="#parameters-5" class="anchor-heading" aria-labelledby="parameters-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-4">
+  
+  
+    <a href="#returns-4" class="anchor-heading" aria-labelledby="returns-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Filename component only (no directory).</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_filepath_from_simname">
+  
+  
+    <a href="#psi4_filepath_from_simname" class="anchor-heading" aria-labelledby="psi4_filepath_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_filepath_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the absolute local path for the psi4 data file.</p>
+<h4 id="parameters-6">
+  
+  
+    <a href="#parameters-6" class="anchor-heading" aria-labelledby="parameters-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-5">
+  
+  
+    <a href="#returns-5" class="anchor-heading" aria-labelledby="returns-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>POSIX-style absolute path string.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="psi4_url_from_simname">
+  
+  
+    <a href="#psi4_url_from_simname" class="anchor-heading" aria-labelledby="psi4_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">psi4_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">psi4_url_from_simname</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Return the remote download URL for the psi4 data file.</p>
+<h4 id="parameters-7">
+  
+  
+    <a href="#parameters-7" class="anchor-heading" aria-labelledby="parameters-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-6">
+  
+  
+    <a href="#returns-6" class="anchor-heading" aria-labelledby="returns-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Full HTTP(S) URL from the SXS file manifest.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_psi4_data">
+  
+  
+    <a href="#download_psi4_data" class="anchor-heading" aria-labelledby="download_psi4_data"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_psi4_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_psi4_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Download the psi4 data for <em>sim_name</em> via the <code class="language-plaintext highlighter-rouge">sxs</code> package.</p>
+
+<p>Accesses <code class="language-plaintext highlighter-rouge">sim.psi4</code> to trigger the download; the file is cached
+in the <code class="language-plaintext highlighter-rouge">sxs</code> package’s own cache directory.</p>
+<h4 id="parameters-8">
+  
+  
+    <a href="#parameters-8" class="anchor-heading" aria-labelledby="parameters-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get">
+  
+  
+    <a href="#get" class="anchor-heading" aria-labelledby="get"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extrapolation_order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">download</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">waveform</span><span class="p">.</span><span class="n">WaveformModes</span>
+</code></pre></div></div>
+
+<p>Load the strain waveform for <em>sim_name</em> and return a WaveformModes object.</p>
+
+<p>Overrides <code class="language-plaintext highlighter-rouge">CatalogBase.get()</code> because SXS waveform loading goes
+entirely through the <code class="language-plaintext highlighter-rouge">sxs</code> package rather than via direct HDF5 reads.</p>
+<h4 id="parameters-9">
+  
+  
+    <a href="#parameters-9" class="anchor-heading" aria-labelledby="parameters-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>. Deprecated IDs are resolved automatically via <code class="language-plaintext highlighter-rouge">auto_supersede=True</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">extrapolation_order</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Waveform extrapolation order used as a fallback when <code class="language-plaintext highlighter-rouge">sim_obj.strain</code> is unavailable. Defaults to 2.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">download</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Whether to download the waveform if not cached. Defaults to True.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-7">
+  
+  
+    <a href="#returns-7" class="anchor-heading" aria-labelledby="returns-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">waveform.WaveformModes</code></td>
+      <td>nrcats.waveform.WaveformModes: Waveform object with the</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">waveform.WaveformModes</code></td>
+      <td>catalog metadata attached.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="download_waveform_data">
+  
+  
+    <a href="#download_waveform_data" class="anchor-heading" aria-labelledby="download_waveform_data"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">download_waveform_data</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">download_waveform_data</span><span class="p">(</span><span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Download the strain waveform data for <em>sim_name</em> via <code class="language-plaintext highlighter-rouge">sxs.load()</code>.</p>
+
+<p>First fetches the simulation metadata JSON, then downloads the
+<code class="language-plaintext highlighter-rouge">rhOverM</code> strain file.  Both are handled by the <code class="language-plaintext highlighter-rouge">sxs</code> package’s
+download and caching machinery.</p>
+<h4 id="parameters-10">
+  
+  
+    <a href="#parameters-10" class="anchor-heading" aria-labelledby="parameters-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>SXS simulation name, e.g. <code class="language-plaintext highlighter-rouge">"SXS:BBH:0001"</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-8">
+  
+  
+    <a href="#returns-8" class="anchor-heading" aria-labelledby="returns-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">object</code></td>
+      <td>sxs.WaveformModes: Raw waveform object returned by <code class="language-plaintext highlighter-rouge">sxs.load()</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="waveform_url_from_simname">
+  
+  
+    <a href="#waveform_url_from_simname" class="anchor-heading" aria-labelledby="waveform_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">waveform_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">waveform_url_from_simname</span><span class="p">(</span><span class="n">_sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Not implemented for SXS; downloads are managed by <code class="language-plaintext highlighter-rouge">sxs.load()</code>.</p>
+<h4 id="raises">
+  
+  
+    <a href="#raises" class="anchor-heading" aria-labelledby="raises"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NotImplementedError</code></td>
+      <td>Always.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="metadata_url_from_simname">
+  
+  
+    <a href="#metadata_url_from_simname" class="anchor-heading" aria-labelledby="metadata_url_from_simname"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">metadata_url_from_simname</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">metadata_url_from_simname</span><span class="p">(</span><span class="n">_sim_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span>
+</code></pre></div></div>
+
+<p>Not implemented for SXS; use <code class="language-plaintext highlighter-rouge">sxs.load()</code> instead.</p>
+<h4 id="raises-1">
+  
+  
+    <a href="#raises-1" class="anchor-heading" aria-labelledby="raises-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NotImplementedError</code></td>
+      <td>Always.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="to_sxs">
+  
+  
+    <a href="#to_sxs" class="anchor-heading" aria-labelledby="to_sxs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">to_sxs</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">to_sxs</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="sh">'</span><span class="s">sxs.Simulations</span><span class="sh">'</span>
+</code></pre></div></div>
+
+<p>Return the live <code class="language-plaintext highlighter-rouge">sxs.Simulations</code> object backing this catalog.</p><hr />
+<h3 id="property-simulations_dataframe">
+  
+  
+    <a href="#property-simulations_dataframe" class="anchor-heading" aria-labelledby="property-simulations_dataframe"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">simulations_dataframe</code>
+  
+  
+</h3>
+    
+
+<p>Return the sxs.SimulationsDataFrame for this catalog.</p><hr />
+<h3 id="property-table">
+  
+  
+    <a href="#property-table" class="anchor-heading" aria-labelledby="property-table"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">table</code>
+  
+  
+</h3>
+    
+
+<p>Alias for simulations_dataframe.</p><hr />
+<h3 id="property-tag">
+  
+  
+    <a href="#property-tag" class="anchor-heading" aria-labelledby="property-tag"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">tag</code>
+  
+  
+</h3>
+    
+
+<p>Return the git tag of the catalog snapshot.</p><hr />
+<h3 id="property-published_at">
+  
+  
+    <a href="#property-published_at" class="anchor-heading" aria-labelledby="property-published_at"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">published_at</code>
+  
+  
+</h3>
+    
+
+<p>Return the ISO timestamp from GitHub Releases.</p><hr />
+<h3 id="property-modified">
+  
+  
+    <a href="#property-modified" class="anchor-heading" aria-labelledby="property-modified"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">modified</code>
+  
+  
+</h3>
+    
+
+<p>Approximate the modified property using published_at.</p><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

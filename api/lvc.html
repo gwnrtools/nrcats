@@ -1,0 +1,1580 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(14)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(14) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(14) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(14) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.lvc | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.lvc" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/lvc.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/lvc.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.lvc" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.lvc","url":"https://gwnrtools.github.io/nrcats/api/lvc.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.lvc</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatslvc">
+  
+  
+    <a href="#nrcatslvc" class="anchor-heading" aria-labelledby="nrcatslvc"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.lvc</code>
+  
+  
+</h1>
+    
+
+<p>Frame-rotation helpers and LVCNR format utilities.</p>
+
+<p>This module provides the low-level functions needed to:</p>
+
+<ol>
+  <li>
+    <p><strong>Read LVCNR HDF5 files</strong> – parse mode data and strain from the LVK
+NR format (<code class="language-plaintext highlighter-rouge">get_modes_from_lvcnr_file</code>, <code class="language-plaintext highlighter-rouge">get_strain_from_lvcnr_file</code>).</p>
+  </li>
+  <li>
+    <p><strong>Compute the LAL source frame</strong> – derive the NR orbital normal
+(<code class="language-plaintext highlighter-rouge">LNhat</code>) and binary-separation unit vector (<code class="language-plaintext highlighter-rouge">nhat</code>) from HDF5
+file attributes, time-series data, or SXS-style simulation metadata
+(<code class="language-plaintext highlighter-rouge">compute_lal_source_frame_from_sxs_metadata</code>,
+<code class="language-plaintext highlighter-rouge">compute_lal_source_frame_by_interp</code>).</p>
+  </li>
+  <li>
+    <p><strong>Rotate NR waveforms into the LAL frame</strong> – compute the SO(3) rotation
+angles (<code class="language-plaintext highlighter-rouge">theta</code>, <code class="language-plaintext highlighter-rouge">psi</code>, <code class="language-plaintext highlighter-rouge">alpha</code>) needed to project the NR
+waveform onto the detector line of sight at a given inclination and
+reference phase (<code class="language-plaintext highlighter-rouge">get_nr_to_lal_rotation_angles</code>).</p>
+  </li>
+  <li>
+    <p><strong>Build LAL mode dictionaries</strong> – create LAL parameter dictionaries
+with a specified set of (ell, m) modes for use with LALSimulation
+waveform routines (<code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary</code>,
+<code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary_from_lmax</code>).</p>
+  </li>
+</ol>
+<h2 id="public-functions">
+  
+  
+    <a href="#public-functions" class="anchor-heading" aria-labelledby="public-functions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Public functions
+  
+  
+</h2>
+    
+<p>get_lal_mode_dictionary(mode_array)
+get_lal_mode_dictionary_from_lmax(lmax)
+get_modes_from_lvcnr_file(path_to_file, Mtot, distance, srate, lmax, f_low)
+get_strain_from_lvcnr_file(path_to_file, Mtot, distance, inclination, phi_ref, srate, mode_array)
+check_interp_req(h5_file, metadata, ref_time, avail_ref_time)
+get_ref_freq_from_ref_time(h5_file, ref_time)
+get_ref_time_from_ref_freq(h5_file, ref_freq)
+check_nr_attrs(sim_metadata_object, req_attrs)
+get_interp_ref_values_from_h5_file(h5_file, req_ts_attrs, ref_time)
+get_ref_vals(sim_metadata_object, req_attrs)
+compute_lal_source_frame_from_sxs_metadata(sim_metadata)
+compute_lal_source_frame_by_interp(h5_file, req_ts_attrs, t_ref)
+normalize_metadata(sim_metadata)
+get_ref_time_from_metadata(sim_metadata)
+transform_spins_nr_to_lal(nrSpin1, nrSpin2, n_hat, ln_hat)
+get_nr_to_lal_rotation_angles(h5_file, sim_metadata, inclination, phi_ref, f_ref, t_ref, tol)</p>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatslvc" id="markdown-toc-nrcatslvc"><code class="language-plaintext highlighter-rouge">nrcats.lvc</code></a>    <ol>
+      <li><a href="#public-functions" id="markdown-toc-public-functions">Public functions</a></li>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a>        <ol>
+          <li><a href="#get_lal_mode_dictionary" id="markdown-toc-get_lal_mode_dictionary"><code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_lal_mode_dictionary_from_lmax" id="markdown-toc-get_lal_mode_dictionary_from_lmax"><code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary_from_lmax</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#get_modes_from_lvcnr_file" id="markdown-toc-get_modes_from_lvcnr_file"><code class="language-plaintext highlighter-rouge">get_modes_from_lvcnr_file</code></a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+  <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a>    <ol>
+      <li><a href="#get_strain_from_lvcnr_file" id="markdown-toc-get_strain_from_lvcnr_file"><code class="language-plaintext highlighter-rouge">get_strain_from_lvcnr_file</code></a></li>
+    </ol>
+  </li>
+  <li><a href="#parameters-3" id="markdown-toc-parameters-3">Parameters</a></li>
+  <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a>    <ol>
+      <li><a href="#check_interp_req" id="markdown-toc-check_interp_req"><code class="language-plaintext highlighter-rouge">check_interp_req</code></a>        <ol>
+          <li><a href="#parameters-4" id="markdown-toc-parameters-4">Parameters</a></li>
+          <li><a href="#returns-4" id="markdown-toc-returns-4">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_ref_freq_from_ref_time" id="markdown-toc-get_ref_freq_from_ref_time"><code class="language-plaintext highlighter-rouge">get_ref_freq_from_ref_time</code></a>        <ol>
+          <li><a href="#parameters-5" id="markdown-toc-parameters-5">Parameters</a></li>
+          <li><a href="#returns-5" id="markdown-toc-returns-5">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_ref_time_from_ref_freq" id="markdown-toc-get_ref_time_from_ref_freq"><code class="language-plaintext highlighter-rouge">get_ref_time_from_ref_freq</code></a>        <ol>
+          <li><a href="#parameters-6" id="markdown-toc-parameters-6">Parameters</a></li>
+          <li><a href="#returns-6" id="markdown-toc-returns-6">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#check_nr_attrs" id="markdown-toc-check_nr_attrs"><code class="language-plaintext highlighter-rouge">check_nr_attrs</code></a>        <ol>
+          <li><a href="#parameters-7" id="markdown-toc-parameters-7">Parameters</a></li>
+          <li><a href="#returns-7" id="markdown-toc-returns-7">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_interp_ref_values_from_h5_file" id="markdown-toc-get_interp_ref_values_from_h5_file"><code class="language-plaintext highlighter-rouge">get_interp_ref_values_from_h5_file</code></a>        <ol>
+          <li><a href="#parameters-8" id="markdown-toc-parameters-8">Parameters</a></li>
+          <li><a href="#returns-8" id="markdown-toc-returns-8">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_ref_vals" id="markdown-toc-get_ref_vals"><code class="language-plaintext highlighter-rouge">get_ref_vals</code></a>        <ol>
+          <li><a href="#parameters-9" id="markdown-toc-parameters-9">Parameters</a></li>
+          <li><a href="#returns-9" id="markdown-toc-returns-9">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#compute_lal_source_frame_from_sxs_metadata" id="markdown-toc-compute_lal_source_frame_from_sxs_metadata"><code class="language-plaintext highlighter-rouge">compute_lal_source_frame_from_sxs_metadata</code></a>        <ol>
+          <li><a href="#parameters-10" id="markdown-toc-parameters-10">Parameters</a></li>
+          <li><a href="#returns-10" id="markdown-toc-returns-10">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#compute_lal_source_frame_by_interp" id="markdown-toc-compute_lal_source_frame_by_interp"><code class="language-plaintext highlighter-rouge">compute_lal_source_frame_by_interp</code></a>        <ol>
+          <li><a href="#parameters-11" id="markdown-toc-parameters-11">Parameters</a></li>
+          <li><a href="#returns-11" id="markdown-toc-returns-11">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#normalize_metadata" id="markdown-toc-normalize_metadata"><code class="language-plaintext highlighter-rouge">normalize_metadata</code></a>        <ol>
+          <li><a href="#parameters-12" id="markdown-toc-parameters-12">Parameters</a></li>
+          <li><a href="#returns-12" id="markdown-toc-returns-12">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_ref_time_from_metadata" id="markdown-toc-get_ref_time_from_metadata"><code class="language-plaintext highlighter-rouge">get_ref_time_from_metadata</code></a>        <ol>
+          <li><a href="#parameters-13" id="markdown-toc-parameters-13">Parameters</a></li>
+          <li><a href="#returns-13" id="markdown-toc-returns-13">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#transform_spins_nr_to_lal" id="markdown-toc-transform_spins_nr_to_lal"><code class="language-plaintext highlighter-rouge">transform_spins_nr_to_lal</code></a>        <ol>
+          <li><a href="#parameters-14" id="markdown-toc-parameters-14">Parameters</a></li>
+          <li><a href="#returns-14" id="markdown-toc-returns-14">Returns</a></li>
+        </ol>
+      </li>
+      <li><a href="#get_nr_to_lal_rotation_angles" id="markdown-toc-get_nr_to_lal_rotation_angles"><code class="language-plaintext highlighter-rouge">get_nr_to_lal_rotation_angles</code></a>        <ol>
+          <li><a href="#parameters-15" id="markdown-toc-parameters-15">Parameters</a></li>
+          <li><a href="#returns-15" id="markdown-toc-returns-15">Returns</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">logger</code></td>
+      <td><code class="language-plaintext highlighter-rouge">logging.getLogger(__name__)</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_lal_mode_dictionary">
+  
+  
+    <a href="#get_lal_mode_dictionary" class="anchor-heading" aria-labelledby="get_lal_mode_dictionary"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_lal_mode_dictionary</span><span class="p">(</span><span class="n">mode_array</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Get LALDict with all specified modes.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mode_array</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">waveform_dictionary</code></td>
+      <td><code class="language-plaintext highlighter-rouge">LALDict with all modes included</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_lal_mode_dictionary_from_lmax">
+  
+  
+    <a href="#get_lal_mode_dictionary_from_lmax" class="anchor-heading" aria-labelledby="get_lal_mode_dictionary_from_lmax"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_lal_mode_dictionary_from_lmax</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_lal_mode_dictionary_from_lmax</span><span class="p">(</span><span class="n">lmax</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span>
+</code></pre></div></div>
+
+<p>Get LALDict with modes derived from <code class="language-plaintext highlighter-rouge">lmax</code>.</p>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lmax</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">waveform_dictionary</code></td>
+      <td><code class="language-plaintext highlighter-rouge">LALDict with all modes upto </code>lmax<code class="language-plaintext highlighter-rouge"> included</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_modes_from_lvcnr_file">
+  
+  
+    <a href="#get_modes_from_lvcnr_file" class="anchor-heading" aria-labelledby="get_modes_from_lvcnr_file"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_modes_from_lvcnr_file</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_modes_from_lvcnr_file</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Mtot</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">srate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">lmax</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">f_low</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Get individual modes from LVCNR format file.</p>
+<h1 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h1>
+    
+<p>path_to_file: string
+    Path to LVCNR file
+Mtot: float
+    Total mass (in units of MSUN) to scale the waveform to
+distance: float
+    Luminosity Distance (in units of MPc) to scale the waveform to
+srate: int
+    Sampling rate for the waveform
+lmax: int
+    Max value of :math:<code class="language-plaintext highlighter-rouge">\ell</code> to use
+    (Default: 4)
+f_low: float
+    Value of the low frequency to start waveform generation
+    Uses value given from the LVCNR file if <code class="language-plaintext highlighter-rouge">None</code> is provided
+    (Default: None)</p>
+<h1 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h1>
+    
+<p>mass_ratio: float
+    Mass ratio derived from the LVCNR file
+spins_args: list
+    List of spins derived from the LVCNR file
+eccentricity: float
+    Eccentricty derived from the LVCNR file.
+    Returns <code class="language-plaintext highlighter-rouge">None</code> is eccentricity is not a number.
+f_low: float
+    Low Frequency derived either from the file, or provided
+    in the call
+f_ref: float
+    Reference Frequency derived from the file
+modes: dict of pycbc TimeSeries objects
+    dict containing all the read in modes</p><hr />
+<h3 id="get_strain_from_lvcnr_file">
+  
+  
+    <a href="#get_strain_from_lvcnr_file" class="anchor-heading" aria-labelledby="get_strain_from_lvcnr_file"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_strain_from_lvcnr_file</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_strain_from_lvcnr_file</span><span class="p">(</span><span class="n">path_to_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">Mtot</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">phi_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">srate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">mode_array</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Get full strain from LVCNR format file.</p>
+<h1 id="parameters-3">
+  
+  
+    <a href="#parameters-3" class="anchor-heading" aria-labelledby="parameters-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h1>
+    
+<p>path_to_file: string
+    Path to LVCNR file
+Mtot: float
+    Total mass (in units of MSUN) to scale the waveform to
+distance: float
+    Luminosity Distance (in units of MPc) to scale the waveform to
+srate: int
+    Sampling rate for the waveform
+mode_array: list
+    list of modes to be included. <code class="language-plaintext highlighter-rouge">None</code> means all modes are included.
+    (Default:None)</p>
+<h1 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h1>
+    
+<p>UNDER CONSTRUCTION</p><hr />
+<h3 id="check_interp_req">
+  
+  
+    <a href="#check_interp_req" class="anchor-heading" aria-labelledby="check_interp_req"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">check_interp_req</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">check_interp_req</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">avail_ref_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Check if the required reference time is different from
+the available reference time in the NR HDF5 file or the
+simulation metadata.</p>
+<h4 id="parameters-4">
+  
+  
+    <a href="#parameters-4" class="anchor-heading" aria-labelledby="parameters-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file object</code></td>
+      <td>The waveform h5 file handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict | None</code></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The use and available nr reference time.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">avail_ref_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The use and available nr reference time.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-4">
+  
+  
+    <a href="#returns-4" class="anchor-heading" aria-labelledby="returns-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">interp</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Whether interpolation across time is required.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">avail_ref_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The ref_time available in the NR HDF5 file.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_ref_freq_from_ref_time">
+  
+  
+    <a href="#get_ref_freq_from_ref_time" class="anchor-heading" aria-labelledby="get_ref_freq_from_ref_time"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_ref_freq_from_ref_time</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_ref_freq_from_ref_time</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Get the reference frequency from reference time</p>
+<h4 id="parameters-5">
+  
+  
+    <a href="#parameters-5" class="anchor-heading" aria-labelledby="parameters-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file object</code></td>
+      <td>The waveform h5 file handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference time.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-5">
+  
+  
+    <a href="#returns-5" class="anchor-heading" aria-labelledby="returns-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference frequency.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_ref_time_from_ref_freq">
+  
+  
+    <a href="#get_ref_time_from_ref_freq" class="anchor-heading" aria-labelledby="get_ref_time_from_ref_freq"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_ref_time_from_ref_freq</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_ref_time_from_ref_freq</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">ref_freq</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Get the reference time from reference frequency</p>
+<h4 id="parameters-6">
+  
+  
+    <a href="#parameters-6" class="anchor-heading" aria-labelledby="parameters-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file object</code></td>
+      <td>The waveform h5 file handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_freq</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The reference frequency.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-6">
+  
+  
+    <a href="#returns-6" class="anchor-heading" aria-labelledby="returns-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">fTime</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference time.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="check_nr_attrs">
+  
+  
+    <a href="#check_nr_attrs" class="anchor-heading" aria-labelledby="check_nr_attrs"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">check_nr_attrs</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">check_nr_attrs</span><span class="p">(</span><span class="n">sim_metadata_object</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">req_attrs</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">LNhatx</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">LNhaty</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">LNhatz</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhatx</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhaty</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhatz</span><span class="sh">'</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Check if the NR h5 file or a simulation metadata dictionary
+    contains all the attributes required.</p>
+<h4 id="parameters-7">
+  
+  
+    <a href="#parameters-7" class="anchor-heading" aria-labelledby="parameters-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata_object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">h5 file object, dict</code></td>
+      <td>The NR h5py file handle or simulation metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">req_attrs</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of attribute keys.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-7">
+  
+  
+    <a href="#returns-7" class="anchor-heading" aria-labelledby="returns-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">present</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Whether or not all specified attributes are present.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">absent_attrs</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>The attributes that are absent.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_interp_ref_values_from_h5_file">
+  
+  
+    <a href="#get_interp_ref_values_from_h5_file" class="anchor-heading" aria-labelledby="get_interp_ref_values_from_h5_file"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_interp_ref_values_from_h5_file</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_interp_ref_values_from_h5_file</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">req_ts_attrs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Get the interpolated reference values at a given reference time
+from the NR HDF5 File</p>
+<h4 id="parameters-8">
+  
+  
+    <a href="#parameters-8" class="anchor-heading" aria-labelledby="parameters-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file object</code></td>
+      <td>The waveform h5 file handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">req_ts_attrs</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of attribute keys.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ref_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Reference time.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-8">
+  
+  
+    <a href="#returns-8" class="anchor-heading" aria-labelledby="returns-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The parameter values at the reference time.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_ref_vals">
+  
+  
+    <a href="#get_ref_vals" class="anchor-heading" aria-labelledby="get_ref_vals"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_ref_vals</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_ref_vals</span><span class="p">(</span><span class="n">sim_metadata_object</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">req_attrs</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="p">[</span><span class="sh">'</span><span class="s">LNhatx</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">LNhaty</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">LNhatz</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhatx</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhaty</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">nhatz</span><span class="sh">'</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Get the reference values from a NR HDF5 file
+or a simulation metadata dictionary.</p>
+<h4 id="parameters-9">
+  
+  
+    <a href="#parameters-9" class="anchor-heading" aria-labelledby="parameters-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata_object</code></td>
+      <td><code class="language-plaintext highlighter-rouge">h5 file object, dict</code></td>
+      <td>The NR h5py file handle or the simulation metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">req_attrs</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of attribute keys.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-9">
+  
+  
+    <a href="#returns-9" class="anchor-heading" aria-labelledby="returns-9"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The parameter values at the reference time.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="compute_lal_source_frame_from_sxs_metadata">
+  
+  
+    <a href="#compute_lal_source_frame_from_sxs_metadata" class="anchor-heading" aria-labelledby="compute_lal_source_frame_from_sxs_metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_lal_source_frame_from_sxs_metadata</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_lal_source_frame_from_sxs_metadata</span><span class="p">(</span><span class="n">sim_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Compute the LAL source frame vectors at the
+available reference time from the SXS simulation
+metadata.</p>
+<h4 id="parameters-10">
+  
+  
+    <a href="#parameters-10" class="anchor-heading" aria-labelledby="parameters-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The NR sim_metadata.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-10">
+  
+  
+    <a href="#returns-10" class="anchor-heading" aria-labelledby="returns-10"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>A dictionary containing the LAL source frame vectors.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="compute_lal_source_frame_by_interp">
+  
+  
+    <a href="#compute_lal_source_frame_by_interp" class="anchor-heading" aria-labelledby="compute_lal_source_frame_by_interp"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_lal_source_frame_by_interp</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_lal_source_frame_by_interp</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">req_ts_attrs</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">t_ref</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Compute the LAL source frame vectors at a given reference time
+by interpolation of time series data.</p>
+<h4 id="parameters-11">
+  
+  
+    <a href="#parameters-11" class="anchor-heading" aria-labelledby="parameters-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">h5 file object</code></td>
+      <td>The NR h5py file handle that contains the simulation metadata.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The reference time.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-11">
+  
+  
+    <a href="#returns-11" class="anchor-heading" aria-labelledby="returns-11"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The LAL source frame vectors at the reference time.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="normalize_metadata">
+  
+  
+    <a href="#normalize_metadata" class="anchor-heading" aria-labelledby="normalize_metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">normalize_metadata</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">normalize_metadata</span><span class="p">(</span><span class="n">sim_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Ensure that the keys of the metadata are
+as required.</p>
+<h4 id="parameters-12">
+  
+  
+    <a href="#parameters-12" class="anchor-heading" aria-labelledby="parameters-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The NR sim_metadata.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-12">
+  
+  
+    <a href="#returns-12" class="anchor-heading" aria-labelledby="returns-12"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">norm_sim_metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The normalized simulation metadata</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_ref_time_from_metadata">
+  
+  
+    <a href="#get_ref_time_from_metadata" class="anchor-heading" aria-labelledby="get_ref_time_from_metadata"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_ref_time_from_metadata</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_ref_time_from_metadata</span><span class="p">(</span><span class="n">sim_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Get the reference time of definition of the LAL
+frame from the simulation metadata, if available.</p>
+<h4 id="parameters-13">
+  
+  
+    <a href="#parameters-13" class="anchor-heading" aria-labelledby="parameters-13"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The simulation metadata.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-13">
+  
+  
+    <a href="#returns-13" class="anchor-heading" aria-labelledby="returns-13"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The reference time</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="transform_spins_nr_to_lal">
+  
+  
+    <a href="#transform_spins_nr_to_lal" class="anchor-heading" aria-labelledby="transform_spins_nr_to_lal"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">transform_spins_nr_to_lal</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">transform_spins_nr_to_lal</span><span class="p">(</span><span class="n">nrSpin1</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">nrSpin2</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">n_hat</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">ln_hat</span><span class="p">:</span> <span class="nb">object</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Trnasform the spins of the NR simulation from the
+NR frame to the  frame.</p>
+<h4 id="parameters-14">
+  
+  
+    <a href="#parameters-14" class="anchor-heading" aria-labelledby="parameters-14"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nrSpin1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of the components of the spins of the objects.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nrSpin2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of the components of the spins of the objects.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_hat</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of the components of the unit vectors of the objects, against which the components of the spins are specified.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ln_hat</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code></td>
+      <td>A list of the components of the unit vectors of the objects, against which the components of the spins are specified.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-14">
+  
+  
+    <a href="#returns-14" class="anchor-heading" aria-labelledby="returns-14"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">S1, S2 : list</code></td>
+      <td>The transformed spins in LAL frame.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="get_nr_to_lal_rotation_angles">
+  
+  
+    <a href="#get_nr_to_lal_rotation_angles" class="anchor-heading" aria-labelledby="get_nr_to_lal_rotation_angles"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">get_nr_to_lal_rotation_angles</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">get_nr_to_lal_rotation_angles</span><span class="p">(</span><span class="n">h5_file</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span> <span class="n">sim_metadata</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">phi_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">f_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">t_ref</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">tol</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-06</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Get the angular coordinates :math:<code class="language-plaintext highlighter-rouge">\theta, \phi</code>
+and the rotation angle :math:<code class="language-plaintext highlighter-rouge">\alpha</code> from the H5 file</p>
+<h4 id="parameters-15">
+  
+  
+    <a href="#parameters-15" class="anchor-heading" aria-labelledby="parameters-15"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h5_file</code></td>
+      <td><code class="language-plaintext highlighter-rouge">file object</code></td>
+      <td>The waveform h5 file handle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The inclination angle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">phi_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The orbital phase at reference time.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The reference orbital frequency or time</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">t_ref</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The reference orbital frequency or time</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_metadata</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The sim_metadata of the waveform file.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tol</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The tolerance to use to allow floating point representation errors.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-15">
+  
+  
+    <a href="#returns-15" class="anchor-heading" aria-labelledby="returns-15"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">angles</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>The angular corrdinates Theta, Psi, and the rotation angle Alpha. If available, this also contains the reference time and frequency.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<blockquote>
+  <p><strong>Notes</strong></p>
+
+  <p>Variable definitions.</p>
+
+  <p>theta : Returned inclination angle of source in NR coordinates.
+psi :   Returned azimuth angle of source in NR coordinates.
+alpha: Returned polarisation angle.
+h5_file: h5py object of the NR HDF5 file.
+inclination: inclination of source in LAL source frame.
+phi_ref: Orbital reference phase.
+t_ref : Reference time. -1 or None indicates it was not found in the sim_metadata.
+f_ref: Reference frequency.</p>
+
+  <p>The reference epoch is defined close to the beginning of the simulation.</p>
+</blockquote><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

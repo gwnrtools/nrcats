@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(9)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(9) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(9) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(9) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.surrogate | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.surrogate" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/surrogate.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/surrogate.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.surrogate" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.surrogate","url":"https://gwnrtools.github.io/nrcats/api/surrogate.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.surrogate</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatssurrogate">
+  
+  
+    <a href="#nrcatssurrogate" class="anchor-heading" aria-labelledby="nrcatssurrogate"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.surrogate</code>
+  
+  
+</h1>
+    
+
+<p>Surrogate waveform utilities for NR vs NRSur7dq4 comparisons.</p>
+
+<p>Handles loading the surrogate, calling it with NR-compatible parameters,
+and wrapping the output as physical-unit pycbc TimeSeries objects.</p>
+<h2 id="nrsur7dq4-notes">
+  
+  
+    <a href="#nrsur7dq4-notes" class="anchor-heading" aria-labelledby="nrsur7dq4-notes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> NRSur7dq4 notes
+  
+  
+</h2>
+    
+<ul>
+  <li>Precessing model — takes full 3-vector spins, returns all modes up to ell=4.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">ellMax</code> parameter caps the output (max is 4); <code class="language-plaintext highlighter-rouge">mode_list</code> is not
+supported for precessing models.</li>
+  <li><code class="language-plaintext highlighter-rouge">f_low</code> controls waveform truncation only (start frequency); for NRSur7dq4
+the recommended value is 0 (return the entire waveform).</li>
+  <li><code class="language-plaintext highlighter-rouge">f_ref</code> sets the reference epoch at which the spins are defined; it is in
+<strong>cycles/M</strong> (= M * f_GW where M is in seconds).  For aligned-spin or
+non-spinning systems <code class="language-plaintext highlighter-rouge">f_ref = f_lower_NR * M_seconds</code> is sufficient.  For
+precessing SXS systems Phase 2 extracts the instantaneous spins from
+<code class="language-plaintext highlighter-rouge">Horizons.h5</code> at the epoch corresponding to the chosen <code class="language-plaintext highlighter-rouge">f_ref</code>.</li>
+  <li><code class="language-plaintext highlighter-rouge">dt</code> argument is in dimensionless M units.</li>
+  <li>Output <code class="language-plaintext highlighter-rouge">h[(ell,em)]</code> is a complex numpy array representing the spin-weight
+-2 spherical harmonic mode <code class="language-plaintext highlighter-rouge">h_lm</code> (same convention as SXS/RIT/MAYA NR
+data: <code class="language-plaintext highlighter-rouge">h_+ - i h_×</code> decomposed as <code class="language-plaintext highlighter-rouge">Σ h_lm Y_{-2,lm}</code>).</li>
+  <li>Time array <code class="language-plaintext highlighter-rouge">t_sur</code> is in dimensionless M units; <code class="language-plaintext highlighter-rouge">t_sur[-1] ≈ +100 M</code>
+is near merger (peak amplitude).</li>
+</ul>
+<h2 id="spin-epoch-conventions">
+  
+  
+    <a href="#spin-epoch-conventions" class="anchor-heading" aria-labelledby="spin-epoch-conventions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Spin epoch conventions
+  
+  
+</h2>
+    
+<p>Two cases arise depending on whether the NR waveform starts before or after
+the surrogate’s minimum training frequency (~0.0165 M·Ω_orbital):</p>
+
+<ol>
+  <li>
+    <p><strong>NR shorter than surrogate</strong> (<code class="language-plaintext highlighter-rouge">f_lower_NR &gt; f_min_sur</code>):
+Pass <code class="language-plaintext highlighter-rouge">f_low=0</code> (full waveform) and <code class="language-plaintext highlighter-rouge">f_ref=f_lower_NR_dimless</code>.  The
+surrogate backward-evolves the spins from the NR epoch to its start.</p>
+  </li>
+  <li>
+    <p><strong>NR longer than surrogate</strong> (<code class="language-plaintext highlighter-rouge">f_lower_NR &lt; f_min_sur</code>):
+The surrogate cannot extrapolate before its minimum frequency, so
+<code class="language-plaintext highlighter-rouge">f_ref</code> is clipped to <code class="language-plaintext highlighter-rouge">f_min_sur</code>.  For <strong>aligned-spin or non-spinning
+systems</strong> the spin components are constant (no precession), so the metadata
+spins remain valid regardless of epoch.  For <strong>precessing SXS systems</strong>
+Phase 2 automatically re-extracts the spin vectors from <code class="language-plaintext highlighter-rouge">Horizons.h5</code> at
+the clipped epoch so that the spin-epoch is always physically consistent.</p>
+  </li>
+</ol>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatssurrogate" id="markdown-toc-nrcatssurrogate"><code class="language-plaintext highlighter-rouge">nrcats.surrogate</code></a>    <ol>
+      <li><a href="#nrsur7dq4-notes" id="markdown-toc-nrsur7dq4-notes">NRSur7dq4 notes</a></li>
+      <li><a href="#spin-epoch-conventions" id="markdown-toc-spin-epoch-conventions">Spin epoch conventions</a></li>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a>        <ol>
+          <li><a href="#load_nrsur7dq4" id="markdown-toc-load_nrsur7dq4"><code class="language-plaintext highlighter-rouge">load_nrsur7dq4</code></a>            <ol>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#generate_surrogate_modes" id="markdown-toc-generate_surrogate_modes"><code class="language-plaintext highlighter-rouge">generate_surrogate_modes</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+              <li><a href="#raises" id="markdown-toc-raises">Raises</a></li>
+            </ol>
+          </li>
+          <li><a href="#check_surrogate_prior" id="markdown-toc-check_surrogate_prior"><code class="language-plaintext highlighter-rouge">check_surrogate_prior</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#surrogate_dict_to_waveform_modes" id="markdown-toc-surrogate_dict_to_waveform_modes"><code class="language-plaintext highlighter-rouge">surrogate_dict_to_waveform_modes</code></a>            <ol>
+              <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+              <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">NR_MODES</code></td>
+      <td><code class="language-plaintext highlighter-rouge">[(2, 2), (2, 1), (3, 3), (4, 4), (5, 5), (3, 2), (4, 3)]</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">SURROGATE_MODES</code></td>
+      <td><code class="language-plaintext highlighter-rouge">[(ell, em) for ell, em in NR_MODES if ell &lt;= 4]</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="load_nrsur7dq4">
+  
+  
+    <a href="#load_nrsur7dq4" class="anchor-heading" aria-labelledby="load_nrsur7dq4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">load_nrsur7dq4</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load_nrsur7dq4</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Load and cache the NRSur7dq4 surrogate model.</p>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">gwsurrogate surrogate object</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="generate_surrogate_modes">
+  
+  
+    <a href="#generate_surrogate_modes" class="anchor-heading" aria-labelledby="generate_surrogate_modes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">generate_surrogate_modes</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">generate_surrogate_modes</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">total_mass</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">distance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">delta_t_seconds</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">sim_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="bp">None</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">catalog</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">nr_wfm</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>PyCBC-compatible binary parameter dict as returned by <code class="language-plaintext highlighter-rouge">CatalogBase.get_parameters()</code>. Must contain: <code class="language-plaintext highlighter-rouge">mass1</code>, <code class="language-plaintext highlighter-rouge">mass2</code>, <code class="language-plaintext highlighter-rouge">spin1x/y/z</code>, <code class="language-plaintext highlighter-rouge">spin2x/y/z</code>, <code class="language-plaintext highlighter-rouge">f_lower</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">total_mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Total binary mass in solar masses (sets the physical time/frequency scale for the surrogate call).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distance</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Luminosity distance in Mpc for amplitude scaling (default 1).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t_seconds</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Desired sample spacing in physical seconds (default 1/4096).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">sim_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Simulation name, used for epoch-aligned spin extraction on precessing SXS runs.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">catalog</code></td>
+      <td><code class="language-plaintext highlighter-rouge">CatalogBase</code></td>
+      <td>Catalog instance; enables Phase 2 epoch alignment when the catalog is SXS.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">nr_wfm</code></td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td>Unused; kept for API compatibility.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple[dict, float]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">({(ell, em): pycbc.types.TimeSeries}, f_lower_effective)</code> — complex mode time series in physical units with epoch at peak (2,2) amplitude, plus the effective starting GW frequency in Hz.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="raises">
+  
+  
+    <a href="#raises" class="anchor-heading" aria-labelledby="raises"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Raises
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Exception</th>
+      <th>Condition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ValueError</code></td>
+      <td>If <code class="language-plaintext highlighter-rouge">f_lower</code> is not positive or the surrogate call fails.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="check_surrogate_prior">
+  
+  
+    <a href="#check_surrogate_prior" class="anchor-heading" aria-labelledby="check_surrogate_prior"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">check_surrogate_prior</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">check_surrogate_prior</span><span class="p">(</span><span class="n">params</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">q_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">chi_max</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.8</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span>
+</code></pre></div></div>
+
+<p>Return True if the binary parameters fall within the NRSur7dq4 prior volume.</p>
+
+<p>NRSur7dq4 is valid for:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">q = m1/m2 ∈ [1, 4]</code></li>
+  <li><code class="language-plaintext highlighter-rouge">|χ₁|, |χ₂| ≤ 0.8</code></li>
+  <li>Waveform length ≥ ~4350 M (not checked here — handled by the surrogate call).</li>
+</ul>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">params</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>PyCBC-compatible parameter dict.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">q_max</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Maximum mass ratio (default 4).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">chi_max</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Maximum spin magnitude (default 0.8).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="surrogate_dict_to_waveform_modes">
+  
+  
+    <a href="#surrogate_dict_to_waveform_modes" class="anchor-heading" aria-labelledby="surrogate_dict_to_waveform_modes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">surrogate_dict_to_waveform_modes</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">surrogate_dict_to_waveform_modes</span><span class="p">(</span><span class="n">h_sur_dict</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">ell_max</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Wrap a dictionary of pycbc mode TimeSeries into a WaveformModes object.</p>
+<h4 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_sur_dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>Dict mapping (ell, em) -&gt; pycbc.TimeSeries.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ell_max</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum ell value to support (default 4).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">WaveformModes</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+

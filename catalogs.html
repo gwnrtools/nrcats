@@ -1,0 +1,1719 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    
+    .site-nav > ul.nav-list:first-child > li:not(:nth-child(4)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(4) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(4) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(4) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>Catalog Reference | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="Catalog Reference" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/catalogs.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/catalogs.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Catalog Reference" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"Catalog Reference","url":"https://gwnrtools.github.io/nrcats/catalogs.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <h1 class="no_toc" id="catalog-reference">
+  
+  
+    <a href="#catalog-reference" class="anchor-heading" aria-labelledby="catalog-reference"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Catalog Reference
+  
+  
+</h1>
+    
+<h2 class="no_toc text-delta" id="table-of-contents">
+  
+  
+    <a href="#table-of-contents" class="anchor-heading" aria-labelledby="table-of-contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Table of contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#common-interface-catalogbase" id="markdown-toc-common-interface-catalogbase">Common Interface (<code class="language-plaintext highlighter-rouge">CatalogBase</code>)</a></li>
+  <li><a href="#rit-catalog" id="markdown-toc-rit-catalog">RIT Catalog</a>    <ol>
+      <li><a href="#loading" id="markdown-toc-loading">Loading</a></li>
+      <li><a href="#simulation-naming" id="markdown-toc-simulation-naming">Simulation naming</a></li>
+      <li><a href="#metadata-keys-dataframe-columns" id="markdown-toc-metadata-keys-dataframe-columns">Metadata keys (DataFrame columns)</a></li>
+      <li><a href="#file-formats" id="markdown-toc-file-formats">File formats</a></li>
+      <li><a href="#filter-example" id="markdown-toc-filter-example">Filter example</a></li>
+    </ol>
+  </li>
+  <li><a href="#sxs-catalog" id="markdown-toc-sxs-catalog">SXS Catalog</a>    <ol>
+      <li><a href="#loading-1" id="markdown-toc-loading-1">Loading</a></li>
+      <li><a href="#notes-on-path-resolution" id="markdown-toc-notes-on-path-resolution">Notes on path resolution</a></li>
+      <li><a href="#metadata-keys-dataframe-columns-1" id="markdown-toc-metadata-keys-dataframe-columns-1">Metadata keys (DataFrame columns)</a></li>
+      <li><a href="#filter-example-1" id="markdown-toc-filter-example-1">Filter example</a></li>
+    </ol>
+  </li>
+  <li><a href="#maya--gt-catalog" id="markdown-toc-maya--gt-catalog">MAYA / GT Catalog</a>    <ol>
+      <li><a href="#loading-2" id="markdown-toc-loading-2">Loading</a></li>
+      <li><a href="#metadata-keys-dataframe-columns-2" id="markdown-toc-metadata-keys-dataframe-columns-2">Metadata keys (DataFrame columns)</a></li>
+      <li><a href="#file-formats-1" id="markdown-toc-file-formats-1">File formats</a></li>
+      <li><a href="#filter-example-2" id="markdown-toc-filter-example-2">Filter example</a></li>
+    </ol>
+  </li>
+  <li><a href="#metadata-normalization" id="markdown-toc-metadata-normalization">Metadata Normalization</a></li>
+  <li><a href="#exhaustive-metadata-key-mapping" id="markdown-toc-exhaustive-metadata-key-mapping">Exhaustive Metadata Key Mapping</a>    <ol>
+      <li><a href="#identification" id="markdown-toc-identification">Identification</a></li>
+      <li><a href="#masses" id="markdown-toc-masses">Masses</a></li>
+      <li><a href="#spins" id="markdown-toc-spins">Spins</a></li>
+      <li><a href="#orbital-dynamics-and-frequencies" id="markdown-toc-orbital-dynamics-and-frequencies">Orbital Dynamics and Frequencies</a></li>
+      <li><a href="#initial-adm-conserved-quantities" id="markdown-toc-initial-adm-conserved-quantities">Initial ADM Conserved Quantities</a></li>
+      <li><a href="#remnant-properties" id="markdown-toc-remnant-properties">Remnant Properties</a></li>
+      <li><a href="#numerical-method" id="markdown-toc-numerical-method">Numerical Method</a></li>
+      <li><a href="#cache--path-bookkeeping-added-by-nrcats" id="markdown-toc-cache--path-bookkeeping-added-by-nrcats">Cache / Path Bookkeeping (added by nrcats)</a></li>
+      <li><a href="#pycbc-waveform-parameter-reference" id="markdown-toc-pycbc-waveform-parameter-reference">PyCBC Waveform Parameter Reference</a></li>
+    </ol>
+  </li>
+</ol><hr />
+
+<p>This page documents the three supported NR catalog backends and their metadata conventions.
+All three expose an <strong>identical high-level interface</strong> defined in
+<a href="/nrcats/api/catalog.html"><code class="language-plaintext highlighter-rouge">CatalogBase</code></a>, so that LVK analysis pipelines, waveform
+modeling workflows, and cross-catalog comparison studies can switch between catalogs —
+or sweep across all three — without any catalog-specific code paths.</p><hr />
+<h2 id="common-interface-catalogbase">
+  
+  
+    <a href="#common-interface-catalogbase" class="anchor-heading" aria-labelledby="common-interface-catalogbase"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Common Interface (<code class="language-plaintext highlighter-rouge">CatalogBase</code>)
+  
+  
+</h2>
+    
+
+<p>Every catalog class inherits from <code class="language-plaintext highlighter-rouge">CatalogBase</code>, which provides:</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Method / Property</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">load(download=None, verbosity=0)</code></td>
+      <td>Class method. Load catalog metadata from cache or web.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">get(sim_name, quantity='waveform')</code></td>
+      <td>Return a <code class="language-plaintext highlighter-rouge">WaveformModes</code> for the named simulation. Downloads data if not cached. <code class="language-plaintext highlighter-rouge">quantity</code> can be <code class="language-plaintext highlighter-rouge">'waveform'</code> or <code class="language-plaintext highlighter-rouge">'psi4'</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">get_metadata(sim_name)</code></td>
+      <td>Raw metadata <code class="language-plaintext highlighter-rouge">dict</code> for one simulation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">get_parameters(sim_name, total_mass=1.0)</code></td>
+      <td>PyCBC-compatible parameter dict: masses, spins, <code class="language-plaintext highlighter-rouge">f_lower</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">simulations_list</code></td>
+      <td><code class="language-plaintext highlighter-rouge">list</code> of all simulation names in the catalog.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">simulations_dataframe</code></td>
+      <td>Pandas <code class="language-plaintext highlighter-rouge">DataFrame</code> indexed by simulation name.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">waveform_filepath_from_simname(sim_name)</code></td>
+      <td>Local cache path to the waveform HDF5 file.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">download_waveform_data(sim_name)</code></td>
+      <td>Explicitly download waveform data to local cache.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psi4_filepath_from_simname(sim_name)</code></td>
+      <td>Local cache path to psi4 data (RIT only).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">download_psi4_data(sim_name)</code></td>
+      <td>Explicitly download psi4 data (RIT only).</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p><code class="language-plaintext highlighter-rouge">get()</code> implements download-on-demand: it checks for a local cache file, downloads if absent or
+empty, then returns a <code class="language-plaintext highlighter-rouge">WaveformModes</code> object. See <a href="/nrcats/waveform.html">waveform.md</a> for the full API.</p><hr />
+<h2 id="rit-catalog">
+  
+  
+    <a href="#rit-catalog" class="anchor-heading" aria-labelledby="rit-catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> RIT Catalog
+  
+  
+</h2>
+    
+
+<p><strong>Class:</strong> <code class="language-plaintext highlighter-rouge">nrcats.RITCatalog</code><br />
+<strong>Source:</strong> <a href="/nrcats/api/rit.html">api/rit.md</a><br />
+<strong>Data host:</strong> <code class="language-plaintext highlighter-rouge">https://ccrg.rit.edu/content/data/rit-waveform-catalog</code></p>
+<h3 id="loading">
+  
+  
+    <a href="#loading" class="anchor-heading" aria-labelledby="loading"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Loading
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">nrcats</span> <span class="k">as</span> <span class="n">nrcat</span>
+
+<span class="n">ritcat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="p">.</span><span class="n">RITCatalog</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Access the simulations DataFrame
+</span><span class="n">df</span> <span class="o">=</span> <span class="n">ritcat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">df</span><span class="p">.</span><span class="n">index</span><span class="p">)</span>
+<span class="c1"># Index(['RIT:BBH:0001-n100-id3', 'RIT:BBH:0002-n100-id0', ...])
+</span>
+<span class="c1"># Load a waveform
+</span><span class="n">wfm</span> <span class="o">=</span> <span class="n">ritcat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">RIT:BBH:0003-n100-id0</span><span class="sh">"</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="sh">"</span><span class="s">waveform</span><span class="sh">"</span><span class="p">)</span>
+
+<span class="c1"># Load psi4 data
+</span><span class="n">psi4</span> <span class="o">=</span> <span class="n">ritcat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">RIT:BBH:0003-n100-id0</span><span class="sh">"</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="sh">"</span><span class="s">psi4</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+<h3 id="simulation-naming">
+  
+  
+    <a href="#simulation-naming" class="anchor-heading" aria-labelledby="simulation-naming"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Simulation naming
+  
+  
+</h3>
+    
+
+<ul>
+  <li>Non-eccentric BBH: <code class="language-plaintext highlighter-rouge">RIT:BBH:{id:04d}-n{res}-id{init}</code> (e.g. <code class="language-plaintext highlighter-rouge">RIT:BBH:0001-n100-id3</code>)</li>
+  <li>Eccentric BBH: <code class="language-plaintext highlighter-rouge">RIT:eBBH:{id:04d}-n{res}-ecc</code> (e.g. <code class="language-plaintext highlighter-rouge">RIT:eBBH:1843-n100-ecc</code>)</li>
+</ul>
+<h3 id="metadata-keys-dataframe-columns">
+  
+  
+    <a href="#metadata-keys-dataframe-columns" class="anchor-heading" aria-labelledby="metadata-keys-dataframe-columns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Metadata keys (DataFrame columns)
+  
+  
+</h3>
+    
+
+<p>RIT metadata is stored with <strong>hyphens</strong> in the raw <code class="language-plaintext highlighter-rouge">.txt</code> files and the DataFrame.
+<code class="language-plaintext highlighter-rouge">get_source_parameters_from_metadata()</code> normalizes them to underscores internally.</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Column name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mass ratio \(m_1/m_2\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-mass-ratio-1-over-2</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_1\) x,y,z</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi1x</code>, <code class="language-plaintext highlighter-rouge">relaxed-chi1y</code>, <code class="language-plaintext highlighter-rouge">relaxed-chi1z</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_2\) x,y,z</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi2x</code>, <code class="language-plaintext highlighter-rouge">relaxed-chi2y</code>, <code class="language-plaintext highlighter-rouge">relaxed-chi2z</code></td>
+    </tr>
+    <tr>
+      <td>Eccentricity</td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+    </tr>
+    <tr>
+      <td>Relaxation time (dimless M)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-time</code></td>
+    </tr>
+    <tr>
+      <td>Initial GW frequency (dimless)</td>
+      <td><code class="language-plaintext highlighter-rouge">freq-start-22</code></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="file-formats">
+  
+  
+    <a href="#file-formats" class="anchor-heading" aria-labelledby="file-formats"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> File formats
+  
+  
+</h3>
+    
+
+<ul>
+  <li><strong>Waveform:</strong> HDF5 files, e.g. <code class="language-plaintext highlighter-rouge">ExtrapStrain_RIT-BBH-0001-n100.h5</code>.
+Datasets: <code class="language-plaintext highlighter-rouge">amp_l{ell}_m{em}/X</code> (time), <code class="language-plaintext highlighter-rouge">amp_l{ell}_m{em}/Y</code> (amplitude),
+<code class="language-plaintext highlighter-rouge">phase_l{ell}_m{em}/X</code> (time), <code class="language-plaintext highlighter-rouge">phase_l{ell}_m{em}/Y</code> (phase).</li>
+  <li><strong>Psi4:</strong> Tar-gzip archives, e.g. <code class="language-plaintext highlighter-rouge">ExtrapPsi4_RIT-BBH-0001-n100-id3.tar.gz</code>,
+containing ASCII <code class="language-plaintext highlighter-rouge">(time, real, imag)</code> text files per mode.</li>
+</ul>
+<h3 id="filter-example">
+  
+  
+    <a href="#filter-example" class="anchor-heading" aria-labelledby="filter-example"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Filter example
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">ritcat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="c1"># Equal-mass, non-spinning
+</span><span class="n">q1_ns</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sh">"</span><span class="s">relaxed-mass-ratio-1-over-2</span><span class="sh">"</span><span class="p">].</span><span class="nf">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">).</span><span class="nf">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.02</span>
+<span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+</code></pre></div></div><hr />
+<h2 id="sxs-catalog">
+  
+  
+    <a href="#sxs-catalog" class="anchor-heading" aria-labelledby="sxs-catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> SXS Catalog
+  
+  
+</h2>
+    
+
+<p><strong>Class:</strong> <code class="language-plaintext highlighter-rouge">nrcats.SXSCatalog</code><br />
+<strong>Source:</strong> <a href="/nrcats/api/sxs.html">api/sxs.md</a><br />
+<strong>Data host:</strong> Zenodo (via the <code class="language-plaintext highlighter-rouge">sxs</code> package ≥ 2024.0.0)</p>
+<h3 id="loading-1">
+  
+  
+    <a href="#loading-1" class="anchor-heading" aria-labelledby="loading-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Loading
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">nrcats</span> <span class="k">as</span> <span class="n">nrcat</span>
+
+<span class="c1"># download=False uses only locally cached data
+</span><span class="n">sxscat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="p">.</span><span class="n">SXSCatalog</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">download</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">sxscat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="n">wfm</span> <span class="o">=</span> <span class="n">sxscat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">SXS:BBH:0001</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+<h3 id="notes-on-path-resolution">
+  
+  
+    <a href="#notes-on-path-resolution" class="anchor-heading" aria-labelledby="notes-on-path-resolution"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Notes on path resolution
+  
+  
+</h3>
+    
+
+<p><code class="language-plaintext highlighter-rouge">SXSCatalog</code> uses <strong>lazy path resolution</strong>: path columns in <code class="language-plaintext highlighter-rouge">simulations_dataframe</code> are empty
+strings at catalog-load time. Resolving real on-disk paths for all ~2000 SXS simulations would
+require ~2000 calls to <code class="language-plaintext highlighter-rouge">sxs.load()</code> (each potentially triggering a Zenodo download). Paths are
+resolved on demand inside <code class="language-plaintext highlighter-rouge">get()</code> via the <code class="language-plaintext highlighter-rouge">sxs</code> package’s caching infrastructure.</p>
+
+<p>The call chain inside <code class="language-plaintext highlighter-rouge">get()</code> is:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sxs.load(sim_name, auto_supersede=True)  →  sim_obj.strain  →  WaveformModes(...)
+</code></pre></div></div>
+<h3 id="metadata-keys-dataframe-columns-1">
+  
+  
+    <a href="#metadata-keys-dataframe-columns-1" class="anchor-heading" aria-labelledby="metadata-keys-dataframe-columns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Metadata keys (DataFrame columns)
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Column name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mass ratio</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mass_ratio</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_1\) vector</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin1</code> (3-element list)</td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_2\) vector</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin2</code> (3-element list)</td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_1\) magnitude</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi1_mag</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_2\) magnitude</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi2_mag</code></td>
+    </tr>
+    <tr>
+      <td>Orbital frequency (3-vector)</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_orbital_frequency</code></td>
+    </tr>
+    <tr>
+      <td>Reference time (dimless M)</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_time</code></td>
+    </tr>
+    <tr>
+      <td>Relaxation time (dimless M)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxation_time</code></td>
+    </tr>
+    <tr>
+      <td>Eccentricity</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_eccentricity</code></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="filter-example-1">
+  
+  
+    <a href="#filter-example-1" class="anchor-heading" aria-labelledby="filter-example-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Filter example
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">sxscat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="n">q1_ns</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sh">"</span><span class="s">reference_mass_ratio</span><span class="sh">"</span><span class="p">].</span><span class="nf">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">).</span><span class="nf">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.02</span>
+<span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+</code></pre></div></div><hr />
+<h2 id="maya--gt-catalog">
+  
+  
+    <a href="#maya--gt-catalog" class="anchor-heading" aria-labelledby="maya--gt-catalog"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> MAYA / GT Catalog
+  
+  
+</h2>
+    
+
+<p><strong>Class:</strong> <code class="language-plaintext highlighter-rouge">nrcats.MayaCatalog</code><br />
+<strong>Source:</strong> <a href="/nrcats/api/maya.html">api/maya.md</a><br />
+<strong>Data host:</strong> <code class="language-plaintext highlighter-rouge">https://cgpstorage.ph.utexas.edu/</code></p>
+<h3 id="loading-2">
+  
+  
+    <a href="#loading-2" class="anchor-heading" aria-labelledby="loading-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Loading
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">nrcats</span> <span class="k">as</span> <span class="n">nrcat</span>
+
+<span class="n">mayacat</span> <span class="o">=</span> <span class="n">nrcat</span><span class="p">.</span><span class="n">MayaCatalog</span><span class="p">.</span><span class="nf">load</span><span class="p">(</span><span class="n">verbosity</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">mayacat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="n">wfm</span> <span class="o">=</span> <span class="n">mayacat</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">"</span><span class="s">GT0001</span><span class="sh">"</span><span class="p">,</span> <span class="n">quantity</span><span class="o">=</span><span class="sh">"</span><span class="s">waveform</span><span class="sh">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<blockquote>
+  <p><strong>Note:</strong> MAYA does not provide psi4 data. Calling <code class="language-plaintext highlighter-rouge">get(..., quantity="psi4")</code> raises
+<code class="language-plaintext highlighter-rouge">NotImplementedError</code>.</p>
+</blockquote>
+<h3 id="metadata-keys-dataframe-columns-2">
+  
+  
+    <a href="#metadata-keys-dataframe-columns-2" class="anchor-heading" aria-labelledby="metadata-keys-dataframe-columns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Metadata keys (DataFrame columns)
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Parameter</th>
+      <th>Column name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mass ratio \(m_1/m_2\)</td>
+      <td><code class="language-plaintext highlighter-rouge">q</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_1\) x,y,z</td>
+      <td><code class="language-plaintext highlighter-rouge">a1x</code>, <code class="language-plaintext highlighter-rouge">a1y</code>, <code class="language-plaintext highlighter-rouge">a1z</code></td>
+    </tr>
+    <tr>
+      <td>Spin \(\chi_2\) x,y,z</td>
+      <td><code class="language-plaintext highlighter-rouge">a2x</code>, <code class="language-plaintext highlighter-rouge">a2y</code>, <code class="language-plaintext highlighter-rouge">a2z</code></td>
+    </tr>
+    <tr>
+      <td>Eccentricity</td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+    </tr>
+    <tr>
+      <td>Orbital angular frequency \(M\Omega\)</td>
+      <td><code class="language-plaintext highlighter-rouge">omega_orbital</code></td>
+    </tr>
+    <tr>
+      <td>GT simulation ID</td>
+      <td><code class="language-plaintext highlighter-rouge">GTID</code></td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="file-formats-1">
+  
+  
+    <a href="#file-formats-1" class="anchor-heading" aria-labelledby="file-formats-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> File formats
+  
+  
+</h3>
+    
+
+<ul>
+  <li><strong>Metadata:</strong> Downloaded as <code class="language-plaintext highlighter-rouge">MAYAmetadata.pkl</code> (pickle), stored locally as
+<code class="language-plaintext highlighter-rouge">~/.cache/MAYA/catalog.zip</code> (bzip2-compressed).</li>
+  <li><strong>Waveform:</strong> HDF5 files in LVCNR format (<code class="language-plaintext highlighter-rouge">GT{ID}.h5</code>), loaded via the <code class="language-plaintext highlighter-rouge">mayawaves</code> package.</li>
+</ul>
+<h3 id="filter-example-2">
+  
+  
+    <a href="#filter-example-2" class="anchor-heading" aria-labelledby="filter-example-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Filter example
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">df</span> <span class="o">=</span> <span class="n">mayacat</span><span class="p">.</span><span class="n">simulations_dataframe</span>
+<span class="n">q1_ns</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span>
+    <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="sh">"</span><span class="s">q</span><span class="sh">"</span><span class="p">].</span><span class="nf">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">).</span><span class="nf">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mf">0.02</span>
+<span class="p">].</span><span class="n">index</span><span class="p">.</span><span class="nf">tolist</span><span class="p">()</span>
+</code></pre></div></div><hr />
+<h2 id="metadata-normalization">
+  
+  
+    <a href="#metadata-normalization" class="anchor-heading" aria-labelledby="metadata-normalization"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Metadata Normalization
+  
+  
+</h2>
+    
+
+<p><a href="/nrcats/api/metadata.html"><code class="language-plaintext highlighter-rouge">metadata.py</code></a> converts catalog-specific metadata into a
+PyCBC-compatible parameter dict via <code class="language-plaintext highlighter-rouge">get_source_parameters_from_metadata(metadata, total_mass)</code>.
+The catalog is detected by the explicit <code class="language-plaintext highlighter-rouge">catalog_type</code> metadata key (<code class="language-plaintext highlighter-rouge">"RIT"</code>, <code class="language-plaintext highlighter-rouge">"MAYA"</code>, or <code class="language-plaintext highlighter-rouge">"SXS"</code>), which is injected dynamically during load:</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th><code class="language-plaintext highlighter-rouge">catalog_type</code> value</th>
+      <th>Catalog</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"RIT"</code></td>
+      <td>RIT</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"MAYA"</code></td>
+      <td>MAYA</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">"SXS"</code></td>
+      <td>SXS</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p>All three paths produce the same output dict:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span>
+    <span class="sh">"</span><span class="s">mass1</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>     <span class="c1"># M_sun (scaled by total_mass)
+</span>    <span class="sh">"</span><span class="s">mass2</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">spin1x</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="sh">"</span><span class="s">spin1y</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="sh">"</span><span class="s">spin1z</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">spin2x</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="sh">"</span><span class="s">spin2y</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="sh">"</span><span class="s">spin2z</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="sh">"</span><span class="s">f_lower</span><span class="sh">"</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>   <span class="c1"># Hz; or -1 if unknown
+</span><span class="p">}</span>
+</code></pre></div></div>
+
+<p>Initial GW frequency conversion:</p>
+<ul>
+  <li><strong>RIT / MAYA</strong>: <code class="language-plaintext highlighter-rouge">f_lower [Hz] = f_dimless / (total_mass [M_sun] × lal.MTSUN_SI)</code></li>
+  <li><strong>SXS</strong>: magnitude of <code class="language-plaintext highlighter-rouge">reference_orbital_frequency</code> (3-vector) gives \(M\Omega_{orb}\); \(f_{GW} = M\Omega_{orb} / \pi / (M_\text{tot} \times \text{MTSUN\_SI})\)</li>
+</ul><hr />
+<h2 id="exhaustive-metadata-key-mapping">
+  
+  
+    <a href="#exhaustive-metadata-key-mapping" class="anchor-heading" aria-labelledby="exhaustive-metadata-key-mapping"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Exhaustive Metadata Key Mapping
+  
+  
+</h2>
+    
+
+<p>The table below maps every physical quantity to its key name in each catalog’s raw metadata,
+the normalized key used internally by <code class="language-plaintext highlighter-rouge">nrcats</code>, and the corresponding PyCBC parameter
+name. Units are <strong>dimensionless code units</strong> (total mass \(M=1\), \(G=c=1\)) unless noted.</p>
+<h3 id="identification">
+  
+  
+    <a href="#identification" class="anchor-heading" aria-labelledby="identification"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Identification
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw <code class="language-plaintext highlighter-rouge">.txt</code>, hyphens)</th>
+      <th>SXS (<code class="language-plaintext highlighter-rouge">snake_case</code>)</th>
+      <th>MAYA (<code class="language-plaintext highlighter-rouge">snake_case</code>)</th>
+      <th>PyCBC / nrcats output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Catalog simulation ID</td>
+      <td><code class="language-plaintext highlighter-rouge">catalog-tag</code> + <code class="language-plaintext highlighter-rouge">resolution-tag</code> + <code class="language-plaintext highlighter-rouge">id-tag</code> → e.g. <code class="language-plaintext highlighter-rouge">RIT:BBH:0001-n100-id3</code></td>
+      <td><code class="language-plaintext highlighter-rouge">alternative_names</code> → e.g. <code class="language-plaintext highlighter-rouge">SXS:BBH:0001</code></td>
+      <td><code class="language-plaintext highlighter-rouge">GTID</code> → e.g. <code class="language-plaintext highlighter-rouge">GT0001</code></td>
+      <td><code class="language-plaintext highlighter-rouge">simulation_name</code> (index key)</td>
+    </tr>
+    <tr>
+      <td>Internal run name</td>
+      <td><code class="language-plaintext highlighter-rouge">run-name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">simulation_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">GT_Tag</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Object types</td>
+      <td><code class="language-plaintext highlighter-rouge">system-type</code> (<code class="language-plaintext highlighter-rouge">Aligned</code>, <code class="language-plaintext highlighter-rouge">Precessing</code>, <code class="language-plaintext highlighter-rouge">Nonspinning</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">object_types</code> (<code class="language-plaintext highlighter-rouge">BHBH</code>, <code class="language-plaintext highlighter-rouge">NSNS</code>, <code class="language-plaintext highlighter-rouge">BHNS</code>)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Bibtex citation keys</td>
+      <td><code class="language-plaintext highlighter-rouge">simulation-bibtex-keys</code>, <code class="language-plaintext highlighter-rouge">code-bibtex-keys</code></td>
+      <td><code class="language-plaintext highlighter-rouge">simulation_bibtex_keys</code>, <code class="language-plaintext highlighter-rouge">code_bibtex_keys</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="masses">
+  
+  
+    <a href="#masses" class="anchor-heading" aria-labelledby="masses"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Masses
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Primary mass (physical epoch)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-mass1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mass1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">m1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mass1</code> (M☉, scaled by <code class="language-plaintext highlighter-rouge">total_mass</code>)</td>
+    </tr>
+    <tr>
+      <td>Secondary mass (physical epoch)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-mass2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mass2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">m2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mass2</code> (M☉)</td>
+    </tr>
+    <tr>
+      <td>Total mass (physical epoch)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-total-mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mass1</code> + <code class="language-plaintext highlighter-rouge">reference_mass2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">m1</code> + <code class="language-plaintext highlighter-rouge">m2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mtotal</code> (M☉)</td>
+    </tr>
+    <tr>
+      <td>Mass ratio \(m_1/m_2 \ge 1\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-mass-ratio-1-over-2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mass_ratio</code></td>
+      <td><code class="language-plaintext highlighter-rouge">q</code></td>
+      <td>— (derived: <code class="language-plaintext highlighter-rouge">mass1/mass2</code>)</td>
+    </tr>
+    <tr>
+      <td>Symmetric mass ratio \(\eta\)</td>
+      <td>— (derived)</td>
+      <td>— (derived)</td>
+      <td><code class="language-plaintext highlighter-rouge">eta</code></td>
+      <td><code class="language-plaintext highlighter-rouge">eta</code></td>
+    </tr>
+    <tr>
+      <td>Irreducible mass, primary</td>
+      <td>—</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">m1_irr</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Irreducible mass, secondary</td>
+      <td>—</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">m2_irr</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial bare mass, primary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-mass1</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_mass1</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial bare mass, secondary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-mass2</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_mass2</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Remnant / final mass</td>
+      <td><code class="language-plaintext highlighter-rouge">final-mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">remnant_mass</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="spins">
+  
+  
+    <a href="#spins" class="anchor-heading" aria-labelledby="spins"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Spins
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Primary spin x-component \(\chi_{1x}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi1x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin1[0]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a1x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin1x</code></td>
+    </tr>
+    <tr>
+      <td>Primary spin y-component \(\chi_{1y}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi1y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin1[1]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a1y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin1y</code></td>
+    </tr>
+    <tr>
+      <td>Primary spin z-component \(\chi_{1z}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi1z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin1[2]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a1z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin1z</code></td>
+    </tr>
+    <tr>
+      <td>Secondary spin x-component \(\chi_{2x}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi2x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin2[0]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a2x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin2x</code></td>
+    </tr>
+    <tr>
+      <td>Secondary spin y-component \(\chi_{2y}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi2y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin2[1]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a2y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin2y</code></td>
+    </tr>
+    <tr>
+      <td>Secondary spin z-component \(\chi_{2z}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-chi2z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_dimensionless_spin2[2]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">a2z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">spin2z</code></td>
+    </tr>
+    <tr>
+      <td>Primary spin magnitude \(|\chi_1|\)</td>
+      <td>derived from components</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi1_mag</code></td>
+      <td>derived</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Secondary spin magnitude \(|\chi_2|\)</td>
+      <td>derived from components</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi2_mag</code></td>
+      <td>derived</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Effective spin \(\chi_\text{eff}\)</td>
+      <td>derived</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi_eff</code></td>
+      <td>derived</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Primary in-plane spin \(\chi_{1\perp}\)</td>
+      <td>derived</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi1_perp</code></td>
+      <td>derived</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Secondary in-plane spin \(\chi_{2\perp}\)</td>
+      <td>derived</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_chi2_perp</code></td>
+      <td>derived</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin x, primary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi1x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin1[0]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin y, primary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi1y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin1[1]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin z, primary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi1z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin1[2]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin x, secondary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi2x</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin2[0]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin y, secondary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi2y</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin2[1]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial spin z, secondary</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-bh-chi2z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_dimensionless_spin2[2]</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Remnant spin magnitude</td>
+      <td><code class="language-plaintext highlighter-rouge">final-chi</code></td>
+      <td><code class="language-plaintext highlighter-rouge">remnant_dimensionless_spin</code> (3-vector)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="orbital-dynamics-and-frequencies">
+  
+  
+    <a href="#orbital-dynamics-and-frequencies" class="anchor-heading" aria-labelledby="orbital-dynamics-and-frequencies"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Orbital Dynamics and Frequencies
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Physical epoch time (code units M)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_time</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Relaxation / junk-transient end time</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">relaxation_time</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial orbital frequency \(M\Omega_0\)</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">initial_orbital_frequency</code> (scalar)</td>
+      <td><code class="language-plaintext highlighter-rouge">omega_orbital</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Reference orbital frequency (3-vector)</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_orbital_frequency</code> ([Ωx, Ωy, Ωz])</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Starting GW (2,2) frequency (code units)</td>
+      <td><code class="language-plaintext highlighter-rouge">freq-start-22</code></td>
+      <td>derived: \(|\mathbf{\Omega}|/\pi\)</td>
+      <td>derived: <code class="language-plaintext highlighter-rouge">omega_orbital</code>/π</td>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code> (Hz, after unit conversion)</td>
+    </tr>
+    <tr>
+      <td>Starting GW freq at 1 M☉ (Hz)</td>
+      <td><code class="language-plaintext highlighter-rouge">freq-start-22-Hz-1Msun</code></td>
+      <td>derived</td>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_at_1MSUN</code></td>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code> = value / <code class="language-plaintext highlighter-rouge">total_mass</code></td>
+    </tr>
+    <tr>
+      <td>Initial separation</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-separation</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_separation</code></td>
+      <td><code class="language-plaintext highlighter-rouge">separation</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Reference separation</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_separation</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Orbital eccentricity</td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_eccentricity</code></td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+    </tr>
+    <tr>
+      <td>Mean anomaly</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">reference_mean_anomaly</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mean_anomaly</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mean_per_ano</code></td>
+    </tr>
+    <tr>
+      <td>Eccentricity measurement method</td>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity-measurement-method</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Unit orbital angular momentum \(\hat{L}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-LNhatx/y/z</code></td>
+      <td>derived from <code class="language-plaintext highlighter-rouge">reference_orbital_frequency</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Unit separation vector \(\hat{n}\)</td>
+      <td><code class="language-plaintext highlighter-rouge">relaxed-nhatx/y/z</code></td>
+      <td><code class="language-plaintext highlighter-rouge">reference_position1/2</code> (difference)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Number of GW (2,2) cycles</td>
+      <td><code class="language-plaintext highlighter-rouge">number-of-cycles-22</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number_of_orbits</code> × 2</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Number of orbits</td>
+      <td><code class="language-plaintext highlighter-rouge">number-of-orbits</code></td>
+      <td><code class="language-plaintext highlighter-rouge">number_of_orbits</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Merger / common horizon time</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">common_horizon_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">merge_time</code></td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Peak (2,2) orbital frequency at merger</td>
+      <td><code class="language-plaintext highlighter-rouge">peak-omega-22</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Peak (2,2) amplitude</td>
+      <td><code class="language-plaintext highlighter-rouge">peak-ampl-22</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="initial-adm-conserved-quantities">
+  
+  
+    <a href="#initial-adm-conserved-quantities" class="anchor-heading" aria-labelledby="initial-adm-conserved-quantities"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Initial ADM Conserved Quantities
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Initial ADM energy</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-ADM-energy</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_ADM_energy</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial ADM angular momentum (magnitude)</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-orbital-angular-momentum</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_ADM_angular_momentum</code> (3-vector)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial ADM linear momentum</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">initial_ADM_linear_momentum</code> (3-vector)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial position, primary</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">initial_position1</code> ([x,y,z])</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial position, secondary</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">initial_position2</code> ([x,y,z])</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="remnant-properties">
+  
+  
+    <a href="#remnant-properties" class="anchor-heading" aria-labelledby="remnant-properties"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Remnant Properties
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Remnant mass</td>
+      <td><code class="language-plaintext highlighter-rouge">final-mass</code></td>
+      <td><code class="language-plaintext highlighter-rouge">remnant_mass</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Remnant spin magnitude</td>
+      <td><code class="language-plaintext highlighter-rouge">final-chi</code></td>
+      <td>magnitude of <code class="language-plaintext highlighter-rouge">remnant_dimensionless_spin</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Remnant spin vector</td>
+      <td>—</td>
+      <td><code class="language-plaintext highlighter-rouge">remnant_dimensionless_spin</code> ([χx, χy, χz])</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Remnant recoil / kick velocity</td>
+      <td><code class="language-plaintext highlighter-rouge">final-kick</code> (km/s)</td>
+      <td><code class="language-plaintext highlighter-rouge">remnant_velocity</code> ([vx, vy, vz] in units of c)</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Peak GW luminosity</td>
+      <td><code class="language-plaintext highlighter-rouge">peak-luminosity-ergs-per-sec</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="numerical-method">
+  
+  
+    <a href="#numerical-method" class="anchor-heading" aria-labelledby="numerical-method"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Numerical Method
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Physical quantity</th>
+      <th>RIT (raw, hyphens)</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+      <th>PyCBC output</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Evolution code</td>
+      <td><code class="language-plaintext highlighter-rouge">code</code> (<code class="language-plaintext highlighter-rouge">LazEv</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">code_bibtex_keys</code></td>
+      <td>MayaKranc (implicit)</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Formulation</td>
+      <td><code class="language-plaintext highlighter-rouge">evolution-system</code> (<code class="language-plaintext highlighter-rouge">BSSN</code>)</td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Grid resolution tag</td>
+      <td><code class="language-plaintext highlighter-rouge">resolution-tag</code> (e.g. <code class="language-plaintext highlighter-rouge">n100</code>)</td>
+      <td><code class="language-plaintext highlighter-rouge">simulation_name</code> Lev suffix</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Initial data type</td>
+      <td><code class="language-plaintext highlighter-rouge">initial-data-type</code></td>
+      <td><code class="language-plaintext highlighter-rouge">initial_data_type</code></td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>Finite difference order</td>
+      <td><code class="language-plaintext highlighter-rouge">fd-order</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>CFL factor</td>
+      <td><code class="language-plaintext highlighter-rouge">cfl</code></td>
+      <td>—</td>
+      <td>—</td>
+      <td>—</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="cache--path-bookkeeping-added-by-nrcats">
+  
+  
+    <a href="#cache--path-bookkeeping-added-by-nrcats" class="anchor-heading" aria-labelledby="cache--path-bookkeeping-added-by-nrcats"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Cache / Path Bookkeeping (added by nrcats)
+  
+  
+</h3>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Key</th>
+      <th>RIT</th>
+      <th>SXS</th>
+      <th>MAYA</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Waveform data URL</td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_link</code></td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_link</code> (empty stub)</td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_link</code></td>
+    </tr>
+    <tr>
+      <td>Waveform local path</td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_location</code></td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_location</code> (empty stub)</td>
+      <td><code class="language-plaintext highlighter-rouge">waveform_data_location</code></td>
+    </tr>
+    <tr>
+      <td>Psi4 data URL</td>
+      <td><code class="language-plaintext highlighter-rouge">psi4_data_link</code></td>
+      <td><code class="language-plaintext highlighter-rouge">psi4_data_link</code> (empty stub)</td>
+      <td>— (not available)</td>
+    </tr>
+    <tr>
+      <td>Psi4 local path</td>
+      <td><code class="language-plaintext highlighter-rouge">psi4_data_location</code></td>
+      <td><code class="language-plaintext highlighter-rouge">psi4_data_location</code> (empty stub)</td>
+      <td>— (not available)</td>
+    </tr>
+    <tr>
+      <td>Metadata URL</td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_link</code></td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_link</code> (empty stub)</td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_link</code></td>
+    </tr>
+    <tr>
+      <td>Metadata local path</td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_location</code></td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_location</code> (empty stub)</td>
+      <td><code class="language-plaintext highlighter-rouge">metadata_location</code></td>
+    </tr>
+  </tbody>
+</table></div>
+
+<blockquote>
+  <p><strong>SXS path stubs</strong>: All SXS path/URL columns are empty strings at catalog-load time.
+They are resolved on demand inside <code class="language-plaintext highlighter-rouge">get()</code> via <code class="language-plaintext highlighter-rouge">sxs.load(sim_name)</code> to avoid triggering
+~2000 Zenodo downloads at startup.</p>
+</blockquote>
+<h3 id="pycbc-waveform-parameter-reference">
+  
+  
+    <a href="#pycbc-waveform-parameter-reference" class="anchor-heading" aria-labelledby="pycbc-waveform-parameter-reference"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> PyCBC Waveform Parameter Reference
+  
+  
+</h3>
+    
+
+<p>The following PyCBC parameter names are accepted by <code class="language-plaintext highlighter-rouge">pycbc.waveform.get_td_waveform()</code>,
+<code class="language-plaintext highlighter-rouge">get_fd_waveform()</code>, and <code class="language-plaintext highlighter-rouge">get_td_waveform_modes()</code>. The <code class="language-plaintext highlighter-rouge">get_parameters()</code> method on all
+catalog classes returns a dict with the starred (★) names populated.</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>PyCBC parameter</th>
+      <th>Units</th>
+      <th>Description</th>
+      <th>Populated by <code class="language-plaintext highlighter-rouge">get_parameters()</code>?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mass1</code> ★</td>
+      <td>M☉</td>
+      <td>Primary (larger) object mass</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mass2</code> ★</td>
+      <td>M☉</td>
+      <td>Secondary (smaller) object mass</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin1x</code> ★</td>
+      <td>—</td>
+      <td>Primary spin x-component \(\chi_{1x} = S_{1x}/m_1^2\)</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin1y</code> ★</td>
+      <td>—</td>
+      <td>Primary spin y-component</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin1z</code> ★</td>
+      <td>—</td>
+      <td>Primary spin z-component</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin2x</code> ★</td>
+      <td>—</td>
+      <td>Secondary spin x-component</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin2y</code> ★</td>
+      <td>—</td>
+      <td>Secondary spin y-component</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin2z</code> ★</td>
+      <td>—</td>
+      <td>Secondary spin z-component</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code> ★</td>
+      <td>Hz</td>
+      <td>Starting GW frequency</td>
+      <td>Yes (or -1 if unavailable in metadata)</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_ref</code></td>
+      <td>Hz</td>
+      <td>Reference frequency for spin definitions</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_final</code></td>
+      <td>Hz</td>
+      <td>Maximum frequency</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td>s</td>
+      <td>Time sample spacing (e.g. <code class="language-plaintext highlighter-rouge">1./4096</code>)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_f</code></td>
+      <td>Hz</td>
+      <td>Frequency bin spacing</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">distance</code></td>
+      <td>Mpc</td>
+      <td>Luminosity distance</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td>rad</td>
+      <td>Angle between \(\hat{L}\) and line of sight</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">coa_phase</code></td>
+      <td>rad</td>
+      <td>Orbital phase at peak amplitude</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tc</code></td>
+      <td>GPS s</td>
+      <td>Coalescence time</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ra</code></td>
+      <td>rad</td>
+      <td>Right ascension</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">dec</code></td>
+      <td>rad</td>
+      <td>Declination</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">polarization</code></td>
+      <td>rad</td>
+      <td>GW polarization angle</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">eccentricity</code></td>
+      <td>—</td>
+      <td>Orbital eccentricity</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mean_per_ano</code></td>
+      <td>rad</td>
+      <td>Mean anomaly at periastron</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">long_asc_nodes</code></td>
+      <td>rad</td>
+      <td>Longitude of ascending nodes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mchirp</code></td>
+      <td>M☉</td>
+      <td>Chirp mass (derived from <code class="language-plaintext highlighter-rouge">mass1</code>, <code class="language-plaintext highlighter-rouge">mass2</code>)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mtotal</code></td>
+      <td>M☉</td>
+      <td>Total mass (derived)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">eta</code></td>
+      <td>—</td>
+      <td>Symmetric mass ratio (derived)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lambda1</code></td>
+      <td>—</td>
+      <td>Dimensionless tidal deformability of object 1 (BNS/BHNS)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">lambda2</code></td>
+      <td>—</td>
+      <td>Dimensionless tidal deformability of object 2</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">approximant</code></td>
+      <td>str</td>
+      <td>Waveform model name (e.g. <code class="language-plaintext highlighter-rouge">IMRPhenomXPHM</code>, <code class="language-plaintext highlighter-rouge">NR_hdf5</code>)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">numrel_data</code></td>
+      <td>path</td>
+      <td>Path to NR HDF5 file; required when <code class="language-plaintext highlighter-rouge">approximant='NR_hdf5'</code></td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mode_array</code></td>
+      <td>list</td>
+      <td>List of <code class="language-plaintext highlighter-rouge">[l,m]</code> mode pairs to include</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">phase_order</code></td>
+      <td>int</td>
+      <td>PN phase order (−1 = highest available)</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">amplitude_order</code></td>
+      <td>int</td>
+      <td>PN amplitude order</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">spin_order</code></td>
+      <td>int</td>
+      <td>PN spin-correction order</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">tidal_order</code></td>
+      <td>int</td>
+      <td>PN tidal-correction order</td>
+      <td>No</td>
+    </tr>
+  </tbody>
+</table></div>
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+
