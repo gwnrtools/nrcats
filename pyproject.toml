@@ -11,7 +11,14 @@ license = {text = "GPL"}
 authors = [
     {name = "Prayush Kumar", email = "prayush.kumar@gmail.com"},
 ]
-requires-python = ">=3.8"
+# Raised from >=3.8 to match the strictest dependency actually installed:
+# waveformtools requires >=3.11 (sxs and spherical require >=3.10).  The old
+# value let pip begin an install on 3.8-3.10 that could only fail later.
+requires-python = ">=3.11"
+
+# Kept in step with conda.yml.  Everything here is imported at MODULE level by
+# nrcats/, so the package cannot be imported without it.  Dependencies that are
+# imported lazily inside functions live in [project.optional-dependencies].
 dependencies = [
     "PyYAML",
     "numpy",
@@ -24,6 +31,15 @@ dependencies = [
     "waveformtools",
     "mayawaves>=2025.12",
     "h5py",
+    # --- previously undeclared but imported at module level ---
+    "quaternionic",         # waveform/modes.py:12, waveform/loaders.py:23
+    "requests",             # utils.py:55, rit.py:51
+    "spherical",            # waveform/modes.py:13, waveform/matching.py:8
+    "tqdm",                 # rit.py:52
+    # pycbc/waveform/plugin.py imports pkg_resources during its plugin scan,
+    # and setuptools 81 removed it.  Without this cap, `import pycbc.waveform`
+    # raises ModuleNotFoundError on a fresh install.
+    "setuptools<81",
 ]
 
 [project.urls]
@@ -34,6 +50,34 @@ Homepage = "https://github.com/gwnrtools/nrcats"
 # (see docs/Gemfile and .github/workflows/docs.yml).
 docs = [
     "griffe>=1.0",
+]
+
+# The three extras below are imported lazily, inside the functions that need
+# them, so `import nrcats` works without them -- but the corresponding feature
+# raises ImportError at call time if they are absent.
+surrogate = [
+    "gwsurrogate",          # surrogate.py:63 -- NRSur7dq4 generation
+]
+plots = [
+    "matplotlib",           # comparisons.py:322
+]
+bms = [
+    "scri",                 # waveform/modes.py:1296 -- BMS coupling coefficients
+]
+
+test = [
+    "pytest",
+    "coverage",
+]
+
+# Everything needed to exercise the full package, including the surrogate
+# comparisons: pip install -e ".[all]"
+all = [
+    "gwsurrogate",
+    "matplotlib",
+    "scri",
+    "pytest",
+    "coverage",
 ]
 
 [tool.setuptools.packages.find]
