@@ -1,0 +1,109 @@
+# Conda/mamba environment for nrcats and the cross-catalog comparison paper.
+#
+#   mamba env create -f conda.yml
+#   conda activate nrcats
+#   pip install -e . --no-deps        # --no-deps is REQUIRED; see below
+#   pytest -m "not requires_data and not cross_catalog"
+#
+# Derived by scanning every third-party import in nrcats/, test/ and the
+# paper's project/scripts/ -- not from pyproject.toml, which is incomplete:
+# it declares 11 packages while the code imports 18.  Undeclared but required:
+# gwsurrogate, matplotlib, quaternionic, requests, scri, spherical, tqdm.
+#
+# ---------------------------------------------------------------------------
+# TWO THINGS THIS FILE GETS RIGHT THE HARD WAY
+#
+# 1. setuptools MUST be <81.  setuptools 81 removed pkg_resources, and
+#    pycbc/waveform/plugin.py:99 still does `import pkg_resources` during its
+#    waveform-plugin scan.  With setuptools 84 the whole test suite dies at
+#    collection with 14 errors -- ModuleNotFoundError: No module named
+#    'pkg_resources' -- for every module that touches pycbc.  This is the real
+#    blocker, and it is easy to misdiagnose as a numpy problem.
+#
+# 2. numpy ends up at 2.x, and that is FINE.  mayawaves and waveformtools
+#    declare an unbounded `numpy`, and conda applies its own pins only to the
+#    conda solve -- the `pip:` section below runs afterwards and overrides
+#    them.  So this env resolves to numpy 2.2.6 regardless of what is pinned
+#    here.  The full suite passes that way (117 passed, 2 skipped), including
+#    scipy 1.13.1, which is nominally numpy-1.x-only.
+#
+#    What genuinely breaks things is a HALF-REPLACED numpy: running
+#    `mamba install --force-reinstall numpy=1.26.4` on top of a pip-installed
+#    numpy 2.x leaves both trees (numpy/core and numpy/_core) and both
+#    dist-info records in place, which sends numpy's dtype __repr__ into
+#    infinite recursion and takes down sxs, scri, gwsurrogate and pyseobnr.
+#    Recovering means removing the numpy tree and both records by hand.
+#
+#    So: do not fight the numpy version. If you must pip-install into this env
+#    afterwards, pass --no-deps so pip cannot half-replace numpy.
+#
+#    Known cosmetic consequence: nrcats/waveform/matching.py:235 emits a
+#    numpy-2 DeprecationWarning (`__array__` copy keyword). Harmless for now,
+#    worth fixing during the paper_plan.md metric work.
+# ---------------------------------------------------------------------------
+
+name: nrcats
+
+channels:
+  - conda-forge
+
+dependencies:
+  # ---- interpreter -------------------------------------------------------
+  - python=3.11
+
+  # ---- build/runtime tooling --------------------------------------------
+  - setuptools<81              # REQUIRED: 81 removed pkg_resources, which
+                               # pycbc/waveform/plugin.py still imports.
+                               # Without this the suite fails to collect.
+
+  # ---- core scientific stack --------------------------------------------
+  - numpy                      # unpinned: the pip: section overrides any pin
+                               # here anyway, and numpy 2.2.6 passes the suite
+  - scipy
+  - pandas
+  - h5py
+  - pyyaml
+  - requests                   # nrcats/{sxs,utils,rit}.py
+  - tqdm
+
+  # ---- plotting ----------------------------------------------------------
+  - matplotlib                 # imported by nrcats/, not declared
+  - seaborn                    # paper scripts only
+
+  # ---- LIGO / gravitational-wave stack -----------------------------------
+  - lalsuite                   # provides lal + lalsimulation.
+                               # SEOBNRv4PHM lives HERE, not in pyseobnr:
+                               # lalsimulation.GetApproximantFromString(
+                               #     'SEOBNRv4PHM') -> 52
+  - ligo-common
+  - pycbc
+  - pyseobnr                   # SEOBNRv5 family only; not needed for v4PHM,
+                               # but standard in IGWN and loaded anyway via
+                               # pycbc's waveform-plugin entry points
+
+  # ---- NR waveform / spherical-harmonic packages -------------------------
+  - sxs                        # >=2025.0.0 required by nrcats
+  - gwsurrogate                # nrcats/surrogate.py:63 -- NRSur7dq4.
+                               # IS on conda-forge; install here rather than
+                               # via pip so it stays ABI-coherent
+  - quaternionic               # SO(3) optimisation
+  - spherical                  # Wigner D matrices
+  - scri                       # nrcats/waveform/modes.py:1296 (BMS coupling)
+
+  # ---- testing and tooling ----------------------------------------------
+  - pytest
+  - coverage
+  - black
+  - flake8
+  - pre-commit
+
+  # ---- pip-only packages -------------------------------------------------
+  # Genuinely unavailable on conda-forge (checked with `mamba repoquery
+  # search`).  Both declare an unbounded `numpy` requirement, so install them
+  # with --no-deps if adding them to an existing environment by hand.
+  - pip
+  - pip:
+      - mayawaves>=2025.12
+      - waveformtools
+      - gw_eccentricity        # planned: common eccentricity estimator
+                               # (paper_plan.md Phase 5); drop if unwanted
