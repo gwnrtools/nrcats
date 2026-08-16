@@ -404,6 +404,73 @@ class SXSCatalog(catalog.CatalogBase):
 
         return sorted(orders)
 
+    @staticmethod
+    def clear_cache(
+        sim_names: list[str] | None = None,
+        dry_run: bool = False,
+    ) -> dict:
+        """Delete cached waveform files, freeing disk between processing batches.
+
+        A full pass over the catalog needs far more disk than the waveforms are
+        worth keeping: 637 quasi-circular simulations at ~21 MB of
+        ``ExtraWaveforms.h5`` each is ~13 GB, and that is before strain files.
+        Processing in chunks and clearing between them turns an impossible run
+        into a bounded one, at the cost of re-downloading anything needed twice.
+
+        **Only per-simulation waveform directories are removed.**  The catalog
+        index (``simulations_*.bz2``, ``catalog.zip``) is deliberately kept: it
+        is a few megabytes, it is expensive to rebuild, and every call into the
+        catalog needs it.  Deleting it would turn a disk-space optimisation into
+        a repeated multi-minute stall.
+
+        Args:
+            sim_names (list[str] or None): Simulations to clear, e.g.
+                ``["SXS:BBH:1419"]``.  Version suffixes are matched
+                automatically, so ``SXS:BBH:1419`` clears ``SXS:BBH:1419v3.0``.
+                ``None`` clears **every** cached simulation.
+            dry_run (bool): Report what would be freed without deleting.
+
+        Returns:
+            dict: ``{"removed": [paths], "bytes_freed": int, "dry_run": bool}``.
+
+        Note:
+            Cached data is a pure download cache -- everything removed can be
+            fetched again -- so this is safe to call between chunks.  It is not
+            safe to call *while* another process is reading the same cache.
+        """
+        import shutil
+
+        cache = Path(sxs.sxs_directory("cache"))
+        if not cache.is_dir():
+            return {"removed": [], "bytes_freed": 0, "dry_run": dry_run}
+
+        wanted = None
+        if sim_names is not None:
+            # Match on the stem so a caller need not know the version suffix.
+            wanted = {
+                n.split("v")[0] if "v" in n.rsplit(":", 1)[-1] else n for n in sim_names
+            }
+
+        removed, freed = [], 0
+        for entry in sorted(cache.iterdir()):
+            if not entry.is_dir():
+                continue  # catalog index files -- never touched
+            stem = entry.name
+            for marker in ("v",):
+                idx = stem.rfind(marker)
+                if idx > 0 and stem[idx + 1 :].replace(".", "").isdigit():
+                    stem = stem[:idx]
+                    break
+            if wanted is not None and stem not in wanted:
+                continue
+            size = sum(f.stat().st_size for f in entry.rglob("*") if f.is_file())
+            removed.append(str(entry))
+            freed += size
+            if not dry_run:
+                shutil.rmtree(entry, ignore_errors=True)
+
+        return {"removed": removed, "bytes_freed": freed, "dry_run": dry_run}
+
     def download_waveform_data(self, sim_name: str) -> object:
         """Download the strain waveform data for *sim_name* via ``sxs.load()``.
 

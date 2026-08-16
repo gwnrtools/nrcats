@@ -61,7 +61,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.NR_CATALOG_CACHE }}
-          key: nr-data-v1-RIT-BBH-0001-SXS-BBH-0001-GT0905
+          key: nr-data-v2-RIT-BBH-0001-SXS-BBH-0001-1419-GT0905
 
       # ── 6. Download NR data (skipped when cache hits) ─────────────────────
       # Seed the RIT metadata cache from the pre-built CSV committed to the
@@ -93,9 +93,15 @@ jobs:
           python - <<'EOF'
           import warnings; warnings.filterwarnings("ignore")
           import sxs
+          import nrcats as nrcat
           # download=True fetches both metadata and strain for SXS:BBH:0001
           sim = sxs.load("SXS:BBH:0001", download=True, auto_supersede=True)
           _ = sim.strain   # triggers the actual data fetch
+          
+          # Pre-download SXS:BBH:1419 (all used extrapolation orders) for tests
+          cat = nrcat.SXSCatalog.load(download=True, verbosity=0)
+          for order in [2, 3, 4]:
+              _ = cat.get("SXS:BBH:1419", extrapolation_order=order)
           print("SXS download done.")
           EOF
 
@@ -113,7 +119,7 @@ jobs:
       # ── 7. Run tests ──────────────────────────────────────────────────────
       - name: Run cross-catalog tests
         run: |
-          pytest test/test_cross_catalog_q1_nospin.py \
+          pytest test/test_cross_catalog_q1_nospin.py test/test_sxs_extrapolation_order.py \
             -v \
             --tb=short \
             -p no:warnings \

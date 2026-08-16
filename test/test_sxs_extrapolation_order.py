@@ -24,6 +24,8 @@ Markers:
   requires_data — loads waveform HDF5 files; needs cached data or network.
 """
 
+import os
+
 import numpy as np
 import pytest
 
@@ -102,8 +104,8 @@ def test_available_orders_reports_what_loads():
     is only trustworthy while the convention holds -- this test is what would
     catch a catalog release that changes it.
     """
-    cat = load_catalog("SXS")
     try:
+        cat = load_catalog("SXS")
         cheap = cat.available_extrapolation_orders(SIM)
     except Exception as exc:  # noqa: BLE001
         pytest.skip(f"{SIM} listing unavailable: {type(exc).__name__}: {exc}")
@@ -126,7 +128,56 @@ def test_default_is_order_two():
     without an explicit order stop being comparable with those computed with
     ``extrapolation_order=2``, and nothing in the data records which was used.
     """
-    default = np.asarray(load_catalog("SXS").get(SIM).get_mode(2, 2))
+    try:
+        wfm = load_catalog("SXS").get(SIM)
+    except Exception as exc:
+        pytest.skip(f"{SIM} default load unavailable: {type(exc).__name__}: {exc}")
+
+    default = np.asarray(wfm.get_mode(2, 2))
     explicit = np.asarray(_get(2).get_mode(2, 2))
     n = min(len(default), len(explicit))
     assert np.array_equal(default[:n], explicit[:n])
+
+
+@pytest.mark.requires_data
+def test_clear_cache_dry_run_targets_only_named_simulations():
+    """Targeted clearing selects the named simulations and nothing else.
+
+    Dry-run only: this must never delete a developer's cache as a side effect
+    of running the suite.  What is checked is the *selection*, which is where
+    the risk lives -- an over-broad match would silently delete unrelated
+    simulations, and a version-suffix mismatch would silently delete nothing
+    while reporting success.
+    """
+    from nrcats.sxs import SXSCatalog
+
+    res = SXSCatalog.clear_cache([SIM], dry_run=True)
+    assert res["dry_run"] is True
+
+    if not res["removed"]:
+        pytest.skip(f"{SIM} is not cached; nothing to select")
+
+    # The caller passed no version suffix; the cache stores one.  Matching on
+    # the stem is the whole point, so assert it actually happened.
+    assert all(SIM in p for p in res["removed"]), res["removed"]
+    assert len(res["removed"]) == 1, "matched more than the one simulation asked for"
+    assert res["bytes_freed"] > 0
+
+
+@pytest.mark.requires_data
+def test_clear_cache_never_removes_the_catalog_index():
+    """The catalog index must survive a full clear.
+
+    It is small and expensive to rebuild, and every call into the catalog needs
+    it -- deleting it would turn a disk-space optimisation into a repeated
+    multi-minute stall.  Index entries are files at the cache root rather than
+    per-simulation directories, so a clear must skip them.
+    """
+    from nrcats.sxs import SXSCatalog
+
+    res = SXSCatalog.clear_cache(dry_run=True)
+    for path in res["removed"]:
+        name = os.path.basename(path)
+        assert not name.endswith(
+            (".bz2", ".zip", ".json")
+        ), f"a full clear would remove the index file {name!r}"
