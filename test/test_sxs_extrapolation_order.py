@@ -93,6 +93,32 @@ def test_orders_agree_to_the_extraction_systematic(modes):
 
 
 @pytest.mark.requires_data
+def test_available_orders_reports_what_loads():
+    """The cheap enumeration must agree with what can actually be loaded.
+
+    ``available_extrapolation_orders()`` answers from the file listing without
+    downloading, which is what makes it usable over a whole batch.  That speed
+    comes from applying the v3 convention rather than reading the groups, so it
+    is only trustworthy while the convention holds -- this test is what would
+    catch a catalog release that changes it.
+    """
+    cat = load_catalog("SXS")
+    try:
+        cheap = cat.available_extrapolation_orders(SIM)
+    except Exception as exc:  # noqa: BLE001
+        pytest.skip(f"{SIM} listing unavailable: {type(exc).__name__}: {exc}")
+
+    assert 2 in cheap, "the default order must always be reported"
+    assert cheap == sorted(set(cheap)), "orders must be sorted and unique"
+
+    verified = cat.available_extrapolation_orders(SIM, download=True)
+    assert cheap == verified, (
+        f"file listing reports {cheap} but only {verified} actually load -- the "
+        f"v3 ExtraWaveforms convention no longer holds for this release."
+    )
+
+
+@pytest.mark.requires_data
 def test_default_is_order_two():
     """The default matches an explicit N2 request.
 
