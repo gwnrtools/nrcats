@@ -275,8 +275,15 @@ class SXSCatalog(catalog.CatalogBase):
             sim_name (str): SXS simulation name, e.g. ``"SXS:BBH:0001"``.
                 Deprecated IDs are resolved automatically via
                 ``auto_supersede=True``.
-            extrapolation_order (int): Waveform extrapolation order used as a
-                fallback when ``sim_obj.strain`` is unavailable.  Defaults to 2.
+            extrapolation_order (int): Order of the polynomial extrapolation to
+                future null infinity.  Defaults to 2, which is the SXS default
+                and the only order stored in ``Strain_N2.h5``; orders 3 and 4
+                are read from ``ExtraWaveforms.h5``.  Comparing waveforms across
+                orders bounds the systematic error of the extraction to null
+                infinity, which is a distinct component of the numerical error
+                budget from finite-resolution truncation error -- the v3 catalog
+                publishes a single Lev, so the latter cannot be measured from it.
+                Raises if the requested order is not the one obtained.
             download (bool): Whether to download the waveform if not cached.
                 Defaults to True.
 
@@ -286,18 +293,34 @@ class SXSCatalog(catalog.CatalogBase):
         """
         # sxs >= 2024 uses a Simulation_v3 object; access .strain for WaveformModes.
         # auto_supersede=True resolves deprecated simulation IDs automatically.
-        sim_obj = sxs.load(sim_name, download=download, auto_supersede=True)
-        # Prefer the highest available extrapolation order
-        try:
-            raw_obj = sim_obj.strain
-        except Exception:
-            # Fallback: reload with explicit extrapolation string (new sxs API)
-            sim_obj = sxs.load(
-                sim_name,
-                extrapolation=f"N{extrapolation_order}",
-                download=download,
+        #
+        # `extrapolation` is passed to sxs.load() up front rather than only as an
+        # exception fallback.  Simulation_v3 reads it in __init__ and its
+        # `strain_path` property routes accordingly: the default order comes from
+        # Strain_N{k}.h5, while any other order comes from ExtraWaveforms.h5 under
+        # the group /Strain_N{k}.dir.  Requesting a non-default order therefore
+        # succeeds normally and never raises, so a fallback-only implementation
+        # meant `extrapolation_order` was silently ignored and every caller got
+        # the default N2 -- including anyone who passed 3 or 4 explicitly.
+        extrapolation = f"N{extrapolation_order}"
+        sim_obj = sxs.load(
+            sim_name,
+            download=download,
+            auto_supersede=True,
+            extrapolation=extrapolation,
+        )
+        raw_obj = sim_obj.strain
+
+        # Fail loudly rather than silently returning a different order than asked
+        # for: the whole point of selecting an order is to compare orders, and a
+        # silent substitution would make two "different" waveforms identical.
+        actual = getattr(sim_obj, "extrapolation", extrapolation)
+        if actual != extrapolation:
+            raise ValueError(
+                f"{sim_name}: requested extrapolation {extrapolation}, "
+                f"got {actual}. Available orders vary by catalog version; "
+                f"check sim.files for Strain_*/ExtraWaveforms entries."
             )
-            raw_obj = sim_obj.strain
 
         # Get the sim metadata (from our catalog dict, keyed by sim_name)
         sim_metadata = self.get_metadata(sim_name)

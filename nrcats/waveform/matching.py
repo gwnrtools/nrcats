@@ -160,9 +160,13 @@ def compute_mode_match(
     from pycbc.filter import match as pycbc_match
     from pycbc.psd import from_string
 
+    # np.asarray, not np.array: pycbc TimeSeries wraps a numpy buffer whose
+    # __array__ predates the numpy-2 copy keyword, so np.array() emits a
+    # DeprecationWarning and will fail outright once numpy removes the shim.
+    # Nothing here mutates the result, so a view is correct as well as cheaper.
     if (
-        float(np.max(np.abs(np.array(h_nr)))) < 1e-50
-        or float(np.max(np.abs(np.array(h_sur)))) < 1e-50
+        float(np.max(np.abs(np.asarray(h_nr)))) < 1e-50
+        or float(np.max(np.abs(np.asarray(h_sur)))) < 1e-50
     ):
         return float("nan")
 
@@ -231,8 +235,10 @@ def compute_phase_diff_per_cycle(h_nr, h_sur) -> tuple:
         Returns ``(nan, nan)`` if either waveform has zero norm or the common
         window contains fewer than 2 samples.
     """
-    arr_nr = np.array(h_nr)
-    arr_sur = np.array(h_sur)
+    # np.asarray for the reason given in compute_mode_match: np.array() on a
+    # pycbc TimeSeries triggers the numpy-2 __array__ copy-keyword warning.
+    arr_nr = np.asarray(h_nr)
+    arr_sur = np.asarray(h_sur)
 
     if float(np.max(np.abs(arr_nr))) < 1e-50 or float(np.max(np.abs(arr_sur))) < 1e-50:
         return float("nan"), float("nan")
