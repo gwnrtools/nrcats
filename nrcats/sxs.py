@@ -40,6 +40,14 @@ from nrcats.registry import register_catalog
 # Module-level singleton — same stale-result fix as RITCatalog.
 _sxs_catalog_singleton = None
 
+# Extrapolation orders carried by ``ExtraWaveforms.h5`` in the v3 layout, as
+# groups ``/Strain_N{k}.dir``.  The default order lives in its own
+# ``Strain_N{k}.h5`` and is discovered from the file listing instead, so it is
+# deliberately absent here.  ``Strain_Outer`` is also present in that file but
+# is an extraction radius rather than an extrapolation order, so it is not an
+# integer member of this sequence and callers wanting it must ask by name.
+_EXTRA_STRAIN_ORDERS = (3, 4)
+
 
 @register_catalog("SXS")
 class SXSCatalog(catalog.CatalogBase):
@@ -333,6 +341,68 @@ class SXSCatalog(catalog.CatalogBase):
         return waveform.WaveformModes(
             raw_obj.data, raw_obj.time, sim_metadata=sim_metadata, **meta
         )
+
+    def available_extrapolation_orders(
+        self, sim_name: str, download: bool = False
+    ) -> list[int]:
+        """Return the extrapolation orders available for *sim_name*.
+
+        Determined from the simulation's **file listing**, which is already
+        cached with the catalog, so this costs no download and can be called
+        over a whole batch cheaply.
+
+        The v3 layout stores the default order in ``Strain_N{k}.h5`` and every
+        other order in ``ExtraWaveforms.h5`` under groups ``/Strain_N{k}.dir``.
+        Group names inside that file cannot be read without fetching it (~21 MB
+        per simulation), so when ``ExtraWaveforms.h5`` is present the orders it
+        conventionally carries are reported without opening it.  Pass
+        ``download=True`` to verify against the actual groups instead of the
+        convention -- worth doing once when surveying a new catalog release,
+        not per simulation in a loop.
+
+        Args:
+            sim_name (str): SXS simulation name.
+            download (bool): Open ``ExtraWaveforms.h5`` and read its real group
+                names rather than assuming the convention.  Defaults to False.
+
+        Returns:
+            list[int]: Sorted extrapolation orders, e.g. ``[2, 3, 4]``.  Only
+            the default order is returned when no ``ExtraWaveforms.h5`` exists.
+
+        Note:
+            The extrapolation order is **not** the resolution.  The v3 catalog
+            publishes a single Lev per simulation (``lev_numbers == [3]``), so
+            finite-resolution truncation error cannot be estimated from it;
+            varying the order bounds the error of the extraction to null
+            infinity, which is a different component of the error budget.
+        """
+        import re
+
+        sim_obj = sxs.load(sim_name, download=False, auto_supersede=True)
+        files = getattr(sim_obj, "files", {}) or {}
+
+        orders = set()
+        for key in files:
+            m = re.search(r"Strain_N(\d+)\.h5$", key)
+            if m:
+                orders.add(int(m.group(1)))
+
+        has_extra = any(re.search(r"ExtraWaveforms\.h5$", k) for k in files)
+        if has_extra:
+            if download:
+                # Verify by loading.  This is the only honest way to enumerate
+                # the groups: they live inside the file, so knowing they exist
+                # means fetching it.
+                for order in _EXTRA_STRAIN_ORDERS:
+                    try:
+                        self.get(sim_name, extrapolation_order=order, download=True)
+                        orders.add(order)
+                    except Exception:  # noqa: BLE001 - this order is absent
+                        pass
+            else:
+                orders.update(_EXTRA_STRAIN_ORDERS)
+
+        return sorted(orders)
 
     def download_waveform_data(self, sim_name: str) -> object:
         """Download the strain waveform data for *sim_name* via ``sxs.load()``.
