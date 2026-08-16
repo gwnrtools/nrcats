@@ -240,6 +240,28 @@ def get_source_parameters_from_metadata(
             s2y = 0
         if np.isnan(s2z):
             s2z = 0
+        # RIT labels its bodies independently of which is heavier, and
+        # ``relaxed-mass-ratio-1-over-2`` is m1/m2 in *RIT's* labelling -- it is
+        # below 1 for 217 of the 229 quasi-circular simulations in the aligned
+        # analysis, i.e. RIT's "body 1" is usually the LIGHTER hole.
+        #
+        # ``mtotal_eta_to_mass1_mass2`` always returns m1 >= m2, and eta is
+        # symmetric under q -> 1/q, so the masses come out right either way.
+        # The spins do not: taking RIT's chi1 as our body 1 pairs the heavier
+        # mass with the lighter body's spin whenever q < 1.  Swap them so that
+        # body 1 is the heavier hole in both.
+        #
+        # This was not cosmetic.  Uncorrected it made RIT appear to disagree
+        # with the NRSur7dq4 surrogate at a median (2,2) mismatch of 8.1e-2
+        # with 47% of simulations above 0.1, against 7.4e-4 for the dozen whose
+        # labelling happened to already match.  The error is invisible when
+        # chi1 == chi2 and grows with |chi1 - chi2| and with q, which is exactly
+        # the bimodal structure that appeared in the results.
+        if q < 1.0:
+            s1x, s2x = s2x, s1x
+            s1y, s2y = s2y, s1y
+            s1z, s2z = s2z, s1z
+
         parameters.update(
             mass1=m1,
             mass2=m2,
