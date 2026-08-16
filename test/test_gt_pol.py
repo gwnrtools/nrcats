@@ -123,7 +123,7 @@ def GetPolsToCompare(sim_name, total_mass, distance, inclination, coa_phase, del
     time_n = hp_n.sample_times
 
     # Recenter
-    mtime = time_n[np.argmax(np.array(hp_n) ** 2 + np.array(hx_n) ** 2)]
+    mtime = time_n[np.argmax(np.asarray(hp_n) ** 2 + np.asarray(hx_n) ** 2)]
     time_n -= mtime
 
     phi_ref_obs = mwf1.get_obs_phi_ref_from_obs_coa_phase(coa_phase)
@@ -261,8 +261,8 @@ def GetPolsToCompare(sim_name, total_mass, distance, inclination, coa_phase, del
     time_w3 -= mtime
 
     # Prepare waveforms
-    wf_n = np.array(hp_n) + 1j * np.array(hx_n)
-    wf_l = np.array(hp_l) + 1j * np.array(hx_l)
+    wf_n = np.asarray(hp_n) + 1j * np.asarray(hx_n)
+    wf_l = np.asarray(hp_l) + 1j * np.asarray(hx_l)
     wf_w3 = hp_w3 + 1j * hx_w3
 
     a_n, p_n = xtract_camp_phase(wf_n.real, wf_n.imag)
