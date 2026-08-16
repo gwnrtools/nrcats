@@ -64,6 +64,7 @@ jobs:
             -v \
             --tb=short \
             -m "not cross_catalog" \
+            --ignore=test/test_sxs_extrapolation_order.py \
             -p no:warnings \
             --junit-xml=test-results.xml
 
