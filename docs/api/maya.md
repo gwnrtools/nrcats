@@ -72,10 +72,10 @@ individual waveform HDF5 files.  Key design points:
 - A module-level singleton prevents redundant catalog loads when
   ``load()`` is called multiple times in the same process.
 
-Example:
-    >>> import nrcats as nrcat
-    >>> cat = nrcat.MayaCatalog.load()
-    >>> wfm = cat.get("GT0001")
+> **Example**
+> >>> import nrcats as nrcat
+> >>> cat = nrcat.MayaCatalog.load()
+> >>> wfm = cat.get("GT0001")
 
 
 ### `clear_cache`

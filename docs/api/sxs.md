@@ -73,10 +73,10 @@ interface over the SXS Zenodo-hosted catalog.  Key design points:
 - A module-level singleton prevents redundant catalog loads when
   ``load()`` is called multiple times in the same process.
 
-Example:
-    >>> import nrcats as nrcat
-    >>> cat = nrcat.SXSCatalog.load(download=False)
-    >>> wfm = cat.get("SXS:BBH:0001")
+> **Example**
+> >>> import nrcats as nrcat
+> >>> cat = nrcat.SXSCatalog.load(download=False)
+> >>> wfm = cat.get("SXS:BBH:0001")
 
 
 ### *classmethod* `load`
@@ -307,7 +307,7 @@ entirely through the ``sxs`` package rather than via direct HDF5 reads.
 | Name | Type | Description |
 |---|---|---|
 | `sim_name` | `str` | SXS simulation name, e.g. ``"SXS:BBH:0001"``. Deprecated IDs are resolved automatically via ``auto_supersede=True``. |
-| `extrapolation_order` | `int` | Waveform extrapolation order used as a fallback when ``sim_obj.strain`` is unavailable. Defaults to 2. |
+| `extrapolation_order` | `int` | Order of the polynomial extrapolation to future null infinity. Defaults to 2, which is the SXS default and the only order stored in ``Strain_N2.h5``; orders 3 and 4 are read from ``ExtraWaveforms.h5``. Comparing waveforms across orders bounds the systematic error of the extraction to null infinity, which is a distinct component of the numerical error budget from finite-resolution truncation error -- the v3 catalog publishes a single Lev, so the latter cannot be measured from it. Raises if the requested order is not the one obtained. |
 | `download` | `bool` | Whether to download the waveform if not cached. Defaults to True. |
 
 #### Returns
@@ -316,6 +316,90 @@ entirely through the ``sxs`` package rather than via direct HDF5 reads.
 |---|---|---|
 |  | `waveform.WaveformModes` | nrcats.waveform.WaveformModes: Waveform object with the |
 |  | `waveform.WaveformModes` | catalog metadata attached. |
+
+---
+
+### `available_extrapolation_orders`
+
+```python
+available_extrapolation_orders(sim_name: str, download: bool = False) -> list[int]
+```
+
+Return the extrapolation orders available for *sim_name*.
+
+Determined from the simulation's **file listing**, which is already
+cached with the catalog, so this costs no download and can be called
+over a whole batch cheaply.
+
+The v3 layout stores the default order in ``Strain_N{k}.h5`` and every
+other order in ``ExtraWaveforms.h5`` under groups ``/Strain_N{k}.dir``.
+Group names inside that file cannot be read without fetching it (~21 MB
+per simulation), so when ``ExtraWaveforms.h5`` is present the orders it
+conventionally carries are reported without opening it.  Pass
+``download=True`` to verify against the actual groups instead of the
+convention -- worth doing once when surveying a new catalog release,
+not per simulation in a loop.
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| `sim_name` | `str` | SXS simulation name. |
+| `download` | `bool` | Open ``ExtraWaveforms.h5`` and read its real group names rather than assuming the convention. Defaults to False. |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+|  | `list[int]` | list[int]: Sorted extrapolation orders, e.g. ``[2, 3, 4]``. Only |
+|  | `list[int]` | the default order is returned when no ``ExtraWaveforms.h5`` exists. |
+
+> **Note**
+> The extrapolation order is **not** the resolution.  The v3 catalog
+> publishes a single Lev per simulation (``lev_numbers == [3]``), so
+> finite-resolution truncation error cannot be estimated from it;
+> varying the order bounds the error of the extraction to null
+> infinity, which is a different component of the error budget.
+
+---
+
+### *staticmethod* `clear_cache`
+
+```python
+clear_cache(sim_names: list[str] | None = None, dry_run: bool = False) -> dict
+```
+
+Delete cached waveform files, freeing disk between processing batches.
+
+A full pass over the catalog needs far more disk than the waveforms are
+worth keeping: 637 quasi-circular simulations at ~21 MB of
+``ExtraWaveforms.h5`` each is ~13 GB, and that is before strain files.
+Processing in chunks and clearing between them turns an impossible run
+into a bounded one, at the cost of re-downloading anything needed twice.
+
+**Only per-simulation waveform directories are removed.**  The catalog
+index (``simulations_*.bz2``, ``catalog.zip``) is deliberately kept: it
+is a few megabytes, it is expensive to rebuild, and every call into the
+catalog needs it.  Deleting it would turn a disk-space optimisation into
+a repeated multi-minute stall.
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| `sim_names` | `list[str] or None` | Simulations to clear, e.g. ``["SXS:BBH:1419"]``. Version suffixes are matched automatically, so ``SXS:BBH:1419`` clears ``SXS:BBH:1419v3.0``. ``None`` clears **every** cached simulation. |
+| `dry_run` | `bool` | Report what would be freed without deleting. |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+| `dict` | `dict` | ``{"removed": [paths], "bytes_freed": int, "dry_run": bool}``. |
+
+> **Note**
+> Cached data is a pure download cache -- everything removed can be
+> fetched again -- so this is safe to call between chunks.  It is not
+> safe to call *while* another process is reading the same cache.
 
 ---
 
