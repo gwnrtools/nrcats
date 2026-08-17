@@ -83,10 +83,10 @@ Key design points:
 - A module-level singleton prevents redundant catalog loads when
   ``load()`` is called multiple times in the same process.
 
-Example:
-    >>> import nrcats as nrcat
-    >>> cat = nrcat.RITCatalog.load(verbosity=0)
-    >>> wfm = cat.get("RIT:BBH:0001-n100-id3")
+> **Example**
+> >>> import nrcats as nrcat
+> >>> cat = nrcat.RITCatalog.load(verbosity=0)
+> >>> wfm = cat.get("RIT:BBH:0001-n100-id3")
 
 
 ### *classmethod* `load`
