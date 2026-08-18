@@ -1025,7 +1025,8 @@ class WaveformModes(sxs_WaveformModes):
         The method then returns the maximized match (overlap):
 
         $$
-        \mathcal{O}_{\mathrm{max}} = \max_{t_c, \phi_c, R \in SO(3)} \left[
+        \mathcal{O}_{\mathrm{max}} =
+        \max_{t_c, \phi_c, \alpha, R \in SO(3)} \left|
         \frac{
             \sum_{\ell, m} \langle h_{1, \ell m} \mid
             h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, \phi_c, R) \rangle_t
@@ -1036,12 +1037,26 @@ class WaveformModes(sxs_WaveformModes):
                 \left( \sum_{\ell, m} \langle h_{2, \ell m} \mid
                 h_{2, \ell m} \rangle_t \right)
             }
-        } \right]
+        } \right|
         $$
 
+        4. **Overall phase ($\alpha$)**: a single constant phase applied to every mode,
+           $h_{\ell m} \to e^{i\alpha} h_{\ell m}$, which is the polarization angle
+           $\alpha = 2\psi$.  It is maximized analytically by taking the modulus of the
+           overlap.  This is *not* reachable by any $R \in SO(3)$: the Wigner matrices mix
+           $m$ within an $\ell$ block but never scale the block by a phase.
+
         The maximization over $t_c$ is performed efficiently using Fast Fourier Transforms (FFTs),
-        $\phi_c$ is maximized analytically, and the SO(3) rotation $R$ (parameterized by
-        Euler angles $\alpha, \beta, \gamma$) is optimized using the differential evolution algorithm.
+        $\phi_c$ and $\alpha$ are maximized analytically, and the SO(3) rotation $R$
+        (parameterized by Euler angles) is optimized using the differential evolution algorithm.
+
+        .. warning::
+           $\phi_c$ enters as $e^{im\phi_c}$, a rotation about $z$, and the third Euler
+           angle is also a rotation about $z$, so the two are exactly degenerate: the
+           search has four parameters and three effective directions.  ``identity_mismatch``
+           below is computed and logged but never compared against ``result.fun``, so the
+           returned value can be *worse* than the identity rotation.  Both are known and
+           unfixed.
 
         Parameters
         ----------
@@ -1189,7 +1204,25 @@ class WaveformModes(sxs_WaveformModes):
                     I_f_full += term
 
             _q = ifft(I_f_full)
-            max_inner_prod = df * N_pad * np.max(np.real(_q))
+            # np.abs, not np.real: taking the modulus maximizes over an overall
+            # constant phase on the modes, h_lm -> e^{i alpha} h_lm for every
+            # (l, m).  That is the polarization angle (alpha = 2 psi), it is a
+            # convention rather than a physical difference, and no rotation in
+            # SO(3) can produce it -- Wigner D mixes m within an ell block and
+            # never multiplies the block by a scalar phase.  Using the real part
+            # therefore penalized a pure convention mismatch.
+            #
+            # This is not hypothetical.  Every SXS simulation carries alpha ~ pi
+            # against the surrogate (40/40 measured; see findings 5n in the
+            # catalog-comparison-paper repo), and the SXS reader is where the
+            # sign originates.  Measured on SXS:BBH:0304 against a phase-rotated
+            # copy of itself, with np.real: identical 1.000000, global sign
+            # 0.998682, global phase e^{i pi/2} 0.008579.  The half-turn was
+            # partly absorbed by a pure z-rotation, but only to 1.3e-3 -- the
+            # same order as the NR-against-surrogate mismatches this function
+            # exists to measure -- and a quarter-turn destroyed the match
+            # outright.
+            max_inner_prod = df * N_pad * np.max(np.abs(_q))
 
             overlap = max_inner_prod / np.sqrt(total_norm1_sq * total_norm2_sq)
             if np.isnan(overlap):
