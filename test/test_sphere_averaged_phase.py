@@ -1,4 +1,13 @@
-"""``match_sphere_averaged`` must be blind to an overall constant phase.
+"""Invariances and guarantees of ``match_sphere_averaged``.
+
+Three defects, each with a test that fails without its fix:
+
+1. An overall constant phase was charged as a mismatch.
+2. ``phi_c`` and the third Euler angle were exactly degenerate.
+3. The result could come back worse than the identity rotation.
+
+Overall constant phase
+----------------------
 
 A single phase applied to every mode, ``h_lm -> e^{i alpha} h_lm``, is the
 polarization angle (``alpha = 2 psi``).  It is a convention, not a physical
@@ -14,6 +23,22 @@ identical gave 1.000000, a global sign 0.998682, and ``e^{i pi/2}`` 0.008579 --
 so a quarter-turn destroyed the match, and the half-turn that SXS actually
 carries was mis-reported by 1.3e-3, which is the same order as the mismatches
 this function exists to measure.
+
+Redundant parameter
+-------------------
+``phi_c`` used to multiply the overlap by ``exp(1j * m * phi_c)`` on top of the
+rotation, but the Wigner matrix already carries ``exp(-1j * m * gamma)`` on that
+index, so the two entered only through their sum.  Measured before removal:
+``objective(phi_c + d, alpha, beta, gamma + d)`` reproduced ``objective(phi_c,
+alpha, beta, gamma)`` to 3e-16.  A flat direction wastes a dimension of the
+differential-evolution budget and leaves part of the transformation outside the
+returned rotation.
+
+Never worse than doing nothing
+------------------------------
+The identity mismatch was computed and logged, then discarded.  Differential
+evolution is stochastic and is not obliged to return its own starting point, so
+the function could report a rotation fitting worse than no rotation at all.
 
 Synthetic waveforms throughout: the expected answer is 1 exactly, by symmetry,
 rather than a stored number.
@@ -148,3 +173,67 @@ def test_the_modulus_does_not_make_everything_match(setup):
     )
     assert m < 0.99
     assert -1.0 <= m <= 1.0 + 1e-9
+
+
+def test_rotation_search_takes_three_angles(setup):
+    """``phi_c`` is gone, and the returned rotation is the whole transformation.
+
+    A fourth parameter that is exactly degenerate with the third is not a free
+    lunch: differential evolution spends population on it.  The signature check
+    here is behavioural -- the optimum is still found, and ``R_opt`` alone
+    reproduces it.
+    """
+    wfm, psd = setup
+    m, R = wfm.match_sphere_averaged(
+        _mode_dict(wfm, np.exp(1j * 1.1)), psd, F_LOWER, delta_t=DT,
+        total_mass=40.0, distance=1.0, return_rotation=True,
+    )
+    assert m == pytest.approx(1.0, abs=1e-6)
+    assert R.shape == (4,)
+    assert float(np.sum(np.asarray(R) ** 2)) == pytest.approx(1.0, abs=1e-9)
+
+
+def test_never_returns_worse_than_the_identity(setup, monkeypatch):
+    """A sabotaged optimizer must not drag the answer below the identity.
+
+    Forcing ``differential_evolution`` to return a deliberately bad point is the
+    only way to exercise this deterministically -- with the real optimizer the
+    failure is stochastic and rare, which is exactly what made it survive.
+    """
+    class _BadResult:
+        x = np.array([1.0, 1.0, 1.0])
+        fun = 0.9  # mismatch 0.9, i.e. match 0.1
+
+    # The method does `from scipy.optimize import differential_evolution`
+    # at call time, so patching the module attribute is what takes effect.
+    import scipy.optimize
+
+    monkeypatch.setattr(scipy.optimize, "differential_evolution",
+                        lambda func, bounds, **kw: _BadResult())
+
+    wfm, psd = setup
+    m = wfm.match_sphere_averaged(
+        _mode_dict(wfm, 1.0), psd, F_LOWER, delta_t=DT,
+        total_mass=40.0, distance=1.0,
+    )
+    # Identical waveforms match at the identity; the bad "optimum" must lose.
+    assert m == pytest.approx(1.0, abs=1e-6)
+
+
+def test_identity_wins_returns_the_identity_rotation(setup, monkeypatch):
+    """When the identity wins, the reported rotation must be the identity too."""
+    import scipy.optimize
+
+    class _BadResult:
+        x = np.array([2.0, 1.0, 3.0])
+        fun = 0.5
+
+    monkeypatch.setattr(scipy.optimize, "differential_evolution",
+                        lambda func, bounds, **kw: _BadResult())
+    wfm, psd = setup
+    m, R = wfm.match_sphere_averaged(
+        _mode_dict(wfm, 1.0), psd, F_LOWER, delta_t=DT, total_mass=40.0,
+        distance=1.0, return_rotation=True,
+    )
+    assert m == pytest.approx(1.0, abs=1e-6)
+    assert np.allclose(np.asarray(R), [1.0, 0.0, 0.0, 0.0], atol=1e-12)

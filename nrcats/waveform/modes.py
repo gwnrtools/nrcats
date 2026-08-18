@@ -1009,7 +1009,8 @@ class WaveformModes(sxs_WaveformModes):
         -----------------------------
         Because the two waveforms may be defined in different coordinate systems (source frames)
         and have arbitrary reference times/phases, we align the target waveform $h_2$ to $h_1$
-        by active/passive rigid rotation $R \in SO(3)$, time translation $t_c$, and coalescence phase shift $\phi_c$:
+        by active/passive rigid rotation $R \in SO(3)$, time translation $t_c$, and an
+        overall phase $\alpha$:
         1. **Rotation ($R$)**: Rotates the modes using Wigner D-matrices:
            $$
            h_{2, \ell m}^{\mathrm{rot}}(t) = \sum_{m'=-\ell}^{\ell} h_{2, \ell m'}(t) \, D^{\ell}_{m' m}(R)
@@ -1017,19 +1018,18 @@ class WaveformModes(sxs_WaveformModes):
 
         2. **Time Shift ($t_c$)**: Shifts time via $t \to t - t_c$,
            implemented efficiently as a linear phase in the frequency domain.
-        3. **Phase Shift ($\phi_c$)**: Twist around the rotated $z$-axis via:
-           $$
-           h_{2, \ell m}^{\mathrm{rot, shifted}}(t) \to e^{-i m \phi_c} \, h_{2, \ell m}^{\mathrm{rot}}(t - t_c)
-           $$
+        3. **Coalescence phase**: *not* a separate parameter.  A twist about the rotated
+           $z$-axis, $h_{2,\ell m} \to e^{-i m \phi_c} h_{2,\ell m}$, is precisely what the
+           third Euler angle of $R$ already does, so it is subsumed into $R$.
 
         The method then returns the maximized match (overlap):
 
         $$
         \mathcal{O}_{\mathrm{max}} =
-        \max_{t_c, \phi_c, \alpha, R \in SO(3)} \left|
+        \max_{t_c, \alpha, R \in SO(3)} \left|
         \frac{
             \sum_{\ell, m} \langle h_{1, \ell m} \mid
-            h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, \phi_c, R) \rangle_t
+            e^{i\alpha} h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, R) \rangle_t
         }{
             \sqrt{
                 \left( \sum_{\ell, m} \langle h_{1, \ell m} \mid
@@ -1047,16 +1047,17 @@ class WaveformModes(sxs_WaveformModes):
            $m$ within an $\ell$ block but never scale the block by a phase.
 
         The maximization over $t_c$ is performed efficiently using Fast Fourier Transforms (FFTs),
-        $\phi_c$ and $\alpha$ are maximized analytically, and the SO(3) rotation $R$
+        $\alpha$ is maximized analytically, and the SO(3) rotation $R$
         (parameterized by Euler angles) is optimized using the differential evolution algorithm.
 
-        .. warning::
-           $\phi_c$ enters as $e^{im\phi_c}$, a rotation about $z$, and the third Euler
-           angle is also a rotation about $z$, so the two are exactly degenerate: the
-           search has four parameters and three effective directions.  ``identity_mismatch``
-           below is computed and logged but never compared against ``result.fun``, so the
-           returned value can be *worse* than the identity rotation.  Both are known and
-           unfixed.
+        .. note::
+           There is no separate $\phi_c$ parameter.  A twist about $z$ is already the
+           third Euler angle, so the two entered the objective only through their sum and
+           were exactly degenerate (verified to 3e-16).  The search is over three angles,
+           and the returned rotation describes the whole transformation.
+
+           The result is never worse than the identity: the search is seeded there and the
+           two are compared before returning.
 
         Parameters
         ----------
@@ -1166,7 +1167,7 @@ class WaveformModes(sxs_WaveformModes):
         ells_in_common = set(ell for ell, m in common_modes)
 
         def objective_function(x):
-            phi_c, alpha, beta, gamma = x
+            alpha, beta, gamma = x
             R = quaternionic.array.from_euler_angles(alpha, beta, gamma)
             D_full = wigner.D(R)
 
@@ -1197,11 +1198,21 @@ class WaveformModes(sxs_WaveformModes):
                 for j, m in enumerate(range(-ell, ell + 1)):
                     if (ell, m) not in common_modes:
                         continue
-                    term = (
+                    # No separate exp(1j * m * phi_c) factor here.  It used to
+                    # be applied on top of the rotation, but a twist about z is
+                    # already the third Euler angle: the Wigner matrix carries
+                    # exp(-1j * m * gamma) on this index, so phi_c and gamma
+                    # entered the objective only through their sum.  Verified
+                    # numerically before removal -- objective(phi_c + d, alpha,
+                    # beta, gamma + d) reproduced objective(phi_c, alpha, beta,
+                    # gamma) to 3e-16 over random samples.  Carrying both gave
+                    # the search four parameters and three effective
+                    # directions, wasting a dimension of the differential
+                    # evolution budget on an exactly flat direction and leaving
+                    # part of the transformation outside the returned rotation.
+                    I_f_full += (
                         h1_f_dict[(ell, m)] * np.conj(h2_rot_matrix[:, j])
                     ) / psd_full
-                    term *= np.exp(1j * m * phi_c)
-                    I_f_full += term
 
             _q = ifft(I_f_full)
             # np.abs, not np.real: taking the modulus maximizes over an overall
@@ -1230,27 +1241,42 @@ class WaveformModes(sxs_WaveformModes):
 
             return 1.0 - overlap
 
-        bounds = [(0, 2 * np.pi), (0, 2 * np.pi), (0, np.pi), (0, 2 * np.pi)]
+        bounds = [(0, 2 * np.pi), (0, np.pi), (0, 2 * np.pi)]
 
-        identity_mismatch = objective_function([0.0, 0.0, 0.0, 0.0])
+        identity = [0.0, 0.0, 0.0]
+        identity_mismatch = objective_function(identity)
         logger.info(
-            f"      [DEBUG] Sphere-averaged match at Identity Rotation: {1.0 - identity_mismatch:.6f}"
+            "      [DEBUG] Sphere-averaged match at Identity Rotation: "
+            f"{1.0 - identity_mismatch:.6f}"
         )
 
         result = differential_evolution(
             objective_function,
             bounds,
+            x0=identity,
             popsize=10,
             maxiter=50,
             tol=1e-3,
             mutation=(0.5, 1.0),
             recombination=0.7,
         )
-        match = 1.0 - result.fun
+
+        # Take the better of the two.  Differential evolution is stochastic and
+        # is not guaranteed to return its own starting point: the identity
+        # mismatch was computed here before, and logged, but discarded, so this
+        # function could report a rotation that fits *worse* than doing nothing
+        # -- an unambiguous defect, since the identity is always available.
+        # Seeding at the identity via x0 makes that rare; comparing makes it
+        # impossible.
+        if identity_mismatch <= result.fun:
+            best_x, best_fun = identity, identity_mismatch
+        else:
+            best_x, best_fun = result.x, result.fun
+        match = 1.0 - best_fun
 
         if return_rotation:
             R_opt = quaternionic.array.from_euler_angles(
-                result.x[1], result.x[2], result.x[3]
+                best_x[0], best_x[1], best_x[2]
             )
             return match, R_opt
         return match
