@@ -147,14 +147,40 @@ def test_zero_norm_is_reported_as_such():
     assert not r.is_usable
 
 
-def test_disjoint_windows_are_reported_as_no_overlap():
+def test_epochs_no_longer_determine_the_window():
+    """Disjoint *epochs* are no longer a failure -- alignment ignores them.
+
+    This test previously asserted ``no_overlap`` for two series whose epochs do
+    not intersect.  That encoded the old epoch-based slicing, which took the
+    common window as ``[max(start), min(end)]`` in absolute time.  Both current
+    backends align on waveform *content* instead -- 'peak' on the merger index,
+    'crosscorr' on the correlation lag -- and deliberately discard the epoch, so
+    two identical signals carrying different epochs now align and match.
+
+    That is the intended behaviour and it is an improvement: an epoch is a
+    translation-invariant label, and a match maximised over time shifts should
+    not depend on it.  But it is a real semantic change, so it is asserted
+    rather than left implicit -- ``no_overlap`` can no longer be reached by
+    epoch disagreement, only by a genuine shortage of overlapping samples
+    (see :func:`test_no_overlap_needs_too_few_samples`).
+    """
     a = _sine(1.0, epoch=0.0)  # spans [0, 1]
     b = _sine(1.0, epoch=5.0)  # spans [5, 6]
 
     r = compute_mode_match_detailed(a, b, 26.0)
-    assert r.reason == "no_overlap"
+    assert r.reason == "ok"
+    assert not np.isnan(r.match)
+    assert r.match > 0.99, "identical signals must match regardless of epoch"
+
+
+def test_no_overlap_needs_too_few_samples():
+    """``no_overlap`` now means the aligned segments share <= 1 sample."""
+    a = _sine(1.0)
+    b = _sine(2.0 * _DELTA_T)  # two samples long
+
+    r = compute_mode_match_detailed(a, b, 26.0)
+    assert r.reason in ("no_overlap", "insufficient_bins")
     assert np.isnan(r.match)
-    assert r.overlap_seconds <= 0
 
 
 @pytest.mark.parametrize(

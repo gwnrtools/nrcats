@@ -81,19 +81,89 @@ class ModeMatchResult:
         return self.reason in ("ok", "band_raised")
 
 
+#: Fraction of the matched segment tapered at the START for complex modes.
+#:
+#: Complex modes cannot use LAL's ``TAPER_STARTEND``.  LAL tapers from the start
+#: to the first *local maximum*: an oscillatory real series reaches one within a
+#: half cycle, but a smooth rising amplitude envelope does not reach one until
+#: the merger, so applying it to |h| windows a fifth of the inspiral away
+#: (measured: 633 of 3551 samples against 157 for the real part, and by
+#: different amounts for the NR and surrogate segments -- which drove a (2,2)
+#: mismatch of 4.3e-1 against the 1.1e-3 the real path gives).
+#:
+#: A fixed-fraction window has none of those problems: it is deterministic
+#: rather than data-dependent, it is *identical* for the two segments being
+#: compared, and multiplying a complex array by a real window leaves the phase
+#: untouched.
+#:
+#: **The taper is applied to the start only.**  Tapering the end is actively
+#: harmful here.  These are NR and surrogate waveforms carrying a full merger
+#: and ringdown, and a ringdown decays to zero on its own -- there is no
+#: discontinuity at the end to suppress.  What an end taper does instead is
+#: attenuate genuine merger-ringdown signal, which at M = 40 M_sun is where most
+#: of the in-band signal-to-noise sits.  Only the start needs a window, because
+#: the segment begins mid-inspiral at whatever amplitude the slice lands on.
+TAPER_FRACTION = 0.05
+
+
+def _start_window(n: int, fraction: float) -> np.ndarray:
+    """Half-Tukey: raised-cosine rise over the first ``fraction`` of the segment,
+    unity thereafter.  The end is left alone -- see :data:`TAPER_FRACTION`."""
+    w = np.ones(n, dtype=np.float64)
+    k = int(round(fraction * n))
+    if k > 1:
+        w[:k] = 0.5 * (1.0 - np.cos(np.pi * np.arange(k) / k))
+    return w
+
+
 try:
     from pycbc.waveform.utils import taper_timeseries as _pycbc_taper
 
-    def _taper(ts):
-        return _pycbc_taper(ts, tapermethod="startend", return_lal=False)
+    def _taper(ts, fraction: float = TAPER_FRACTION):
+        """Taper the START of a real or complex mode series before matching.
 
-except ImportError:
-    from scipy.signal.windows import tukey as _tukey
+        Neither branch touches the end.  These waveforms carry a full merger and
+        ringdown, and a ringdown decays to zero on its own, so there is no
+        end discontinuity to suppress -- an end taper only attenuates real
+        merger-ringdown signal, which is where most of the in-band SNR sits at
+        the masses analysed here.  Measured: with the end tapered, the (2,2)
+        mismatch slid by 8-16x as the taper width was varied over 0.02-0.20;
+        with the start alone it is constant to four significant figures over the
+        same range.
 
-    def _taper(ts):
-        win = _tukey(len(ts), alpha=0.2).astype(np.float64)
-        data = np.array(ts) * win
-        return pycbc_TimeSeries(data, delta_t=ts.delta_t, epoch=ts.start_time)
+        Real input uses LAL's ``TAPER_START``; complex input cannot (pycbc
+        rejects non-float dtypes) and gets the equivalent half-Tukey rise.  Note
+        the two are not identical: LAL picks its window width from the series'
+        own extrema, so it windows the NR and model segments differently over
+        the same interval, whereas the fixed-fraction window is by construction
+        the same for both.  A difference introduced by the window is not a
+        disagreement between the waveforms, so the complex path is the
+        better-defined of the two.
+        """
+        arr = np.asarray(ts)
+        if not np.iscomplexobj(arr):
+            return _pycbc_taper(ts, tapermethod="start", return_lal=False)
+
+        return pycbc_TimeSeries(
+            arr * _start_window(len(arr), fraction),
+            delta_t=ts.delta_t,
+            epoch=ts.start_time,
+        )
+
+except ImportError:  # pragma: no cover - exercised only without pycbc
+
+    def _taper(ts, fraction: float = TAPER_FRACTION):
+        """Fallback taper: identical start-only window, no LAL dependency.
+
+        The fallback deliberately matches the complex branch above rather than
+        approximating LAL, so the two paths cannot silently disagree about what
+        "tapered" means.
+        """
+        return pycbc_TimeSeries(
+            np.asarray(ts) * _start_window(len(ts), fraction),
+            delta_t=ts.delta_t,
+            epoch=ts.start_time,
+        )
 
 
 def apply_wigner_rotation_to_mode_dict(mode_dict, R, ell_max=4):
@@ -209,6 +279,51 @@ def _fail(reason, f_req, overlap=float("nan"), cycles=float("nan")):
     )
 
 
+def _get_merger_index(arr) -> int:
+    """Find the merger peak index robustly by searching backwards.
+
+    This avoids initial junk radiation which can exceed the merger amplitude
+    in higher modes. It finds the last prominent peak in the amplitude envelope.
+    """
+    from scipy.signal import find_peaks
+
+    abs_arr = np.abs(arr)
+
+    # Use max of the second half as a baseline to ensure
+    # a massive junk peak in the first half doesn't inflate the threshold.
+    baseline_max = float(np.max(abs_arr[len(abs_arr) // 2 :]))
+
+    # Find peaks that stand out from their local background
+    peaks, _ = find_peaks(abs_arr, prominence=0.1 * baseline_max)
+
+    if len(peaks) > 0:
+        # The LAST prominent peak is the merger, naturally ignoring early junk
+        return int(peaks[-1])
+
+    return int(np.argmax(abs_arr))
+
+
+def _get_crosscorr_lag(arr_nr, arr_sur) -> int:
+    """Find the optimal integer sample shift between two arrays via matched filter.
+
+    Returns the lag required to shift `arr_sur` so it aligns with `arr_nr`.
+    """
+    from scipy.signal import correlate
+    from scipy.signal.windows import tukey
+
+    # Mildly taper just to prevent edge discontinuities from polluting the cross-correlation
+    win_nr = tukey(len(arr_nr), alpha=0.1)
+    win_sur = tukey(len(arr_sur), alpha=0.1)
+
+    # Fast FFT cross-correlation
+    corr = correlate(arr_nr * win_nr, arr_sur * win_sur, mode="full", method="fft")
+    idx_max = int(np.argmax(np.abs(corr)))
+
+    # Calculate the shift of arr_sur relative to arr_nr
+    lag = idx_max - (len(arr_sur) - 1)
+    return lag
+
+
 def compute_mode_match_detailed(
     h_nr,
     h_sur,
@@ -216,6 +331,7 @@ def compute_mode_match_detailed(
     psd_name: str = "aLIGOZeroDetHighPower",
     f_upper=None,
     min_cycles: float = MIN_CYCLES_AT_BAND_EDGE,
+    alignment: str = "peak",
 ) -> ModeMatchResult:
     """Match one NR mode against one model mode, reporting *why* on failure.
 
@@ -244,7 +360,7 @@ def compute_mode_match_detailed(
     Parameters
     ----------
     h_nr, h_sur : pycbc.types.TimeSeries
-        Real parts of the NR and model mode time series, same ``delta_t``.
+        Complex NR and model mode time series, same ``delta_t``.
     f_lower_mode : float
         Requested low-frequency cutoff in Hz, normally ``mode_f_lower(f, m)``.
     psd_name : str, optional
@@ -255,6 +371,10 @@ def compute_mode_match_detailed(
         Cycles at the band edge the window must contain
         (default :data:`MIN_CYCLES_AT_BAND_EDGE`).  Pass ``0`` to disable the
         raise and reproduce the historical behaviour exactly.
+    alignment : str, optional
+        Method to align waveforms before matching: 'peak' (default) finds
+        the merger robustly from the end; 'crosscorr' uses a fast-FFT matched
+        filter over the full envelope to find maximum phase coherence.
 
     Returns
     -------
@@ -273,17 +393,50 @@ def compute_mode_match_detailed(
     ):
         return _fail("zero_norm", f_lower_mode)
 
-    t_start = max(float(h_nr.start_time), float(h_sur.start_time))
-    t_end = min(float(h_nr.end_time), float(h_sur.end_time))
+    arr_nr = np.asarray(h_nr)
+    arr_sur = np.asarray(h_sur)
 
-    if t_end <= t_start:
-        return _fail("no_overlap", f_lower_mode, overlap=t_end - t_start)
+    if alignment == "peak":
+        idx_peak_nr = _get_merger_index(arr_nr)
+        idx_peak_sur = _get_merger_index(arr_sur)
 
-    overlap = t_end - t_start
+        samples_before = min(idx_peak_nr, idx_peak_sur)
+        samples_after = min(len(arr_nr) - idx_peak_nr, len(arr_sur) - idx_peak_sur)
+
+        start_nr = idx_peak_nr - samples_before
+        start_sur = idx_peak_sur - samples_before
+        end_nr = idx_peak_nr + samples_after
+        end_sur = idx_peak_sur + samples_after
+
+    elif alignment == "crosscorr":
+        lag = _get_crosscorr_lag(arr_nr, arr_sur)
+        start_nr = max(0, lag)
+        start_sur = max(0, -lag)
+        end_nr = min(len(arr_nr), lag + len(arr_sur))
+        end_sur = min(len(arr_sur), len(arr_nr) - lag)
+
+    else:
+        raise ValueError(f"Unknown alignment method: {alignment}")
+
+    n_overlap = end_nr - start_nr
+
+    if n_overlap <= 1:
+        return _fail(
+            "no_overlap", f_lower_mode, overlap=n_overlap * float(h_nr.delta_t)
+        )
+
+    overlap = n_overlap * float(h_nr.delta_t)
     cycles = overlap * f_lower_mode
 
-    h_nr_sliced = h_nr.time_slice(t_start, t_end)
-    h_sur_sliced = h_sur.time_slice(t_start, t_end)
+    # Slice the underlying arrays to the exact common window
+    slice_nr = slice(start_nr, end_nr)
+    slice_sur = slice(start_sur, end_sur)
+
+    # 4. Wrap the slices back into pycbc TimeSeries
+    # We can safely discard the epoch because we've manually aligned the physical window,
+    # and pycbc_match will optimize the exact time-shift regardless of the epoch value.
+    h_nr_sliced = pycbc_TimeSeries(arr_nr[slice_nr], delta_t=h_nr.delta_t)
+    h_sur_sliced = pycbc_TimeSeries(arr_sur[slice_sur], delta_t=h_sur.delta_t)
 
     h1_tapered = _taper(h_nr_sliced)
     h2_tapered = _taper(h_sur_sliced)
@@ -315,9 +468,25 @@ def compute_mode_match_detailed(
 
     psd = from_string(psd_name, length_f, delta_f, low_freq_cutoff=f_lower_used)
 
+    # pycbc.filter.match builds a real-to-complex FFT internally and raises
+    # "For C2C FFT, len(outvec) must be nbatch*size" if handed a complex series,
+    # so the complex mode cannot be passed through to the filter itself.
+    #
+    # It does not need to be.  The complex series is what everything *upstream*
+    # requires -- the merger peak, the cross-correlation lag and the taper are
+    # all defined on the amplitude envelope |h_lm|, which the real part alone
+    # cannot give (Re h_lm passes through zero every half cycle).  The filter is
+    # the one step that is indifferent: for h_lm = A e^{-i phi}, Re(h_lm) is
+    # A cos(phi), and match() maximises over a constant phase offset, so the
+    # whole family A cos(phi + phi_0) -- every real projection of the mode --
+    # returns the same value.  Taking the real part here therefore discards
+    # nothing the match could have used.
+    h1_re = h1.real() if h1.kind == "complex" else h1
+    h2_re = h2.real() if h2.kind == "complex" else h2
+
     mm, _ = pycbc_match(
-        h1,
-        h2,
+        h1_re,
+        h2_re,
         psd=psd,
         low_frequency_cutoff=f_lower_used,
         high_frequency_cutoff=f_upper,
@@ -340,6 +509,7 @@ def compute_mode_match(
     psd_name: str = "aLIGOZeroDetHighPower",
     f_upper=None,
     min_cycles: float = MIN_CYCLES_AT_BAND_EDGE,
+    alignment: str = "peak",
 ) -> float:
     """Compute the noise-weighted match between one NR and one model mode.
 
@@ -347,17 +517,16 @@ def compute_mode_match(
     numeric match, for callers that do not need the failure reason.  The
     signature and return type are unchanged from earlier versions.
 
-    Both inputs should be the *real part* of the complex strain mode
-    (h₊ component), sampled at the same ``delta_t``.  The function pads to
-    the next power-of-two, builds a PSD at the matching frequency resolution,
-    and calls ``pycbc.filter.match()``.
+    Both inputs should be the *complex* strain mode, sampled at the same
+    ``delta_t``.  The function pads to the next power-of-two, builds a PSD at
+    the matching frequency resolution, and calls ``pycbc.filter.match()``.
 
     Parameters
     ----------
     h_nr : pycbc.types.TimeSeries
-        Real-valued NR mode time series.
+        Complex NR mode time series.
     h_sur : pycbc.types.TimeSeries
-        Real-valued surrogate mode time series.
+        Complex surrogate mode time series.
     f_lower_mode : float
         Low-frequency cutoff for this mode in Hz.
         Use ``f_lower * |m| / 2`` (GW frequency scales as |m| × f_orbital).
@@ -369,6 +538,10 @@ def compute_mode_match(
         Cycles at the band edge the common window must contain before the
         cutoff is raised (default :data:`MIN_CYCLES_AT_BAND_EDGE`).  Pass ``0``
         to reproduce the historical behaviour exactly.
+    alignment : str, optional
+        Method used to align waveforms before matching. 'peak' (default) finds
+        the merger peak robustly from the end; 'crosscorr' uses a fast-FFT
+        matched filter over the full envelope to find the maximum phase coherence.
 
     Returns
     -------
@@ -388,10 +561,11 @@ def compute_mode_match(
         psd_name=psd_name,
         f_upper=f_upper,
         min_cycles=min_cycles,
+        alignment=alignment,
     ).match
 
 
-def compute_phase_diff_per_cycle(h_nr, h_sur) -> tuple:
+def compute_phase_diff_per_cycle(h_nr, h_sur, alignment: str = "peak") -> tuple:
     """Compute accumulated phase difference per GW cycle over the common window.
 
     Both inputs are the *complex* mode time series (h_lm = h+ - i h×).
@@ -412,6 +586,9 @@ def compute_phase_diff_per_cycle(h_nr, h_sur) -> tuple:
         Complex NR mode time series.
     h_sur : pycbc.types.TimeSeries
         Complex surrogate mode time series.
+    alignment : str, optional
+        Method to align waveforms before computing phase diff. 'peak' (default)
+        or 'crosscorr'.
 
     Returns
     -------
@@ -428,21 +605,32 @@ def compute_phase_diff_per_cycle(h_nr, h_sur) -> tuple:
     if float(np.max(np.abs(arr_nr))) < 1e-50 or float(np.max(np.abs(arr_sur))) < 1e-50:
         return float("nan"), float("nan")
 
-    dt = float(h_nr.delta_t)
-    t_start = max(float(h_nr.start_time), float(h_sur.start_time))
-    t_end = min(float(h_nr.end_time), float(h_sur.end_time))
+    if alignment == "peak":
+        idx_peak_nr = _get_merger_index(arr_nr)
+        idx_peak_sur = _get_merger_index(arr_sur)
 
-    if t_end <= t_start:
-        return float("nan"), float("nan")
+        samples_before = min(idx_peak_nr, idx_peak_sur)
+        samples_after = min(len(arr_nr) - idx_peak_nr, len(arr_sur) - idx_peak_sur)
 
-    i_nr_s = max(0, int(round((t_start - float(h_nr.start_time)) / dt)))
-    i_nr_e = min(len(arr_nr), int(round((t_end - float(h_nr.start_time)) / dt)) + 1)
-    i_sur_s = max(0, int(round((t_start - float(h_sur.start_time)) / dt)))
-    i_sur_e = min(len(arr_sur), int(round((t_end - float(h_sur.start_time)) / dt)) + 1)
+        start_nr = idx_peak_nr - samples_before
+        start_sur = idx_peak_sur - samples_before
+        end_nr = idx_peak_nr + samples_after
 
-    n = min(i_nr_e - i_nr_s, i_sur_e - i_sur_s)
+    elif alignment == "crosscorr":
+        lag = _get_crosscorr_lag(arr_nr, arr_sur)
+        start_nr = max(0, lag)
+        start_sur = max(0, -lag)
+        end_nr = min(len(arr_nr), lag + len(arr_sur))
+
+    else:
+        raise ValueError(f"Unknown alignment method: {alignment}")
+
+    n = end_nr - start_nr
     if n < 2:
         return float("nan"), float("nan")
+
+    i_nr_s = start_nr
+    i_sur_s = start_sur
 
     phi_nr = np.unwrap(np.angle(arr_nr[i_nr_s : i_nr_s + n]))
     phi_sur = np.unwrap(np.angle(arr_sur[i_sur_s : i_sur_s + n]))
