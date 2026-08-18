@@ -715,3 +715,500 @@ def interpolate_in_amp_phase(obj, new_time, k=3, kind=None):
     metadata["time_axis"] = obj.time_axis
 
     return type(obj)(resam_data, **metadata)
+
+
+# ---------------------------------------------------------------------------
+# Frame-maximised strain match
+# ---------------------------------------------------------------------------
+#
+# Every match above is computed one mode at a time, and ``pycbc.filter.match``
+# maximises over a constant phase *independently for each mode*.  Six modes
+# therefore carry six free phases, and the relative phase between modes -- which
+# is physical -- is discarded before any number is produced.  Two mode sets can
+# agree perfectly mode by mode and still describe different waveforms.
+#
+# Measured: SXS:BBH:0201 has a (2,2) mismatch of 6.6e-5 per mode and 5.7e-2 on
+# the coherent strain, because the two mode sets differ by a frame offset
+#
+#     h_lm^A  =  exp[ i ( alpha + m beta ) ]  h_lm^B                        (*)
+#
+# with alpha ~ pi.  Fitting (*) over 117 simulations gives coherence 1.0000 in
+# every one, so (*) is not an approximation: to the accuracy of the data, two
+# mode sets of the same binary differ by exactly these two angles and nothing
+# else.  Both are unobservable nuisance parameters and both must be maximised
+# over before a strain-level disagreement means anything.
+
+
+#: Number of ``beta`` samples in the coarse scan.  2pi/720 = 8.7e-3 rad, refined
+#: afterwards by a local grid, so this only has to be fine enough not to miss
+#: the global peak of a trigonometric polynomial of degree ``max|m|`` (<= 4 for
+#: the modes this package carries, hence at most 8 maxima in [0, 2pi)).
+STRAIN_MATCH_N_BETA = 720
+
+#: Cap on the number of time samples entered into the full (beta, t_c) grid
+#: after pruning.  The pruning below is exact; this is the fallback when it
+#: fails to bite, and 2e4 samples at 4096 Hz is a +-2.4 s window.
+_MAX_TC_SAMPLES = 20000
+
+
+@dataclass(frozen=True)
+class StrainMatchResult:
+    """Outcome of a frame-maximised match between two mode sets.
+
+    Attributes
+    ----------
+    match : float
+        Match in [0, 1] maximised over ``(alpha, beta, t_c)``, or NaN on failure.
+    mismatch : float
+        ``1 - match``.
+    alpha : float
+        Overall phase of the complex strain, in radians on (-pi, pi].  Applied
+        *after* the mode sum, so it is a rotation of the polarisation basis by
+        ``alpha / 2`` -- not an orbital phase.
+    beta : float
+        Rotation of the source frame about the orbital angular momentum axis, in
+        radians on [0, 2pi).  Degenerate with the azimuthal viewing angle.
+    phase_offsets : dict
+        ``{m: alpha + m * beta}`` wrapped to (-pi, pi], the composite offset
+        actually applied to each ``m``.  This is the quantity a single-mode
+        match absorbs and therefore cannot report.
+    time_shift : float
+        Time offset applied to ``modes_a``, in seconds, relative to the
+        (2,2)-peak alignment.
+    match_at_zero_beta : float
+        The same match with ``beta`` held at 0 (``alpha`` and ``t_c`` still
+        maximised).  ``match - match_at_zero_beta`` is what the extra degree of
+        freedom bought, and a large gap means the two mode sets are reported in
+        different frames rather than disagreeing physically.
+    inclination, azimuth : float
+        Viewing angles the strain was evaluated at, in radians.
+    f_lower_used, f_upper_used : float
+        Band actually integrated over, in Hz.
+    n_bins_in_band : int
+        Positive-frequency bins between the two cutoffs.
+    ms_used : tuple
+        The ``m`` values that contributed, sorted.
+    reason : str
+        ``'ok'``, or a failure code: ``'no_common_modes'``, ``'zero_norm'``,
+        ``'insufficient_bins'``.
+    """
+
+    match: float
+    mismatch: float
+    alpha: float
+    beta: float
+    phase_offsets: dict
+    time_shift: float
+    match_at_zero_beta: float
+    inclination: float
+    azimuth: float
+    f_lower_used: float
+    f_upper_used: float
+    n_bins_in_band: int
+    ms_used: tuple
+    reason: str
+
+    @property
+    def is_usable(self) -> bool:
+        return self.reason == "ok"
+
+
+def sylm(ell: int, em: int, inclination: float, azimuth: float = 0.0) -> complex:
+    """Spin-weight -2 spherical harmonic ``{}_{-2}Y_{lm}(iota, phi)``.
+
+    Thin wrapper over LAL so that every caller in this package uses one
+    convention.  ``spherical`` is also a dependency here but indexes its
+    harmonics differently, and mixing the two is exactly the kind of silent
+    convention error this function exists to prevent.
+    """
+    import lal
+
+    return complex(
+        lal.SpinWeightedSphericalHarmonic(
+            float(inclination), float(azimuth), -2, int(ell), int(em)
+        )
+    )
+
+
+def complete_negative_m(modes: dict) -> dict:
+    """Add the ``m < 0`` modes implied by equatorial symmetry.
+
+    For a non-precessing binary ``h_{l,-m} = (-1)^l conj(h_lm)``.  Verified
+    against SXS data carrying both signs: the relation holds to 3e-6 (2,2) and
+    4e-4 (3,3), i.e. to the numerical error of the simulation.
+
+    **This is wrong for precessing systems**, which have no such symmetry, and
+    is why it is a separate function rather than something applied silently
+    inside the match.  Modes already present are never overwritten.
+    """
+    out = dict(modes)
+    for (ell, em), h in modes.items():
+        if em <= 0 or (ell, -em) in out:
+            continue
+        out[(ell, -em)] = ((-1) ** ell) * np.conj(np.asarray(h, dtype=complex))
+    return out
+
+
+def _next_pow2(n: int) -> int:
+    p = 1
+    while p < n:
+        p <<= 1
+    return p
+
+
+def _partial_strains(modes, inclination, azimuth, taper_fraction):
+    """Group modes by ``m`` into ``c_m(t) = sum_l h_lm  {}_{-2}Y_lm``.
+
+    The frame offset acts on ``m`` alone, so summing over ``l`` first turns a
+    scan over ``beta`` into a scan over at most nine coefficients instead of a
+    re-evaluation of the whole mode sum.
+    """
+    by_m: dict = {}
+    n = max(len(np.asarray(h)) for h in modes.values())
+    for (ell, em), h in modes.items():
+        arr = np.asarray(h, dtype=complex)
+        if len(arr) < n:  # pragma: no cover - modes of one waveform share a grid
+            arr = np.concatenate([arr, np.zeros(n - len(arr), dtype=complex)])
+        term = arr * sylm(ell, em, inclination, azimuth)
+        by_m[em] = by_m.get(em, 0.0) + term
+    if taper_fraction:
+        w = _start_window(n, taper_fraction)
+        by_m = {em: c * w for em, c in by_m.items()}
+    return by_m
+
+
+def _peak_index(modes) -> int:
+    """Index of the (2,2) amplitude peak, falling back to the loudest mode."""
+    key = (2, 2) if (2, 2) in modes else max(
+        modes, key=lambda k: np.abs(np.asarray(modes[k])).max()
+    )
+    return int(np.argmax(np.abs(np.asarray(modes[key]))))
+
+
+def compute_strain_match(
+    modes_a,
+    modes_b,
+    delta_t: float,
+    inclination: float,
+    azimuth: float = 0.0,
+    psd=None,
+    psd_name: str = "aLIGOZeroDetHighPower",
+    f_lower: float = 20.0,
+    f_upper: float = None,
+    n_beta: int = STRAIN_MATCH_N_BETA,
+    taper_fraction: float = TAPER_FRACTION,
+    symmetrize: bool = True,
+) -> StrainMatchResult:
+    r"""Match two mode sets as coherent strain, maximised over the frame offset.
+
+    Builds the complex strain :math:`h = h_+ - i h_\times` from each mode set,
+
+    .. math::
+
+        h^A(t; \alpha, \beta) = e^{i\alpha}
+            \sum_{\ell m} e^{i m \beta}\, h^A_{\ell m}(t)\,
+            {}_{-2}Y_{\ell m}(\iota, \varphi)
+
+    and returns the noise-weighted match maximised over :math:`\alpha`,
+    :math:`\beta` and the time shift :math:`t_c`.
+
+    Why these three and no others
+    -----------------------------
+    :math:`t_c` and :math:`\alpha` are the parameters a per-mode match already
+    maximises over -- :math:`\alpha` multiplies :math:`h_+ - i h_\times` by a
+    constant phase, which is a rotation of the polarisation basis by
+    :math:`\alpha/2`.  :math:`\beta` is the one that per-mode matching cannot
+    see: it rotates the source about the orbital angular momentum axis and is
+    exactly degenerate with the azimuthal viewing angle, so it is unobservable
+    and must be maximised over, but because it acts as :math:`e^{im\beta}` it is
+    *not* absorbed by any single-mode phase maximisation.  Leaving it in place
+    reports a mismatch dominated by a convention difference: measured at
+    :math:`\iota = 60^\circ`, 5.7e-2 against 2.1e-4 for SXS:BBH:0201.
+
+    Nothing else is maximised over.  Inclination is a physical parameter of the
+    comparison, not a nuisance, so it is an argument rather than a search
+    dimension; a mode set that only agrees at some fitted inclination is not the
+    same waveform.
+
+    Argument order and azimuth
+    --------------------------
+    ``beta`` is applied to ``modes_a``, which makes the result mildly asymmetric
+    under swapping the arguments: measured on SXS:BBH:0201 at
+    :math:`\iota = 60^\circ`, 1.87e-3 one way against 1.45e-3 the other.  That
+    asymmetry is not an artefact -- an independent reference implementation
+    reproduces both numbers -- and it is not really about argument order either.
+    Rotating the source by ``beta`` is the same as viewing it from azimuth
+    ``beta``, so putting the rotation on ``a`` rather than ``b`` amounts to
+    evaluating the pair at a different absolute azimuth, and the mismatch
+    genuinely depends on azimuth: the same simulation spans 1.35e-3 to 2.09e-3
+    over a uniform azimuth grid, a range that contains both of the numbers
+    above.  ``beta`` itself is unaffected, agreeing to 2e-4 rad under a swap.
+
+    Use :func:`compute_strain_mismatch_averaged` when a single
+    convention-independent number is wanted; use this function when the
+    dependence on viewing geometry is the thing being studied.
+
+    The inner product
+    -----------------
+    Two-sided, so that it is correct for the *complex* strain and agrees with
+    the usual real-signal convention without a case split:
+
+    .. math::
+
+        \langle a | b \rangle = 2 \int_{-\infty}^{\infty}
+            \frac{\tilde a(f)\, \tilde b^*(f)}{S_n(|f|)}\, df
+
+    For real :math:`a, b` the negative-frequency half is the conjugate of the
+    positive half and this collapses to :math:`4\,\mathrm{Re}\int_0^\infty`.
+    Restricting to positive frequencies instead would silently discard the
+    counter-rotating content, which is exactly the ``m < 0`` half of the mode
+    sum.
+
+    Parameters
+    ----------
+    modes_a, modes_b : dict
+        ``{(ell, em): complex array}``, both sampled at ``delta_t``.  Need not
+        be the same length or contain the same modes; only the common ``(l, m)``
+        are used.
+    delta_t : float
+        Sample spacing in seconds.  Must be the same for both.
+    inclination, azimuth : float
+        Viewing angles in radians.
+    psd : pycbc.types.FrequencySeries, optional
+        Supply to override ``psd_name``.  Resampled onto the internal grid.
+    f_lower, f_upper : float
+        Band in Hz.  ``f_upper`` defaults to Nyquist.  Note ``f_lower`` here is
+        the *strain* band edge and should be the (2,2) cutoff, not a value
+        scaled by ``|m|/2``: the mode-wise scaling in :func:`mode_f_lower`
+        exists because each mode is filtered separately, whereas the coherent
+        strain carries every mode at once.
+    n_beta : int
+        Coarse ``beta`` grid size; refined locally afterwards.
+    taper_fraction : float
+        Start-only taper, as elsewhere in this module.  0 disables.
+    symmetrize : bool
+        Fill in absent ``m < 0`` modes via :func:`complete_negative_m`.  Leave
+        on for non-precessing systems and **off** for precessing ones.
+
+    Returns
+    -------
+    StrainMatchResult
+        Carries ``alpha``, ``beta`` and ``phase_offsets = {m: alpha + m*beta}``
+        alongside the match.
+    """
+    if symmetrize:
+        modes_a = complete_negative_m(modes_a)
+        modes_b = complete_negative_m(modes_b)
+
+    common = sorted(set(modes_a) & set(modes_b))
+    if not common:
+        return _strain_fail("no_common_modes", inclination, azimuth, f_lower)
+    modes_a = {k: modes_a[k] for k in common}
+    modes_b = {k: modes_b[k] for k in common}
+
+    ca = _partial_strains(modes_a, inclination, azimuth, taper_fraction)
+    cb = _partial_strains(modes_b, inclination, azimuth, taper_fraction)
+    ms = sorted(ca)
+
+    # Align on the (2,2) peaks before padding, so t_c = 0 is the expected
+    # optimum and the pruning below starts from a tight bound.
+    ia, ib = _peak_index(modes_a), _peak_index(modes_b)
+    na = max(len(c) for c in ca.values())
+    nb = max(len(c) for c in cb.values())
+    lead = max(ia, ib)
+    trail = max(na - ia, nb - ib)
+    n_fft = _next_pow2(lead + trail)
+
+    def _place(c, i):
+        out = np.zeros(n_fft, dtype=complex)
+        out[lead - i:lead - i + len(c)] = c
+        return out
+
+    A = {em: np.fft.fft(_place(ca[em], ia)) for em in ms}
+    B_total = np.fft.fft(sum(_place(cb[em], ib) for em in ms))
+
+    freqs = np.fft.fftfreq(n_fft, d=delta_t)
+    f_hi = float(f_upper) if f_upper else 0.5 / delta_t
+    inv_psd = _inverse_psd(psd, psd_name, freqs, f_lower, f_hi, delta_t, n_fft)
+    n_bins = int(np.count_nonzero(inv_psd[: n_fft // 2 + 1]))
+    if n_bins < MIN_BINS_IN_BAND:
+        return _strain_fail("insufficient_bins", inclination, azimuth, f_lower,
+                            f_hi, n_bins)
+
+    # Constant prefactor cancels in the normalised match; kept so that the
+    # intermediate norms are ordinary SNR^2 values rather than arbitrary units.
+    pref = 2.0 * delta_t / n_fft
+
+    norm_b = np.sqrt(pref * np.sum(np.abs(B_total) ** 2 * inv_psd).real)
+    gram = np.array(
+        [[pref * np.sum(A[p] * np.conj(A[q]) * inv_psd) for q in ms] for p in ms]
+    )
+    if norm_b <= 0 or not np.isfinite(gram.trace().real) or gram.trace().real <= 0:
+        return _strain_fail("zero_norm", inclination, azimuth, f_lower, f_hi,
+                            n_bins)
+
+    # z_m(t_c) = <c_m shifted by t_c | h^B>, all t_c at once.
+    z = np.stack([pref * np.fft.fft(A[em] * np.conj(B_total) * inv_psd) for em in ms])
+
+    m_arr = np.asarray(ms, dtype=float)
+
+    def _numerator(betas, cols):
+        """|sum_m e^{i m beta} z_m(t)| on a (beta, t) grid."""
+        return np.abs(np.exp(1j * np.outer(betas, m_arr)) @ z[:, cols])
+
+    def _norm_a(betas):
+        """||h^A(beta)||: the m-modes are not orthogonal under this product."""
+        ph = np.exp(1j * np.outer(betas, m_arr))
+        val = np.einsum("bp,pq,bq->b", ph, gram, np.conj(ph)).real
+        return np.sqrt(np.maximum(val, 0.0))
+
+    betas = np.linspace(0.0, 2.0 * np.pi, int(n_beta), endpoint=False)
+    norms = _norm_a(betas)
+
+    # Prune t_c exactly.  sum_m |z_m(t)| bounds the numerator |sum_m e^{i m
+    # beta} z_m(t)| from above for every beta, so a column whose bound cannot
+    # reach a value already achieved cannot host the maximum.  The bound has to
+    # be divided by the *smallest* attainable ||h^A(beta)||, not by ||h^A(0)||:
+    # the m-partial strains are not orthogonal under this inner product, so the
+    # denominator moves with beta, and pruning on the numerator alone discards
+    # columns that a smaller denominator would have promoted.  Measured cost of
+    # getting this wrong: the reported match came out 1.6e-5 below the true
+    # maximum on SXS:BBH:0304.
+    n_min = float(norms.min())
+    achieved = float(
+        (_numerator(betas[:1], slice(None)) / (norms[0] * norm_b)).max()
+    )
+    bound = np.abs(z).sum(axis=0)
+    cols = np.flatnonzero(bound >= achieved * n_min * norm_b)
+    if cols.size > _MAX_TC_SAMPLES:
+        cols = cols[np.argsort(bound[cols])[-_MAX_TC_SAMPLES:]]
+    if cols.size == 0:  # pragma: no cover - the beta = 0 column always survives
+        cols = np.array([int(np.argmax(bound))])
+
+    ratio = _numerator(betas, cols) / (norms[:, None] * norm_b)
+    bi = int(np.argmax(ratio) // ratio.shape[1])
+
+    # Local refinement.  The fine grid is evaluated over *every* surviving
+    # column, not just the one the coarse grid picked: refining beta at a frozen
+    # t_c is only valid if the optimal t_c is independent of beta, and it is not.
+    step = 2.0 * np.pi / n_beta
+    fine = betas[bi] + np.linspace(-step, step, 65)
+    fine_ratio = _numerator(fine, cols) / (_norm_a(fine)[:, None] * norm_b)
+    fi, ti = np.unravel_index(int(np.argmax(fine_ratio)), fine_ratio.shape)
+    col = cols[ti: ti + 1]
+    beta_applied = float(fine[fi])
+    match = float(min(fine_ratio[fi, ti], 1.0))
+
+    # alpha is whatever makes the overlap real and positive at the optimum.
+    overlap = np.exp(1j * beta_applied * m_arr) @ z[:, col[0]]
+    alpha_applied = float(-np.angle(overlap))
+
+    # Report the *offset*, not the correction that removes it, so that
+    #     h_lm^A = exp[i(alpha + m beta)] h_lm^B
+    # reads the same way here as in the fit it generalises.  The maximisation
+    # above finds the inverse rotation, hence the sign flip.
+    beta = float(np.mod(-beta_applied, 2.0 * np.pi))
+    alpha = float(np.angle(np.exp(-1j * alpha_applied)))
+
+    zero = _numerator(np.zeros(1), slice(None)) / (_norm_a(np.zeros(1))[:, None] * norm_b)
+    n_shift = int(col[0]) - (n_fft if col[0] > n_fft // 2 else 0)
+
+    return StrainMatchResult(
+        match=match,
+        mismatch=1.0 - match,
+        alpha=alpha,
+        beta=beta,
+        phase_offsets={
+            int(em): float(np.angle(np.exp(1j * (alpha + em * beta)))) for em in ms
+        },
+        time_shift=n_shift * delta_t,
+        match_at_zero_beta=float(min(zero.max(), 1.0)),
+        inclination=float(inclination),
+        azimuth=float(azimuth),
+        f_lower_used=float(f_lower),
+        f_upper_used=f_hi,
+        n_bins_in_band=n_bins,
+        ms_used=tuple(int(m) for m in ms),
+        reason="ok",
+    )
+
+
+def compute_strain_mismatch_averaged(
+    modes_a, modes_b, delta_t: float, inclination: float, n_azimuth: int = 12,
+    **kwargs
+) -> dict:
+    """Frame-maximised strain mismatch averaged over azimuth.
+
+    :func:`compute_strain_match` is evaluated at a single azimuth, and its value
+    depends on that choice -- 1.55x between the best and worst azimuth for
+    SXS:BBH:0201.  Averaging removes both that dependence and the residual
+    asymmetry under swapping ``modes_a`` and ``modes_b``, since the two argument
+    orders differ only by which absolute azimuth the pair is evaluated at.  This
+    is the number to quote when the viewing geometry is a nuisance rather than
+    the subject.
+
+    Returns
+    -------
+    dict
+        ``mean``, ``median``, ``min``, ``max`` of the mismatch over the grid,
+        plus ``per_azimuth`` (the individual :class:`StrainMatchResult` objects)
+        so the spread can be inspected rather than assumed small.
+    """
+    results = [
+        compute_strain_match(
+            modes_a, modes_b, delta_t, inclination, azimuth=float(az), **kwargs
+        )
+        for az in np.linspace(0.0, 2.0 * np.pi, int(n_azimuth), endpoint=False)
+    ]
+    vals = np.array([r.mismatch for r in results if r.is_usable])
+    if vals.size == 0:
+        nan = float("nan")
+        return {"mean": nan, "median": nan, "min": nan, "max": nan,
+                "per_azimuth": results}
+    return {
+        "mean": float(vals.mean()),
+        "median": float(np.median(vals)),
+        "min": float(vals.min()),
+        "max": float(vals.max()),
+        "per_azimuth": results,
+    }
+
+
+def _inverse_psd(psd, psd_name, freqs, f_lower, f_upper, delta_t, n_fft):
+    """``1 / S_n(|f|)`` on the two-sided FFT grid, zeroed outside the band."""
+    from pycbc.psd import from_string
+
+    delta_f = 1.0 / (n_fft * delta_t)
+    if psd is None:
+        s = np.asarray(
+            from_string(psd_name, n_fft // 2 + 1, delta_f, low_freq_cutoff=f_lower)
+        )
+    else:
+        # Resample a supplied PSD onto this grid rather than assuming it matches.
+        src_f = np.arange(len(psd)) * float(psd.delta_f)
+        s = np.interp(
+            np.arange(n_fft // 2 + 1) * delta_f, src_f, np.asarray(psd),
+            left=np.inf, right=np.inf,
+        )
+    inv = np.zeros(n_fft // 2 + 1)
+    band = (np.arange(n_fft // 2 + 1) * delta_f >= f_lower) & (
+        np.arange(n_fft // 2 + 1) * delta_f <= f_upper
+    )
+    good = band & np.isfinite(s) & (s > 0)
+    inv[good] = 1.0 / s[good]
+    two_sided = np.zeros(n_fft)
+    two_sided[: n_fft // 2 + 1] = inv
+    two_sided[n_fft // 2 + 1:] = inv[1: (n_fft + 1) // 2][::-1]
+    return two_sided
+
+
+def _strain_fail(reason, inclination, azimuth, f_lower, f_upper=float("nan"),
+                 n_bins=0):
+    nan = float("nan")
+    return StrainMatchResult(
+        match=nan, mismatch=nan, alpha=nan, beta=nan, phase_offsets={},
+        time_shift=nan, match_at_zero_beta=nan, inclination=float(inclination),
+        azimuth=float(azimuth), f_lower_used=float(f_lower),
+        f_upper_used=float(f_upper), n_bins_in_band=int(n_bins), ms_used=(),
+        reason=reason,
+    )
