@@ -87,7 +87,7 @@ Load and cache the NRSur7dq4 surrogate model.
 ### `generate_surrogate_modes`
 
 ```python
-generate_surrogate_modes(params: dict, total_mass: float, distance: float = 1.0, delta_t_seconds: float = 1.0 / 4096, sim_name: str | None = None, catalog=None, nr_wfm=None) -> tuple[dict, float]
+generate_surrogate_modes(params: dict, total_mass: float, distance: float = 1.0, delta_t_seconds: float = 1.0 / 4096, sim_name: str | None = None, catalog=None, nr_wfm=None, modes='all') -> tuple[dict, float]
 ```
 
 Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
@@ -103,6 +103,7 @@ Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
 | `sim_name` | `str` | Simulation name, used for epoch-aligned spin extraction on precessing SXS runs. |
 | `catalog` | `CatalogBase` | Catalog instance; enables Phase 2 epoch alignment when the catalog is SXS. |
 | `nr_wfm` | `WaveformModes` | Unused; kept for API compatibility. |
+| `modes` | `list[tuple[int, int]] or 'all' or None` | Which modes to return. ``None`` (default) keeps the historical :data:`SURROGATE_MODES` subset, so existing per-mode results are unchanged. ``"all"`` returns every mode the model produced, which is what a sphere-averaged or BMS-maximized comparison of a *precessing* binary requires -- see the note on :data:`SURROGATE_MODES`. |
 
 #### Returns
 
