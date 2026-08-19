@@ -68,7 +68,22 @@ def load_nrsur7dq4():
 
 # Full set of NR modes to include in the comparison table.  Modes absent from
 # the surrogate (e.g. (5,5)) will appear with match=NaN in the output.
-NR_MODES = [(2, 2), (2, 1), (3, 3), (4, 4), (5, 5), (3, 2), (4, 3)]
+NR_MODES = [
+    (2, 2),
+    (2, -2),
+    (2, 1),
+    (2, -1),
+    (3, 3),
+    (3, -3),
+    (4, 4),
+    (4, -4),
+    (5, 5),
+    (5, -5),
+    (3, 2),
+    (3, -2),
+    (4, 3),
+    (4, -3),
+]
 
 # The subset of NR_MODES the per-mode analysis reports.  NOT "the modes
 # NRSur7dq4 produces": the model is precessing and returns every (ell, em) with
@@ -139,10 +154,24 @@ def _epoch_align_spins(
         phase22 = np.unwrap(np.angle(h22_data))
         omega22_ts = np.gradient(phase22, strain.t)
         f_gw_ts = np.abs(omega22_ts) / (2.0 * np.pi)
-        mask = f_gw_ts >= f_ref_target
+        # Only after relaxation.  f_GW here is d(phase)/dt of the raw (2,2), and
+        # over the junk-radiation burst that derivative is large and
+        # non-monotonic -- on SXS:BBH:1346 the first ten samples run
+        # 0.0089, 0.0066, 0.0014, 0.0045, 0.0100 cycles/M.  argmax() takes the
+        # *first* True, so an unrestricted search returns index 0: the epoch
+        # landed at t = 0.5M, inside the junk, and the spins defining a
+        # precessing configuration were read there.  Restricted to t >= the
+        # relaxation time the same target resolves to t = 2035.6M, where f_GW is
+        # monotonic and the horizon data is meaningful.
+        try:
+            t_relax = float(sim_obj.metadata["relaxation_time"])
+        except Exception:
+            t_relax = float(strain.t[0])
+        mask = (f_gw_ts >= f_ref_target) & (strain.t >= t_relax)
         if not np.any(mask):
             raise ValueError(
-                f"NR waveform never reaches f_ref={f_ref_target:.5f} cycles/M."
+                f"NR waveform never reaches f_ref={f_ref_target:.5f} cycles/M "
+                f"after the relaxation time t={t_relax:.1f}M."
             )
         t_target = strain.t[int(np.argmax(mask))]
     else:
@@ -159,8 +188,13 @@ def _epoch_align_spins(
     #   χ_y = χ · (L̂ × n̂)
     #   χ_z = χ · L̂
     # The SXS labeling (A, B) does not guarantee A is heavier, so we check.
-    mA = float(h.A.mass[idx_h])
-    mB = float(h.B.mass[idx_h])
+    # christodoulou_mass, not mass: HorizonQuantities exposes
+    # christodoulou_mass / areal_mass / chi_inertial / coord_center_inertial,
+    # and has no `mass`.  Reading it raised AttributeError, which the caller
+    # caught and turned into a fallback to metadata spins -- so epoch alignment
+    # silently never ran, on precisely the precessing systems it exists for.
+    mA = float(h.A.christodoulou_mass[idx_h])
+    mB = float(h.B.christodoulou_mass[idx_h])
     if mA >= mB:
         chi_primary = h.A.chi_inertial.ndarray[idx_h]  # heavier
         chi_secondary = h.B.chi_inertial.ndarray[idx_h]  # lighter
@@ -233,7 +267,7 @@ def generate_surrogate_modes(
     sim_name: str | None = None,
     catalog=None,
     nr_wfm=None,
-    modes="all",
+    modes=None,
 ) -> tuple[dict, float]:
     """Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
 
@@ -257,7 +291,7 @@ def generate_surrogate_modes(
     nr_wfm : WaveformModes, optional
         Unused; kept for API compatibility.
     modes : list[tuple[int, int]] or "all" or None, optional
-        Which modes to return.  ``None`` (default) keeps the historical
+        Which modes to return.  ``None`` (default) keeps the minimal
         :data:`SURROGATE_MODES` subset, so existing per-mode results are
         unchanged.  ``"all"`` returns every mode the model produced, which is
         what a sphere-averaged or BMS-maximized comparison of a *precessing*
