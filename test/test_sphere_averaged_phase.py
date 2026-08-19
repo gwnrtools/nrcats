@@ -94,16 +94,27 @@ def _chirp_wfm(n_times=4096, ell_max=3, seed=0):
     attrs["spin_weight"] = translate_data_type_to_spin_weight(attrs["data_type"])
     attrs["data_type"] = translate_data_type_to_sxs_string(attrs["data_type"])
     return WaveformModes(
-        data, time=times, time_axis=0, modes_axis=1,
-        ell_min=2, ell_max=ell_max, **attrs,
+        data,
+        time=times,
+        time_axis=0,
+        modes_axis=1,
+        ell_min=2,
+        ell_max=ell_max,
+        **attrs,
     )
 
 
 def _mode_dict(wfm, factor=1.0, total_mass=40.0):
     out = {}
     for ell, em in map(tuple, wfm.LM):
-        ts = wfm.get_mode(ell, em, total_mass=total_mass, distance=1.0,
-                          to_pycbc=True, delta_t_seconds=DT)
+        ts = wfm.get_mode(
+            ell,
+            em,
+            total_mass=total_mass,
+            distance=1.0,
+            to_pycbc=True,
+            delta_t_seconds=DT,
+        )
         ts = ts.copy()
         ts.data[:] = factor * np.asarray(ts.data)
         out[(ell, em)] = ts
@@ -115,21 +126,27 @@ def setup():
     import pycbc.psd
 
     wfm = _chirp_wfm()
-    n = len(wfm.get_mode(2, 2, total_mass=40.0, distance=1.0, to_pycbc=True,
-                         delta_t_seconds=DT))
+    n = len(
+        wfm.get_mode(
+            2, 2, total_mass=40.0, distance=1.0, to_pycbc=True, delta_t_seconds=DT
+        )
+    )
     n_fft = 1
     while n_fft < n:
         n_fft <<= 1
-    psd = pycbc.psd.aLIGOZeroDetHighPower(n_fft // 2 + 1, 1.0 / (n_fft * DT),
-                                          F_LOWER)
+    psd = pycbc.psd.aLIGOZeroDetHighPower(n_fft // 2 + 1, 1.0 / (n_fft * DT), F_LOWER)
     return wfm, psd
 
 
 def _match(setup, factor):
     wfm, psd = setup
     return wfm.match_sphere_averaged(
-        _mode_dict(wfm, factor), psd, F_LOWER, delta_t=DT,
-        total_mass=40.0, distance=1.0,
+        _mode_dict(wfm, factor),
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=40.0,
+        distance=1.0,
     )
 
 
@@ -185,8 +202,13 @@ def test_rotation_search_takes_three_angles(setup):
     """
     wfm, psd = setup
     m, R = wfm.match_sphere_averaged(
-        _mode_dict(wfm, np.exp(1j * 1.1)), psd, F_LOWER, delta_t=DT,
-        total_mass=40.0, distance=1.0, return_rotation=True,
+        _mode_dict(wfm, np.exp(1j * 1.1)),
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=40.0,
+        distance=1.0,
+        return_rotation=True,
     )
     assert m == pytest.approx(1.0, abs=1e-6)
     assert R.shape == (4,)
@@ -200,6 +222,7 @@ def test_never_returns_worse_than_the_identity(setup, monkeypatch):
     only way to exercise this deterministically -- with the real optimizer the
     failure is stochastic and rare, which is exactly what made it survive.
     """
+
     class _BadResult:
         x = np.array([1.0, 1.0, 1.0])
         fun = 0.9  # mismatch 0.9, i.e. match 0.1
@@ -208,13 +231,20 @@ def test_never_returns_worse_than_the_identity(setup, monkeypatch):
     # at call time, so patching the module attribute is what takes effect.
     import scipy.optimize
 
-    monkeypatch.setattr(scipy.optimize, "differential_evolution",
-                        lambda func, bounds, **kw: _BadResult())
+    monkeypatch.setattr(
+        scipy.optimize,
+        "differential_evolution",
+        lambda func, bounds, **kw: _BadResult(),
+    )
 
     wfm, psd = setup
     m = wfm.match_sphere_averaged(
-        _mode_dict(wfm, 1.0), psd, F_LOWER, delta_t=DT,
-        total_mass=40.0, distance=1.0,
+        _mode_dict(wfm, 1.0),
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=40.0,
+        distance=1.0,
     )
     # Identical waveforms match at the identity; the bad "optimum" must lose.
     assert m == pytest.approx(1.0, abs=1e-6)
@@ -228,12 +258,20 @@ def test_identity_wins_returns_the_identity_rotation(setup, monkeypatch):
         x = np.array([2.0, 1.0, 3.0])
         fun = 0.5
 
-    monkeypatch.setattr(scipy.optimize, "differential_evolution",
-                        lambda func, bounds, **kw: _BadResult())
+    monkeypatch.setattr(
+        scipy.optimize,
+        "differential_evolution",
+        lambda func, bounds, **kw: _BadResult(),
+    )
     wfm, psd = setup
     m, R = wfm.match_sphere_averaged(
-        _mode_dict(wfm, 1.0), psd, F_LOWER, delta_t=DT, total_mass=40.0,
-        distance=1.0, return_rotation=True,
+        _mode_dict(wfm, 1.0),
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=40.0,
+        distance=1.0,
+        return_rotation=True,
     )
     assert m == pytest.approx(1.0, abs=1e-6)
     assert np.allclose(np.asarray(R), [1.0, 0.0, 0.0, 0.0], atol=1e-12)

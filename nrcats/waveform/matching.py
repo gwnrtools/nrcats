@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import spherical
+from pycbc.types import FrequencySeries as pycbc_FrequencySeries
 from pycbc.types import TimeSeries as pycbc_TimeSeries
 from sxs import TimeSeries as sxs_TimeSeries
 
@@ -50,7 +51,7 @@ class ModeMatchResult:
         Match in [0, 1], or NaN when ``reason`` describes a failure.
     reason : str
         One of ``'ok'``, ``'band_raised'``, ``'no_overlap'``, ``'zero_norm'``,
-        ``'insufficient_bins'``.  Both ``'ok'`` and ``'band_raised'`` carry a
+        ``'insufficient_bins'``, ``'no_psd_support'``.  Both ``'ok'`` and ``'band_raised'`` carry a
         usable ``match``; the rest carry NaN.
     f_lower_requested : float
         The cutoff the caller asked for, in Hz.
@@ -328,6 +329,7 @@ def compute_mode_match_detailed(
     h_nr,
     h_sur,
     f_lower_mode: float,
+    psd=None,
     psd_name: str = "aLIGOZeroDetHighPower",
     f_upper=None,
     min_cycles: float = MIN_CYCLES_AT_BAND_EDGE,
@@ -363,8 +365,16 @@ def compute_mode_match_detailed(
         Complex NR and model mode time series, same ``delta_t``.
     f_lower_mode : float
         Requested low-frequency cutoff in Hz, normally ``mode_f_lower(f, m)``.
+    psd : pycbc.types.FrequencySeries or None, optional
+        A pre-built one-sided PSD.  It is **resampled** onto the frequency grid
+        this function actually integrates on, so its ``delta_f`` need not match
+        the padded segment -- the caller cannot generally know that resolution
+        in advance, since it depends on the common window found here.  Outside
+        the supplied range the PSD is taken as infinite, excluding those bins.
+        When ``None`` (default) the PSD is built from ``psd_name``.
     psd_name : str, optional
-        PyCBC analytic PSD name (default ``'aLIGOZeroDetHighPower'``).
+        PyCBC analytic PSD name (default ``'aLIGOZeroDetHighPower'``).  Ignored
+        when ``psd`` is given.
     f_upper : float or None, optional
         Upper frequency cutoff in Hz (default: Nyquist).
     min_cycles : float, optional
@@ -458,7 +468,31 @@ def compute_mode_match_detailed(
     # this a strict no-op wherever the requested band was already supported, so
     # results for well-sampled waveforms are unchanged bit-for-bit.
     f_floor = (min_cycles / overlap) if min_cycles > 0 else 0.0
-    f_lower_used = max(f_lower_mode, f_floor)
+
+    grid_f = np.arange(length_f) * delta_f
+    resampled = None
+    psd_floor = 0.0
+    if psd is not None:
+        # Resample onto this grid rather than assuming it matches, exactly as
+        # _inverse_psd does for the strain match.  inf outside the supplied
+        # range so those bins drop out of the integral instead of extrapolating.
+        src_f = np.arange(len(psd)) * float(psd.delta_f)
+        resampled = np.interp(grid_f, src_f, np.asarray(psd), left=np.inf, right=np.inf)
+        # A supplied PSD is commonly built with its own low_freq_cutoff, below
+        # which PyCBC leaves zeros.  Those are absent information, not zero
+        # noise, and dividing by them yields a bare NaN for exactly the modes
+        # whose |m|/2 cutoff reaches furthest down.  Treat non-positive and
+        # non-finite bins as infinite -- the _inverse_psd convention -- and
+        # raise the cutoff to where the PSD actually has support, so the band
+        # reported is the band integrated.
+        usable = np.isfinite(resampled) & (resampled > 0)
+        resampled = np.where(usable, resampled, np.inf)
+        in_band = usable & (grid_f > 0)
+        if not in_band.any():
+            return _fail("no_psd_support", f_lower_mode, overlap, cycles)
+        psd_floor = float(grid_f[in_band][0])
+
+    f_lower_used = max(f_lower_mode, f_floor, psd_floor)
     reason = "band_raised" if f_lower_used > f_lower_mode else "ok"
 
     f_hi = f_upper if f_upper is not None else 0.5 / float(h1.delta_t)
@@ -466,7 +500,12 @@ def compute_mode_match_detailed(
     if n_bins < MIN_BINS_IN_BAND:
         return _fail("insufficient_bins", f_lower_mode, overlap, cycles)
 
-    psd = from_string(psd_name, length_f, delta_f, low_freq_cutoff=f_lower_used)
+    if resampled is None:
+        psd_used = from_string(
+            psd_name, length_f, delta_f, low_freq_cutoff=f_lower_used
+        )
+    else:
+        psd_used = pycbc_FrequencySeries(resampled, delta_f=delta_f)
 
     # pycbc.filter.match builds a real-to-complex FFT internally and raises
     # "For C2C FFT, len(outvec) must be nbatch*size" if handed a complex series,
@@ -487,7 +526,7 @@ def compute_mode_match_detailed(
     mm, _ = pycbc_match(
         h1_re,
         h2_re,
-        psd=psd,
+        psd=psd_used,
         low_frequency_cutoff=f_lower_used,
         high_frequency_cutoff=f_upper,
     )
@@ -506,6 +545,7 @@ def compute_mode_match(
     h_nr,
     h_sur,
     f_lower_mode: float,
+    psd=None,
     psd_name: str = "aLIGOZeroDetHighPower",
     f_upper=None,
     min_cycles: float = MIN_CYCLES_AT_BAND_EDGE,
@@ -530,6 +570,9 @@ def compute_mode_match(
     f_lower_mode : float
         Low-frequency cutoff for this mode in Hz.
         Use ``f_lower * |m| / 2`` (GW frequency scales as |m| × f_orbital).
+    psd : pycbc.types.FrequencySeries or None, optional
+        Pre-built one-sided PSD, resampled onto the grid actually integrated.
+        When ``None`` (default) it is built from ``psd_name``.
     psd_name : str, optional
         PyCBC analytic PSD name (default ``'aLIGOZeroDetHighPower'``).
     f_upper : float or None, optional
@@ -558,6 +601,7 @@ def compute_mode_match(
         h_nr,
         h_sur,
         f_lower_mode,
+        psd=psd,
         psd_name=psd_name,
         f_upper=f_upper,
         min_cycles=min_cycles,
@@ -879,8 +923,10 @@ def _partial_strains(modes, inclination, azimuth, taper_fraction):
 
 def _peak_index(modes) -> int:
     """Index of the (2,2) amplitude peak, falling back to the loudest mode."""
-    key = (2, 2) if (2, 2) in modes else max(
-        modes, key=lambda k: np.abs(np.asarray(modes[k])).max()
+    key = (
+        (2, 2)
+        if (2, 2) in modes
+        else max(modes, key=lambda k: np.abs(np.asarray(modes[k])).max())
     )
     return int(np.argmax(np.abs(np.asarray(modes[key]))))
 
@@ -1021,7 +1067,7 @@ def compute_strain_match(
 
     def _place(c, i):
         out = np.zeros(n_fft, dtype=complex)
-        out[lead - i:lead - i + len(c)] = c
+        out[lead - i : lead - i + len(c)] = c
         return out
 
     A = {em: np.fft.fft(_place(ca[em], ia)) for em in ms}
@@ -1032,8 +1078,9 @@ def compute_strain_match(
     inv_psd = _inverse_psd(psd, psd_name, freqs, f_lower, f_hi, delta_t, n_fft)
     n_bins = int(np.count_nonzero(inv_psd[: n_fft // 2 + 1]))
     if n_bins < MIN_BINS_IN_BAND:
-        return _strain_fail("insufficient_bins", inclination, azimuth, f_lower,
-                            f_hi, n_bins)
+        return _strain_fail(
+            "insufficient_bins", inclination, azimuth, f_lower, f_hi, n_bins
+        )
 
     # Constant prefactor cancels in the normalised match; kept so that the
     # intermediate norms are ordinary SNR^2 values rather than arbitrary units.
@@ -1044,8 +1091,7 @@ def compute_strain_match(
         [[pref * np.sum(A[p] * np.conj(A[q]) * inv_psd) for q in ms] for p in ms]
     )
     if norm_b <= 0 or not np.isfinite(gram.trace().real) or gram.trace().real <= 0:
-        return _strain_fail("zero_norm", inclination, azimuth, f_lower, f_hi,
-                            n_bins)
+        return _strain_fail("zero_norm", inclination, azimuth, f_lower, f_hi, n_bins)
 
     # z_m(t_c) = <c_m shifted by t_c | h^B>, all t_c at once.
     z = np.stack([pref * np.fft.fft(A[em] * np.conj(B_total) * inv_psd) for em in ms])
@@ -1075,9 +1121,7 @@ def compute_strain_match(
     # getting this wrong: the reported match came out 1.6e-5 below the true
     # maximum on SXS:BBH:0304.
     n_min = float(norms.min())
-    achieved = float(
-        (_numerator(betas[:1], slice(None)) / (norms[0] * norm_b)).max()
-    )
+    achieved = float((_numerator(betas[:1], slice(None)) / (norms[0] * norm_b)).max())
     bound = np.abs(z).sum(axis=0)
     cols = np.flatnonzero(bound >= achieved * n_min * norm_b)
     if cols.size > _MAX_TC_SAMPLES:
@@ -1095,7 +1139,7 @@ def compute_strain_match(
     fine = betas[bi] + np.linspace(-step, step, 65)
     fine_ratio = _numerator(fine, cols) / (_norm_a(fine)[:, None] * norm_b)
     fi, ti = np.unravel_index(int(np.argmax(fine_ratio)), fine_ratio.shape)
-    col = cols[ti: ti + 1]
+    col = cols[ti : ti + 1]
     beta_applied = float(fine[fi])
     match = float(min(fine_ratio[fi, ti], 1.0))
 
@@ -1110,7 +1154,9 @@ def compute_strain_match(
     beta = float(np.mod(-beta_applied, 2.0 * np.pi))
     alpha = float(np.angle(np.exp(-1j * alpha_applied)))
 
-    zero = _numerator(np.zeros(1), slice(None)) / (_norm_a(np.zeros(1))[:, None] * norm_b)
+    zero = _numerator(np.zeros(1), slice(None)) / (
+        _norm_a(np.zeros(1))[:, None] * norm_b
+    )
     n_shift = int(col[0]) - (n_fft if col[0] > n_fft // 2 else 0)
 
     return StrainMatchResult(
@@ -1134,8 +1180,7 @@ def compute_strain_match(
 
 
 def compute_strain_mismatch_averaged(
-    modes_a, modes_b, delta_t: float, inclination: float, n_azimuth: int = 12,
-    **kwargs
+    modes_a, modes_b, delta_t: float, inclination: float, n_azimuth: int = 12, **kwargs
 ) -> dict:
     """Frame-maximised strain mismatch averaged over azimuth.
 
@@ -1163,8 +1208,13 @@ def compute_strain_mismatch_averaged(
     vals = np.array([r.mismatch for r in results if r.is_usable])
     if vals.size == 0:
         nan = float("nan")
-        return {"mean": nan, "median": nan, "min": nan, "max": nan,
-                "per_azimuth": results}
+        return {
+            "mean": nan,
+            "median": nan,
+            "min": nan,
+            "max": nan,
+            "per_azimuth": results,
+        }
     return {
         "mean": float(vals.mean()),
         "median": float(np.median(vals)),
@@ -1187,8 +1237,11 @@ def _inverse_psd(psd, psd_name, freqs, f_lower, f_upper, delta_t, n_fft):
         # Resample a supplied PSD onto this grid rather than assuming it matches.
         src_f = np.arange(len(psd)) * float(psd.delta_f)
         s = np.interp(
-            np.arange(n_fft // 2 + 1) * delta_f, src_f, np.asarray(psd),
-            left=np.inf, right=np.inf,
+            np.arange(n_fft // 2 + 1) * delta_f,
+            src_f,
+            np.asarray(psd),
+            left=np.inf,
+            right=np.inf,
         )
     inv = np.zeros(n_fft // 2 + 1)
     band = (np.arange(n_fft // 2 + 1) * delta_f >= f_lower) & (
@@ -1198,17 +1251,25 @@ def _inverse_psd(psd, psd_name, freqs, f_lower, f_upper, delta_t, n_fft):
     inv[good] = 1.0 / s[good]
     two_sided = np.zeros(n_fft)
     two_sided[: n_fft // 2 + 1] = inv
-    two_sided[n_fft // 2 + 1:] = inv[1: (n_fft + 1) // 2][::-1]
+    two_sided[n_fft // 2 + 1 :] = inv[1 : (n_fft + 1) // 2][::-1]
     return two_sided
 
 
-def _strain_fail(reason, inclination, azimuth, f_lower, f_upper=float("nan"),
-                 n_bins=0):
+def _strain_fail(reason, inclination, azimuth, f_lower, f_upper=float("nan"), n_bins=0):
     nan = float("nan")
     return StrainMatchResult(
-        match=nan, mismatch=nan, alpha=nan, beta=nan, phase_offsets={},
-        time_shift=nan, match_at_zero_beta=nan, inclination=float(inclination),
-        azimuth=float(azimuth), f_lower_used=float(f_lower),
-        f_upper_used=float(f_upper), n_bins_in_band=int(n_bins), ms_used=(),
+        match=nan,
+        mismatch=nan,
+        alpha=nan,
+        beta=nan,
+        phase_offsets={},
+        time_shift=nan,
+        match_at_zero_beta=nan,
+        inclination=float(inclination),
+        azimuth=float(azimuth),
+        f_lower_used=float(f_lower),
+        f_upper_used=float(f_upper),
+        n_bins_in_band=int(n_bins),
+        ms_used=(),
         reason=reason,
     )

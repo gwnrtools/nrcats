@@ -24,6 +24,136 @@ from nrcats.waveform.units import _modal_dt
 logger = logging.getLogger(__name__)
 
 
+def _analysis_setup(
+    arr1,
+    arr2,
+    common_modes,
+    delta_t,
+    alignment,
+    taper_fraction,
+    psd,
+    psd_name,
+    f_lower,
+    f_upper,
+    min_cycles,
+    keys1=None,
+    margin=0,
+):
+    """Window, taper, padding and PSD shared by the sphere-averaged matches.
+
+    ``arr1`` / ``arr2`` map ``(ell, m)`` to complex mode arrays.  Returns None
+    when the pair cannot be matched at all, otherwise a dict describing one
+    analysis grid.
+
+    The window is located **once**, on the reference mode, and applied to every
+    mode.  Windowing each mode on its own peak would shift modes relative to
+    one another, and the relative phase between modes is what the frame
+    transformations are being fitted to.
+    """
+    from nrcats.waveform.matching import (
+        MIN_BINS_IN_BAND,
+        _get_crosscorr_lag,
+        _get_merger_index,
+        _start_window,
+    )
+
+    keys1 = list(keys1 or common_modes)
+
+    if (2, 2) in common_modes:
+        ref = (2, 2)
+    else:
+        ref = max(common_modes, key=lambda k: float(np.max(np.abs(arr1[k]))))
+
+    if float(np.max(np.abs(arr1[ref]))) < 1e-50 or (
+        float(np.max(np.abs(arr2[ref]))) < 1e-50
+    ):
+        return None
+
+    n1 = min(len(arr1[k]) for k in keys1)
+    n2 = min(len(arr2[k]) for k in common_modes)
+
+    if alignment == "peak":
+        i1 = _get_merger_index(arr1[ref])
+        i2 = _get_merger_index(arr2[ref])
+        before = min(i1, i2)
+        after = min(n1 - i1, n2 - i2)
+        s1, e1 = i1 - before, i1 + after
+        s2, e2 = i2 - before, i2 + after
+    elif alignment == "crosscorr":
+        lag = _get_crosscorr_lag(arr1[ref], arr2[ref])
+        s1, s2 = max(0, lag), max(0, -lag)
+        e1, e2 = min(n1, lag + n2), min(n2, n1 - lag)
+    else:
+        raise ValueError(f"Unknown alignment method: {alignment}")
+
+    # Reserve room at both ends for a transformation that consumes data, e.g.
+    # a supertranslation: u' = u - alpha(theta, phi) is only defined where the
+    # original waveform still has support.  Without this the analysis window
+    # spans essentially all the data, every candidate transformation falls off
+    # the end, and the search sees a flat penalty instead of a gradient.
+    if margin:
+        s1, e1 = s1 + margin, e1 - margin
+        s2, e2 = s2 + margin, e2 - margin
+
+    n_overlap = e1 - s1
+    if n_overlap <= 1:
+        return None
+    overlap_seconds = n_overlap * delta_t
+
+    # Power of two, chosen from the window rather than inherited from the
+    # caller's PSD resolution.
+    n_fft = 1
+    while n_fft < n_overlap:
+        n_fft <<= 1
+    df = 1.0 / (n_fft * delta_t)
+    length_f = n_fft // 2 + 1
+    grid_f = np.arange(length_f) * df
+
+    # Start taper only: these modes carry a full merger and ringdown, and the
+    # ringdown decays on its own, so an end taper would attenuate real signal.
+    window = _start_window(n_overlap, taper_fraction)
+
+    if psd is None:
+        from pycbc.psd import from_string
+
+        one_sided = np.asarray(
+            from_string(psd_name, length_f, df, low_freq_cutoff=f_lower)
+        )
+    else:
+        src_f = np.arange(len(psd)) * float(psd.delta_f)
+        one_sided = np.interp(grid_f, src_f, np.asarray(psd), left=np.inf, right=np.inf)
+    usable = np.isfinite(one_sided) & (one_sided > 0)
+    if not usable[grid_f > 0].any():
+        return None
+    psd_floor = float(grid_f[usable & (grid_f > 0)][0])
+
+    f_floor = (min_cycles / overlap_seconds) if min_cycles > 0 else 0.0
+    f_lower_used = max(f_lower or 0.0, f_floor, psd_floor)
+    f_hi = f_upper if f_upper is not None else 0.5 / delta_t
+    if int((f_hi - f_lower_used) / df) < MIN_BINS_IN_BAND:
+        return None
+
+    band = usable & (grid_f >= f_lower_used) & (grid_f <= f_hi)
+    psd_full = np.full(n_fft, np.inf)
+    psd_full[:length_f] = np.where(band, one_sided, np.inf)
+    psd_full[length_f:] = psd_full[1 : (n_fft + 1) // 2][::-1]
+
+    return {
+        "s1": s1,
+        "e1": e1,
+        "s2": s2,
+        "e2": e2,
+        "n_overlap": n_overlap,
+        "overlap_seconds": overlap_seconds,
+        "window": window,
+        "n_fft": n_fft,
+        "df": df,
+        "psd_full": psd_full,
+        "f_lower_used": f_lower_used,
+        "ref": ref,
+    }
+
+
 def get_mode(
     wfm,
     ell,
@@ -189,41 +319,71 @@ def match_single_mode(
     f_lower,
     delta_t=1.0 / 4096,
     f_upper=None,
+    total_mass=1.0,
+    distance=1.0,
+    psd_name="aLIGOZeroDetHighPower",
+    min_cycles=None,
+    alignment="peak",
 ):
     """Implementation of :meth:`WaveformModes.match_single_mode`.
 
-    ``wfm`` is the :class:`WaveformModes` instance; see the method
-    for the full parameter and return documentation.
-    """
-    from pycbc.filter import match as pycbc_match
+    ``wfm`` is the :class:`WaveformModes` instance; see the method for the full
+    parameter and return documentation.
 
-    h1 = wfm.get_mode(ell, em, to_pycbc=True, delta_t_seconds=delta_t).real()
+    This delegates to :func:`~nrcats.waveform.matching.compute_mode_match`,
+    which owns the merger-aligned common window, the start taper, the
+    power-of-two padding and the band-validity checks.  Doing the filtering
+    here as well would be a second, weaker implementation of the same thing.
+    """
+    from nrcats.waveform.matching import (
+        MIN_CYCLES_AT_BAND_EDGE,
+        compute_mode_match,
+        mode_f_lower,
+    )
+
+    if min_cycles is None:
+        min_cycles = MIN_CYCLES_AT_BAND_EDGE
+
+    # Complex modes throughout: the merger index, the taper and the alignment
+    # are all defined on the envelope |h_lm|, which Re(h_lm) cannot give since
+    # it passes through zero every half cycle.  compute_mode_match takes the
+    # real part itself, at the filter, where it costs nothing.
+    h1 = wfm.get_mode(
+        ell,
+        em,
+        total_mass=total_mass,
+        distance=distance,
+        to_pycbc=True,
+        delta_t_seconds=delta_t,
+    )
 
     if isinstance(other, dict):
         if (ell, em) not in other:
             raise KeyError(f"Mode ({ell}, {em}) not found in other waveform dict.")
         val = other[(ell, em)]
-        h2 = val[0] if isinstance(val, (tuple, list)) else val.real()
+        h2 = val[0] if isinstance(val, (tuple, list)) else val
     else:
-        h2 = other.get_mode(ell, em, to_pycbc=True, delta_t_seconds=delta_t).real()
+        h2 = other.get_mode(
+            ell,
+            em,
+            total_mass=total_mass,
+            distance=distance,
+            to_pycbc=True,
+            delta_t_seconds=delta_t,
+        )
 
-    target_len = max(len(h1), len(h2))
-    h1.resize(target_len)
-    h2.resize(target_len)
-
-    psd_copy = psd.copy()
-    psd_copy.resize(len(h1.to_frequencyseries()))
-
-    mode_f_lower = f_lower * abs(em) / 2.0 if em != 0 else f_lower
-
-    mm, _ = pycbc_match(
-        h1,
-        h2,
-        psd=psd_copy,
-        low_frequency_cutoff=mode_f_lower,
-        high_frequency_cutoff=f_upper,
+    return float(
+        compute_mode_match(
+            h1,
+            h2,
+            mode_f_lower(f_lower, em),
+            psd=psd,
+            psd_name=psd_name,
+            f_upper=f_upper,
+            min_cycles=min_cycles,
+            alignment=alignment,
+        )
     )
-    return float(mm)
 
 
 def match_sphere_averaged(
@@ -236,19 +396,34 @@ def match_sphere_averaged(
     return_rotation=False,
     total_mass=1.0,
     distance=1.0,
+    psd_name="aLIGOZeroDetHighPower",
+    min_cycles=None,
+    alignment="peak",
+    taper_fraction=None,
 ):
     """Implementation of :meth:`WaveformModes.match_sphere_averaged`.
 
     ``wfm`` is the :class:`WaveformModes` instance; see the method
     for the full parameter and return documentation.
+
+    The setup here mirrors
+    :func:`~nrcats.waveform.matching.compute_mode_match_detailed` -- merger
+    aligned common window, start taper, power-of-two padding, PSD resampled
+    onto the grid actually integrated -- with one deliberate difference: the
+    window and the taper are chosen **once**, from the reference mode, and
+    applied identically to every mode.  Windowing each mode on its own peak
+    would shift modes relative to one another, and the relative phase between
+    modes is precisely what the SO(3) rotation is being fitted to.
     """
     from scipy.optimize import differential_evolution
     from scipy.fft import fft, ifft
 
-    # Compute overlapping frequency range
-    df = psd.delta_f
-    low_idx = int(f_lower / df) if f_lower else 0
-    high_idx = int(np.ceil(f_upper / df)) if f_upper else len(psd)
+    from nrcats.waveform.matching import MIN_CYCLES_AT_BAND_EDGE, TAPER_FRACTION
+
+    if min_cycles is None:
+        min_cycles = MIN_CYCLES_AT_BAND_EDGE
+    if taper_fraction is None:
+        taper_fraction = TAPER_FRACTION
 
     if isinstance(other, dict):
         other_LM = list(other.keys())
@@ -284,34 +459,39 @@ def match_sphere_averaged(
                 delta_t_seconds=delta_t,
             )
 
-    # Determine required length to match PSD's delta_f
-    N_pad = int(np.round(1.0 / (df * delta_t)))
+    arr1 = {k: np.asarray(v) for k, v in h1_ts_dict.items()}
+    arr2 = {k: np.asarray(v) for k, v in h2_ts_dict.items()}
 
-    # Build two-sided PSD array
-    psd_full = np.ones(N_pad) * np.inf
-    psd_len = N_pad // 2 + 1
-    for i in range(low_idx, min(high_idx, len(psd))):
-        if i < psd_len:
-            val = psd.data[i]
-            if val > 0:
-                psd_full[i] = val
-                if i > 0 and (N_pad - i) < N_pad:
-                    psd_full[N_pad - i] = val
+    setup = _analysis_setup(
+        arr1,
+        arr2,
+        common_modes,
+        delta_t,
+        alignment,
+        taper_fraction,
+        psd,
+        psd_name,
+        f_lower,
+        f_upper,
+        min_cycles,
+    )
+    if setup is None:
+        return (0.0, None) if return_rotation else 0.0
 
-    # Compute full complex FFTs, zero-padded to N_pad
+    n_fft = N_pad = setup["n_fft"]
+    df = setup["df"]
+    psd_full = setup["psd_full"]
+    window = setup["window"]
+    n_overlap = setup["n_overlap"]
+    s1, e1, s2, e2 = setup["s1"], setup["e1"], setup["s2"], setup["e2"]
+
     h1_f_dict = {}
     h2_f_dict = {}
     for k in common_modes:
-        ts1 = h1_ts_dict[k].data
-        ts2 = h2_ts_dict[k].data
-
-        # Zero-pad arrays to N_pad
-        pad1 = np.zeros(N_pad, dtype=complex)
-        pad2 = np.zeros(N_pad, dtype=complex)
-
-        pad1[: len(ts1)] = ts1
-        pad2[: len(ts2)] = ts2
-
+        pad1 = np.zeros(n_fft, dtype=complex)
+        pad2 = np.zeros(n_fft, dtype=complex)
+        pad1[:n_overlap] = arr1[k][s1:e1] * window
+        pad2[:n_overlap] = arr2[k][s2:e2] * window
         h1_f_dict[k] = fft(pad1)
         h2_f_dict[k] = fft(pad2)
 
@@ -432,6 +612,47 @@ def match_sphere_averaged(
     return match
 
 
+def _supertranslation_params(j_max):
+    """Real degrees of freedom of a real supertranslation for ell = 1..j_max.
+
+    A supertranslation field is real, so its harmonic coefficients obey
+    ``alpha^{l,m} = (-1)^m conj(alpha^{l,-m})``.  That leaves one real number
+    for m = 0 and two for each m > 0, i.e. 2l+1 per l -- the dimension of the
+    real spherical harmonics at that order, as it must be.  ell = 0 is a rigid
+    time translation and is deliberately excluded: it is maximized exactly and
+    for free by the FFT over t_c, so handing it to the optimizer would only add
+    a redundant direction.
+
+    Returns a list of ``(ell, m, part)`` with part in {'re', 'im'}.
+    """
+    out = []
+    for ell in range(1, j_max + 1):
+        out.append((ell, 0, "re"))
+        for m in range(1, ell + 1):
+            out.append((ell, m, "re"))
+            out.append((ell, m, "im"))
+    return out
+
+
+def _build_supertranslation(values, layout, j_max):
+    """Pack real parameters into scri's complex, ell=0-based coefficient array."""
+    alpha = np.zeros((j_max + 1) ** 2, dtype=complex)
+
+    def idx(ell, m):
+        return ell * ell + (ell + m)
+
+    for value, (ell, m, part) in zip(values, layout):
+        if m == 0:
+            alpha[idx(ell, 0)] += value  # real by the reality condition
+        elif part == "re":
+            alpha[idx(ell, m)] += value
+            alpha[idx(ell, -m)] += ((-1) ** m) * value
+        else:
+            alpha[idx(ell, m)] += 1j * value
+            alpha[idx(ell, -m)] += ((-1) ** m) * (-1j) * value
+    return alpha
+
+
 def match_sphere_averaged_bms_maximized(
     wfm,
     other,
@@ -439,13 +660,34 @@ def match_sphere_averaged_bms_maximized(
     f_lower,
     f_upper=None,
     j_max=1,
+    delta_t=1.0 / 4096,
+    total_mass=1.0,
+    distance=1.0,
+    psd_name="aLIGOZeroDetHighPower",
+    min_cycles=None,
+    alignment="peak",
+    taper_fraction=None,
+    alpha_max_M=10.0,
+    seed_rotation=True,
+    n_coarse=128,
+    n_starts=3,
+    maxfev=800,
+    seed=None,
+    return_transformation=False,
 ):
     """Implementation of :meth:`WaveformModes.match_sphere_averaged_bms_maximized`.
 
-    ``wfm`` is the :class:`WaveformModes` instance; see the method
-    for the full parameter and return documentation.
+    ``wfm`` is the :class:`WaveformModes` instance; see the method for the full
+    parameter and return documentation.
+
+    The supertranslation is applied by ``scri``'s exact grid transformation
+    (``WaveformGrid.from_modes`` then ``to_modes``), not by a first-order
+    expansion in Gaunt coefficients.
     """
     from scipy.optimize import minimize
+    from scipy.fft import fft, ifft
+
+    from nrcats.waveform.matching import MIN_CYCLES_AT_BAND_EDGE, TAPER_FRACTION
 
     try:
         import scri
@@ -455,109 +697,270 @@ def match_sphere_averaged_bms_maximized(
             "Install it with: pip install scri"
         ) from e
 
-    alpha_jk_indices = [(j, k) for j in range(1, j_max + 1) for k in range(-j, j + 1)]
+    if min_cycles is None:
+        min_cycles = MIN_CYCLES_AT_BAND_EDGE
+    if taper_fraction is None:
+        taper_fraction = TAPER_FRACTION
 
-    max_len = 0
-    for ell, m in wfm.LM:
-        max_len = max(
-            max_len,
-            len(wfm.get_mode(ell, m, to_pycbc=True, delta_t_seconds=1 / 4096)),
+    if isinstance(other, dict):
+        other_LM = [tuple(k) for k in other.keys()]
+    else:
+        other_LM = [tuple(x) for x in other.LM]
+    common_modes = set(map(tuple, wfm.LM)) & set(other_LM)
+    if not common_modes:
+        return (0.0, None) if return_transformation else 0.0
+
+    def _get(src, ell, m):
+        if isinstance(src, dict):
+            val = src[(ell, m)]
+            return val[0] if isinstance(val, (tuple, list)) else val
+        return src.get_mode(
+            ell,
+            m,
+            total_mass=total_mass,
+            distance=distance,
+            to_pycbc=True,
+            delta_t_seconds=delta_t,
         )
 
-    ref_mode_ts = wfm.get_mode(2, 2, to_pycbc=True, delta_t_seconds=1 / 4096)
-    ref_mode_ts.resize(max_len)
-    ref_fs = ref_mode_ts.to_frequencyseries()
-    freqs = ref_fs.sample_frequencies
-    delta_f = ref_fs.delta_f
+    h1_ts = {k: _get(wfm, *k) for k in common_modes}
+    # scri needs complete ell blocks, so carry every mode `other` has, not just
+    # the common ones; the transformation mixes m within (and across) blocks.
+    h2_ts = {k: _get(other, *k) for k in other_LM}
 
-    self_modes_tilde = {}
-    self_modes_dot_tilde = {}
-    for ell, m in wfm.LM:
-        h_ts = wfm.get_mode(ell, m, to_pycbc=True, delta_t_seconds=1 / 4096)
-        h_ts.resize(max_len)
-        h_tilde = h_ts.to_frequencyseries(delta_f=delta_f)
-        self_modes_tilde[(ell, m)] = h_tilde
-        h_dot_tilde = h_tilde.copy()
-        h_dot_tilde.data *= 1j * 2 * np.pi * freqs
-        self_modes_dot_tilde[(ell, m)] = h_dot_tilde
+    arr1 = {k: np.asarray(v) for k, v in h1_ts.items()}
+    arr2 = {k: np.asarray(v) for k, v in h2_ts.items()}
 
-    def objective_function(x):
-        time_shift, phi_c, alpha, beta, gamma = x[:5]
-        alpha_jk_values = x[5:]
-        alpha_jk_coeffs = dict(zip(alpha_jk_indices, alpha_jk_values))
+    from nrcats import utils as _utils
 
-        R = quaternionic.array.from_euler_angles(alpha, beta, gamma)
-        other_rot = other.rotated(R)
+    m_secs = _utils.time_to_physical(total_mass)
+    alpha_bound = abs(alpha_max_M) * m_secs
 
-        total_inner_prod = 0.0
-        total_norm1_sq = 0.0
-        total_norm2_sq = 0.0
+    # No fixed analysis window here.  A supertranslation moves the merger in
+    # retarded time and shortens the usable span, so a window fixed on the
+    # untransformed pair no longer describes the transformed one: measured
+    # against a known 4 M supertranslation, a fixed window put the objective's
+    # minimum at ~2 M with mismatch 3.7e-3 and made the true answer look
+    # *worse*, while re-deriving the window reaches 4.7e-5 at 4 M.  The window
+    # is cheap next to the transformation, so it is recomputed per evaluation.
+    ell_min2 = min(ell for ell, _ in other_LM)
+    ell_max2 = max(ell for ell, _ in other_LM)
+    n2 = min(len(v) for v in arr2.values())
+    ref2 = (
+        (2, 2)
+        if (2, 2) in common_modes
+        else max(common_modes, key=lambda k: float(np.max(np.abs(arr1[k]))))
+    )
+    t2 = np.asarray(h2_ts[ref2].sample_times, dtype=float)[:n2]
 
-        common_modes = set(map(tuple, wfm.LM)) & set(map(tuple, other_rot.LM))
+    def _sidx(ell, m):
+        return ell * ell - ell_min2 * ell_min2 + (ell + m)
 
-        self_modes_tilde_st = {}
-        for ell, m in common_modes:
-            h1_tilde = self_modes_tilde[(ell, m)]
-            st_correction = np.zeros_like(h1_tilde.data, dtype=complex)
+    data2 = np.zeros((n2, (ell_max2 + 1) ** 2 - ell_min2**2), dtype=complex)
+    for (ell, m), v in arr2.items():
+        data2[:, _sidx(ell, m)] = v[:n2]
 
-            for (j, k), alpha_jk in alpha_jk_coeffs.items():
-                for p, q in wfm.LM:
-                    G = scri.coupling_coefficients(
-                        s_prime=-2,
-                        l_prime=ell,
-                        m_prime=m,
-                        s1=0,
-                        l1=j,
-                        m1=k,
-                        s2=-2,
-                        l2=p,
-                        m2=q,
-                    )
-                    if G == 0:
-                        continue
-                    h_dot_pq = self_modes_dot_tilde[(p, q)]
-                    st_correction += alpha_jk * G * h_dot_pq.data
+    other_scri = scri.WaveformModes(
+        t=t2,
+        data=np.ascontiguousarray(data2),
+        ell_min=ell_min2,
+        ell_max=ell_max2,
+        frameType=scri.Inertial,
+        dataType=scri.h,
+        r_is_scaled_out=True,
+        m_is_scaled_out=True,
+    )
 
-            h1_tilde_st = h1_tilde.copy()
-            h1_tilde_st.data -= st_correction
-            self_modes_tilde_st[(ell, m)] = h1_tilde_st
+    layout = _supertranslation_params(j_max)
+    euler_scale = np.array([2 * np.pi, np.pi, 2 * np.pi])
 
-        for ell, m in common_modes:
-            h1_tilde = self_modes_tilde_st[(ell, m)]
-            h2_mode_ts = other_rot.get_mode(
-                ell, m, to_pycbc=True, delta_t_seconds=1 / 4096
+    def _unscale(u):
+        """Normalized search coordinates -> physical ones.
+
+        The supertranslation coefficients are O(1e-4) seconds and the Euler
+        angles are O(1) radians.  A simplex built on the raw vector takes steps
+        that are meaningless for one or the other, so the search runs in
+        [-1, 1] per supertranslation coefficient and [0, 1] per angle.
+        """
+        u = np.asarray(u, dtype=float)
+        return u[: len(layout)] * alpha_bound, u[len(layout) :] * euler_scale
+
+    def _mismatch(u):
+        st_values, euler = _unscale(u)
+        alpha = _build_supertranslation(st_values, layout, j_max)
+        R = quaternionic.array.from_euler_angles(*euler)
+
+        try:
+            tr = other_scri.transform(
+                supertranslation=alpha,
+                frame_rotation=np.asarray(R, dtype=float).tolist(),
+                ell_max=ell_max2,
             )
-            h2_mode_ts.resize(max_len)
-            h2_tilde = h2_mode_ts.to_frequencyseries(delta_f=delta_f)
-
-            temp_psd = psd.copy()
-            temp_psd.resize(len(h1_tilde))
-
-            h2_tilde *= np.exp(-1j * m * phi_c)
-            h2_tilde.data *= np.exp(-2j * np.pi * freqs * time_shift)
-
-            df = delta_f
-            low_idx = int(f_lower / df) if f_lower else 0
-            high_idx = int(np.ceil(f_upper / df)) if f_upper else len(temp_psd)
-
-            h1 = h1_tilde.data[low_idx:high_idx]
-            h2 = h2_tilde.data[low_idx:high_idx]
-            psd_vals = temp_psd.data[low_idx:high_idx]
-            psd_vals[np.isinf(psd_vals)] = 1.0
-
-            total_norm1_sq += 4 * df * np.sum((np.abs(h1) ** 2) / psd_vals)
-            total_norm2_sq += 4 * df * np.sum((np.abs(h2) ** 2) / psd_vals)
-            total_inner_prod += 4 * df * np.sum((h1 * np.conj(h2)) / psd_vals)
-
-        if total_norm1_sq == 0 or total_norm2_sq == 0:
+        except Exception:
             return 1.0
 
-        overlap = np.abs(total_inner_prod) / np.sqrt(total_norm1_sq * total_norm2_sq)
+        arr2t = {k: np.ascontiguousarray(tr.data[:, _sidx(*k)]) for k in common_modes}
+        setup = _analysis_setup(
+            arr1,
+            arr2t,
+            common_modes,
+            delta_t,
+            alignment,
+            taper_fraction,
+            psd,
+            psd_name,
+            f_lower,
+            f_upper,
+            min_cycles,
+        )
+        if setup is None:
+            return 1.0
+
+        n_fft = setup["n_fft"]
+        df = setup["df"]
+        psd_full = setup["psd_full"]
+        window = setup["window"]
+        n_ov = setup["n_overlap"]
+        i1, j1, i2, j2 = setup["s1"], setup["e1"], setup["s2"], setup["e2"]
+
+        inner = np.zeros(n_fft, dtype=complex)
+        norm1_sq = 0.0
+        norm2_sq = 0.0
+        for k in common_modes:
+            p1 = np.zeros(n_fft, dtype=complex)
+            p2 = np.zeros(n_fft, dtype=complex)
+            p1[:n_ov] = arr1[k][i1:j1] * window
+            p2[:n_ov] = arr2t[k][i2:j2] * window
+            H1 = fft(p1)
+            H2 = fft(p2)
+            norm1_sq += df * np.sum((np.abs(H1) ** 2) / psd_full)
+            norm2_sq += df * np.sum((np.abs(H2) ** 2) / psd_full)
+            inner += (H1 * np.conj(H2)) / psd_full
+
+        if not (np.isfinite(norm1_sq) and np.isfinite(norm2_sq)):
+            return 1.0
+        if norm1_sq == 0 or norm2_sq == 0:
+            return 1.0
+
+        # np.abs, not np.real: the modulus maximizes over one constant phase
+        # common to every mode -- the polarization angle -- which no BMS
+        # transformation reproduces.  Same convention as match_sphere_averaged.
+        peak = df * n_fft * np.max(np.abs(ifft(inner)))
+        overlap = peak / np.sqrt(norm1_sq * norm2_sq)
+        if not np.isfinite(overlap):
+            return 1.0
         return 1.0 - overlap
 
-    x0 = [0.0] * (5 + len(alpha_jk_indices))
-    result = minimize(objective_function, x0, method="Nelder-Mead")
-    return 1.0 - result.fun
+    identity = np.zeros(len(layout) + 3)
+    identity_mismatch = _mismatch(identity)
+
+    n_st = len(layout)
+    bounds = [(-1.0, 1.0)] * n_st + [(0.0, 1.0)] * 3
+
+    # Coarse pass, then local polish.  The objective is a broad shallow plateau
+    # with a narrow deep well at the answer: measured against a known 4 M
+    # supertranslation, the mismatch moves only 3.9e-3 -> 2.9e-3 over the first
+    # half of the range and then falls to 4.7e-5 inside the well.  Differential
+    # evolution spreads its population over the plateau and stalls there --
+    # popsize 6/maxiter 15 and popsize 12/maxiter 40 returned identical answers,
+    # so the failure is the shape of the landscape, not the budget.  A quasi
+    # random sweep locates the well and a simplex descends it.
+    starts = [identity]
+
+    # Seed the frame rotation from the rotation-only maximization.  That search
+    # is cheap -- the Wigner rotation is applied in the Fourier domain, with no
+    # grid transformation -- and it is far better at finding a large frame
+    # offset than a local simplex started at the identity.  NR and surrogate
+    # mode sets routinely differ by such an offset, so without this the
+    # supertranslation search is polishing around the wrong frame entirely.
+    # Both R and its inverse are tried: scri's frame_rotation is a passive
+    # transformation of the grid frame and need not share the sign convention
+    # of the Wigner rotation applied to the modes here.
+    if seed_rotation:
+        try:
+            _, R0 = match_sphere_averaged(
+                wfm,
+                other,
+                psd,
+                f_lower,
+                f_upper=f_upper,
+                delta_t=delta_t,
+                return_rotation=True,
+                total_mass=total_mass,
+                distance=distance,
+                psd_name=psd_name,
+                min_cycles=min_cycles,
+                alignment=alignment,
+                taper_fraction=taper_fraction,
+            )
+        except Exception:
+            R0 = None
+        if R0 is not None:
+            for cand in (R0, R0.inverse):
+                try:
+                    ang = np.asarray(
+                        quaternionic.array(cand).to_euler_angles, dtype=float
+                    ).ravel()[:3]
+                except Exception:
+                    continue
+                ang = np.array(
+                    [
+                        ang[0] % (2 * np.pi),
+                        np.clip(ang[1], 0.0, np.pi),
+                        ang[2] % (2 * np.pi),
+                    ]
+                )
+                u = np.zeros(len(layout) + 3)
+                u[len(layout) :] = ang / euler_scale
+                starts.append(u)
+
+    if n_coarse > 0:
+        from scipy.stats import qmc
+
+        sampler = qmc.Sobol(d=n_st, scramble=True, seed=seed)
+        pts = sampler.random(int(n_coarse)) * 2.0 - 1.0
+        # Sweep the supertranslation at the best rotation found so far, not at
+        # the identity: in the wrong frame every sample looks equally bad and
+        # the sweep ranks noise.
+        rot_for_sweep = min(starts, key=_mismatch)[len(layout) :]
+        scored = sorted(
+            ((_mismatch(np.concatenate([pt, rot_for_sweep])), pt) for pt in pts),
+            key=lambda t: t[0],
+        )
+        starts += [
+            np.concatenate([pt, rot_for_sweep]) for _, pt in scored[: int(n_starts)]
+        ]
+
+    best_x, best_fun = identity, identity_mismatch
+    for x0 in starts:
+        result = minimize(
+            _mismatch,
+            x0,
+            method="Nelder-Mead",
+            bounds=bounds,
+            options={"maxfev": int(maxfev), "xatol": 1e-4, "fatol": 1e-10},
+        )
+        if result.fun < best_fun:
+            best_x, best_fun = result.x, result.fun
+
+    # A local method started away from the identity can end up worse than doing
+    # nothing; reporting a transformation that fits worse than none is never
+    # correct.
+    if identity_mismatch <= best_fun:
+        best_x, best_fun = identity, identity_mismatch
+
+    match = 1.0 - best_fun
+    if return_transformation:
+        st_best, euler_best = _unscale(best_x)
+        info = {
+            "supertranslation": _build_supertranslation(st_best, layout, j_max),
+            "supertranslation_M": np.asarray(st_best) / m_secs,
+            "layout": layout,
+            "frame_rotation": quaternionic.array.from_euler_angles(*euler_best),
+            "identity_match": 1.0 - identity_mismatch,
+        }
+        return match, info
+    return match
 
 
 def diff_l2_norm(wfm, other, time_window=None, phase_align=True):

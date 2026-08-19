@@ -73,8 +73,7 @@ def test_recovers_an_injected_frame_offset(alpha0, beta0):
         (ell, em): np.exp(1j * (alpha0 + em * beta0)) * h
         for (ell, em), h in base.items()
     }
-    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER,
-                             symmetrize=False)
+    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER, symmetrize=False)
     assert r.match == pytest.approx(1.0, abs=1e-8)
     # Angles are defined modulo 2pi, so compare on the circle.
     assert np.angle(np.exp(1j * (r.alpha - alpha0))) == pytest.approx(0.0, abs=2e-4)
@@ -89,8 +88,7 @@ def test_phase_offsets_are_alpha_plus_m_beta():
         (ell, em): np.exp(1j * (alpha0 + em * beta0)) * h
         for (ell, em), h in base.items()
     }
-    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER,
-                             symmetrize=False)
+    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER, symmetrize=False)
     assert set(r.phase_offsets) == {em for _, em in base}
     for em, offset in r.phase_offsets.items():
         expected = np.angle(np.exp(1j * (alpha0 + em * beta0)))
@@ -107,10 +105,10 @@ def test_beta_is_what_a_per_mode_match_cannot_see():
     by ignoring it.
     """
     base = complete_negative_m(chirp_modes())
-    rotated = {(ell, em): np.exp(1j * em * 0.9 * np.pi) * h
-               for (ell, em), h in base.items()}
-    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER,
-                             symmetrize=False)
+    rotated = {
+        (ell, em): np.exp(1j * em * 0.9 * np.pi) * h for (ell, em), h in base.items()
+    }
+    r = compute_strain_match(rotated, base, DT, IOTA, f_lower=F_LOWER, symmetrize=False)
     assert r.match == pytest.approx(1.0, abs=1e-8)
     assert 1.0 - r.match_at_zero_beta > 1e-2
 
@@ -167,10 +165,8 @@ def test_azimuth_average_is_symmetric_under_argument_swap():
     smaller, which is the point.
     """
     a, b = chirp_modes(seed=3), chirp_modes(seed=4)
-    fwd = compute_strain_mismatch_averaged(a, b, DT, IOTA, n_azimuth=8,
-                                           f_lower=F_LOWER)
-    rev = compute_strain_mismatch_averaged(b, a, DT, IOTA, n_azimuth=8,
-                                           f_lower=F_LOWER)
+    fwd = compute_strain_mismatch_averaged(a, b, DT, IOTA, n_azimuth=8, f_lower=F_LOWER)
+    rev = compute_strain_mismatch_averaged(b, a, DT, IOTA, n_azimuth=8, f_lower=F_LOWER)
     assert fwd["mean"] == pytest.approx(rev["mean"], rel=1e-3)
     assert fwd["min"] <= fwd["mean"] <= fwd["max"]
     assert len(fwd["per_azimuth"]) == 8

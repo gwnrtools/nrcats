@@ -749,18 +749,30 @@ class WaveformModes(sxs_WaveformModes):
         wigner = spherical.Wigner(self.ell_max)
         rotated_data = np.zeros_like(self.data)
 
+        # spherical.Wigner.D(R) returns the whole flat D array, indexed by
+        # Dindex(ell, m, mp); there is no per-ell D(R, ell) overload, and there
+        # is no `ells` attribute on this class or on sxs.WaveformModes.  Both
+        # were called here, so every path through this method raised
+        # AttributeError.  This is the same construction match_sphere_averaged
+        # uses, which is exercised by the sphere-averaged tests.
+        D_full = wigner.D(R)
+
         for ell in range(self.ell_min, self.ell_max + 1):
-            if ell not in self.ells:
-                continue
             l_modes_indices = np.where(self.LM[:, 0] == ell)[0]
             if len(l_modes_indices) == 0:
                 continue
-            l_modes = self.data[:, l_modes_indices]
-            D = wigner.D(R, ell)
-            rotated_data[:, l_modes_indices] = l_modes @ D
+            D_ell = np.zeros((2 * ell + 1, 2 * ell + 1), dtype=complex)
+            for i, m in enumerate(range(-ell, ell + 1)):
+                for j, mp in enumerate(range(-ell, ell + 1)):
+                    D_ell[i, j] = D_full[wigner.Dindex(ell, m, mp)]
+            rotated_data[:, l_modes_indices] = self.data[:, l_modes_indices] @ D_ell
 
-        rotated_self.data = rotated_data
-        rotated_self.frame = R * self.frame
+        # `data` and `frame` are both read-only properties; the array buffer is
+        # shared with the object itself, and frame lives in the metadata dict
+        # that sxs propagates.  Assigning to either attribute, as this did,
+        # raised AttributeError.
+        np.asarray(rotated_self)[:] = rotated_data
+        rotated_self._metadata["frame"] = R * self.frame
         return rotated_self
 
     def rotate_frame(self, R):
@@ -815,28 +827,75 @@ class WaveformModes(sxs_WaveformModes):
         f_lower,
         delta_t=1.0 / 4096,
         f_upper=None,
+        total_mass=1.0,
+        distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
     ):
         """Compute the noise-weighted match for a single spherical harmonic mode.
+
+        Thin object-oriented entry point to
+        :func:`~nrcats.waveform.matching.compute_mode_match`: this method
+        extracts the ``(ell, em)`` mode from both waveforms and hands the pair
+        to that function, which performs the match itself.
+
+        .. versionchanged::
+           Previously this filtered the modes directly.  That path zero-padded
+           the shorter mode to the length of the longer one instead of
+           restricting to the window the two share, so a model waveform that
+           started later was penalised for signal it never claimed to cover --
+           an artifact of the same order as the mismatches being measured.  It
+           also never forwarded ``total_mass``, so the modes were always built
+           at 1 solar mass regardless of the system, and it required the caller
+           to supply a PSD at a ``delta_f`` that could not be known in advance.
+           All three are fixed by delegating.  **Values returned by this method
+           have changed accordingly.**
 
         Parameters
         ----------
         other : WaveformModes or dict
-            The second waveform.
+            The second waveform.  A dict maps ``(ell, em)`` to a PyCBC
+            TimeSeries (or a tuple whose first element is one).
         ell, em : int
             Spherical harmonic indices.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise PSD.
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise PSD.  Resampled onto the grid actually integrated,
+            so its ``delta_f`` need not match.  Pass ``None`` to build one from
+            ``psd_name`` instead.
         f_lower : float
-            Orbital reference frequency in Hz.
+            Reference GW frequency of the (2,2) mode in Hz.  The cutoff for
+            this mode is derived from it via
+            :func:`~nrcats.waveform.matching.mode_f_lower`.
         delta_t : float, optional
             Sample spacing in physical seconds (default 1/4096).
         f_upper : float, optional
             Upper frequency cutoff in Hz.
+        total_mass : float, optional
+            Total mass in solar masses (default 1.0) used to scale both modes.
+        distance : float, optional
+            Luminosity distance in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`; pass 0
+            to disable.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window is located.
 
         Returns
         -------
         float
-            Match value in [0, 1].
+            Match value in [0, 1], or NaN when the mode carries no signal, the
+            waveforms do not overlap, or the band cannot be resolved.  Use
+            :func:`~nrcats.waveform.matching.compute_mode_match_detailed` to
+            tell those cases apart.
+
+        See Also
+        --------
+        nrcats.waveform.matching.compute_mode_match_detailed
         """
         return modes_worker.match_single_mode(
             self,
@@ -847,6 +906,11 @@ class WaveformModes(sxs_WaveformModes):
             f_lower=f_lower,
             delta_t=delta_t,
             f_upper=f_upper,
+            total_mass=total_mass,
+            distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
         )
 
     def match_sphere_averaged(
@@ -859,6 +923,10 @@ class WaveformModes(sxs_WaveformModes):
         return_rotation=False,
         total_mass=1.0,
         distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
+        taper_fraction=None,
     ):
         r"""Calculate the match (noise-weighted overlap) between this waveform
         and another, integrated over all observer directions on the sphere
@@ -963,10 +1031,13 @@ class WaveformModes(sxs_WaveformModes):
         other : WaveformModes or dict
             The second waveform to compare against. Can be a `WaveformModes` object or a dict
             of PyCBC TimeSeries modes.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise power spectral density (PSD).
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise power spectral density (PSD).  Resampled onto the
+            frequency grid actually integrated, so its ``delta_f`` need not
+            match anything; pass ``None`` to build one from ``psd_name``.
         f_lower : float
-            Lower frequency cutoff in Hz.
+            Lower frequency cutoff in Hz.  Raised if the common window cannot
+            resolve it, or if the PSD has no support that low.
         f_upper : float, optional
             Upper frequency cutoff in Hz. If None, the Nyquist frequency of the PSD is used.
         delta_t : float, optional
@@ -978,6 +1049,28 @@ class WaveformModes(sxs_WaveformModes):
             Total mass of the binary system in solar masses (default 1.0).
         distance : float, optional
             Luminosity distance to the source in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`; 0
+            disables the raise.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window shared by all modes is located.
+        taper_fraction : float, optional
+            Fraction of the window over which the start taper rises.  ``None``
+            uses :data:`~nrcats.waveform.matching.TAPER_FRACTION`.
+
+        Notes
+        -----
+        Both waveforms are restricted to the time window they share, located
+        from the reference mode and applied identically to every mode, then
+        start-tapered before transforming.  Windowing each mode on its own peak
+        would move modes relative to one another, and that relative phase is
+        what the SO(3) rotation is fitted to.  Without the shared window a
+        model waveform that simply starts later is charged for signal it never
+        claimed to cover.
 
         Returns
         -------
@@ -996,6 +1089,10 @@ class WaveformModes(sxs_WaveformModes):
             return_rotation=return_rotation,
             total_mass=total_mass,
             distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
+            taper_fraction=taper_fraction,
         )
 
     def match_sphere_averaged_bms_maximized(
@@ -1005,6 +1102,20 @@ class WaveformModes(sxs_WaveformModes):
         f_lower,
         f_upper=None,
         j_max=1,
+        delta_t=1.0 / 4096,
+        total_mass=1.0,
+        distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
+        taper_fraction=None,
+        alpha_max_M=10.0,
+        seed_rotation=True,
+        n_coarse=128,
+        n_starts=3,
+        maxfev=800,
+        seed=None,
+        return_transformation=False,
     ):
         r"""Calculate the match maximized over BMS supertranslations in addition to
         standard time shift, phase shift, and SO(3) rotation.
@@ -1051,8 +1162,9 @@ class WaveformModes(sxs_WaveformModes):
         ----------
         other : WaveformModes
             The second waveform to compare against.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise power spectral density (PSD).
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise power spectral density (PSD).  Resampled onto the
+            grid actually integrated; ``None`` builds one from ``psd_name``.
         f_lower : float
             Lower frequency cutoff in Hz.
         f_upper : float, optional
@@ -1060,6 +1172,78 @@ class WaveformModes(sxs_WaveformModes):
         j_max : int, optional
             Maximum spherical-harmonic order of the supertranslation field to optimize
             (default 1, which corresponds to time translation + spatial translation).
+        delta_t : float, optional
+            Sample spacing in physical seconds (default 1/4096).
+        total_mass : float, optional
+            Total mass in solar masses (default 1.0) used to scale both waveforms.
+        distance : float, optional
+            Luminosity distance in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window shared by all modes is located.
+        taper_fraction : float, optional
+            Fraction of the window over which the start taper rises.
+        alpha_max_M : float, optional
+            Bound on each supertranslation coefficient, in units of the total
+            mass M (default 10).  Mass-independent by construction; converted
+            to seconds internally.  ``u' = u - alpha`` costs data at both ends,
+            so a supertranslation much larger than the usable window cannot be
+            tested on the data at all.
+        seed_rotation : bool, optional
+            Seed the search from the rotation-only maximization (default True).
+            That search is cheap and finds a large frame offset, which a local
+            simplex started at the identity will not; NR and model mode sets
+            routinely differ by one.
+        n_coarse : int, optional
+            Quasi-random (Sobol) supertranslation samples used to bracket the
+            optimum before any local search (default 128).  The objective is a
+            broad shallow plateau with a narrow deep well at the answer, so the
+            coarse pass is what finds the well; a global population method
+            spreads over the plateau and stalls.  Pass 0 to start only from the
+            identity.
+        n_starts : int, optional
+            How many of the best coarse samples to polish (default 3), on top of
+            the identity, which is always polished.
+        maxfev : int, optional
+            Objective evaluations allowed per local polish (default 800).  Cost
+            is dominated by one exact ``scri`` grid transformation per
+            evaluation, measured at ~250 ms for a 4096-sample, ell_max=3
+            waveform, so these three numbers decide the runtime.
+        seed : int or None, optional
+            Seed for the optimizer, for reproducible results.
+        return_transformation : bool, optional
+            If True, return ``(match, info)`` where ``info`` carries the fitted
+            supertranslation (complex coefficients and the real parameters in
+            units of M), the frame rotation, and the match at the identity.
+
+        .. versionchanged::
+           The supertranslation is now applied by ``scri``'s **exact** grid
+           transformation rather than a first-order expansion in Gaunt
+           coefficients.  The previous implementation called
+           ``scri.coupling_coefficients``, which does not exist in current scri,
+           so no ``j_max >= 1`` call could ever have run.  Working to first
+           order also made the transformation only approximately a BMS group
+           element, which is the wrong tool for asking whether two waveforms are
+           related by one.  ``ell = 0`` remains excluded from the search: a
+           rigid time translation is maximized exactly and for free by the FFT
+           over ``t_c``.
+
+        .. versionchanged::
+           This method previously raised ``TypeError`` for every input: it fed
+           complex modes to ``pycbc``'s ``to_frequencyseries``, which rejects
+           them.  It now transforms with ``scipy.fft`` over the full two-sided
+           spectrum.  That matters beyond simply running -- ``h_lm`` is complex,
+           so its spectrum is not conjugate-symmetric, and for ``m > 0`` the
+           signal sits at negative frequencies, which the previous
+           positive-frequency-only integral would have discarded.  It also
+           gained the merger-aligned common window, the start taper and the
+           PSD handling used by :meth:`match_sphere_averaged`, and no longer
+           builds its modes at a hardcoded 1 solar mass.
 
         Returns
         -------
@@ -1073,6 +1257,20 @@ class WaveformModes(sxs_WaveformModes):
             f_lower=f_lower,
             f_upper=f_upper,
             j_max=j_max,
+            delta_t=delta_t,
+            total_mass=total_mass,
+            distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
+            taper_fraction=taper_fraction,
+            alpha_max_M=alpha_max_M,
+            seed_rotation=seed_rotation,
+            n_coarse=n_coarse,
+            n_starts=n_starts,
+            maxfev=maxfev,
+            seed=seed,
+            return_transformation=return_transformation,
         )
 
     def diff_l2_norm(self, other, time_window=None, phase_align=True):
