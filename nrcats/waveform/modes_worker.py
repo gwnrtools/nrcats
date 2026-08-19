@@ -434,6 +434,60 @@ def match_sphere_averaged(
     if not common_modes:
         return (0.0, None) if return_rotation else 0.0
 
+    # Keep only ell blocks that are complete in *both* waveforms.
+    #
+    # A Wigner rotation mixes m within an ell block and is unitary on the whole
+    # block, not on a subset of it.  With a partial block the code below still
+    # rotates the zero-padded block, which scatters power into the m it does not
+    # hold, and then sums the overlap over the retained m only -- while the
+    # normalisation uses the *un*-rotated norm.  The objective is then not a
+    # normalised inner product between two fixed vectors, and its maximum is no
+    # longer 1 for waveforms that genuinely differ by a rotation.
+    #
+    # Measured on SXS:BBH:0161 against an exactly-rotated copy of itself, where
+    # the true answer is 1 by construction:
+    #
+    #     rotation          complete blocks   positive-m only
+    #     identity          1.000000          1.000000
+    #     pure z-rotation   1.000000          1.000000
+    #     general SO(3)     0.999974          0.977307
+    #
+    # So the penalty is 2.3e-2 -- an order of magnitude above the mismatches
+    # this function is used to measure -- and it is exactly zero for a
+    # z-rotation, because that is diagonal in m and moves nothing out of the
+    # retained set.  That is why aligned-spin work never exposed it and why
+    # precessing work cannot avoid it.
+    ells = {int(ell) for ell, _ in common_modes}
+    complete = {
+        ell
+        for ell in ells
+        if all(
+            any(int(a) == ell and int(b) == m for a, b in common_modes)
+            for m in range(-ell, ell + 1)
+        )
+    }
+    # int(), not the numpy scalars the mode index carries: under numpy 2 a
+    # list of np.int64 renders as "[np.int64(3)]" in the log message.
+    incomplete = sorted(int(e) for e in ells - complete)
+    if incomplete:
+        logger.warning(
+            "match_sphere_averaged: dropping ell=%s -- present in both waveforms "
+            "but not as complete -ell..+ell blocks, which a Wigner rotation "
+            "requires.  Supply every m in the block (for NRSur7dq4, "
+            "generate_surrogate_modes(..., modes='all')).",
+            incomplete,
+        )
+    common_modes = {(ell, m) for (ell, m) in common_modes if ell in complete}
+    if not common_modes:
+        raise ValueError(
+            f"No complete ell block is common to both waveforms (ell present: "
+            f"{sorted(ells)}, none complete).  A sphere-averaged match "
+            "maximised over SO(3) needs every m from -ell to +ell, because the "
+            "rotation mixes them; scoring a partial block understates the match "
+            "by up to 2.3e-2.  For NRSur7dq4 pass "
+            "generate_surrogate_modes(..., modes='all')."
+        )
+
     h1_ts_dict = {}
     h2_ts_dict = {}
 

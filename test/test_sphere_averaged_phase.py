@@ -77,7 +77,18 @@ def _chirp_wfm(n_times=4096, ell_max=3, seed=0):
     lm = [(ell, em) for ell in range(2, ell_max + 1) for em in range(-ell, ell + 1)]
     data = np.zeros((n_times, len(lm)), dtype=complex)
     for i, (ell, em) in enumerate(lm):
-        amp = (1.0 + 0.2 * rng.standard_normal()) / (1.0 + abs(abs(em) - 2))
+            # Amplitude hierarchy matters, and not only for realism.  The
+            # shared analysis window is located from the reference mode, so it
+            # is only stable when that mode dominates.  With flat amplitudes a
+            # rotation mixes m strongly enough that the rotated (2,2) beats,
+            # its peak moves, and the two waveforms end up windowed
+            # differently: measured at the *exact* inverse rotation, flat
+            # amplitudes score 0.679 where a (2,2)-dominated waveform scores
+            # 1.000000.  Real NR has the hierarchy; a mock without it tests the
+            # mock.
+        amp = 1.0 if (ell, abs(em)) == (2, 2) else 0.15 * (
+            1.0 + 0.2 * rng.standard_normal()
+        )
         data[:, i] = amp * env * np.exp(-1j * em * phase)
 
     attrs = {
@@ -275,3 +286,91 @@ def test_identity_wins_returns_the_identity_rotation(setup, monkeypatch):
     )
     assert m == pytest.approx(1.0, abs=1e-6)
     assert np.allclose(np.asarray(R), [1.0, 0.0, 0.0, 0.0], atol=1e-12)
+
+
+# ── complete ell blocks ───────────────────────────────────────────────────────
+#
+# A Wigner rotation mixes m within an ell block and is unitary on the whole
+# block, not on a subset.  Scoring a partial block rotates the zero-padded block
+# (scattering power into the m it does not hold), sums the overlap over the
+# retained m only, and normalizes by the *un*-rotated norm -- so the objective
+# stops being a normalized inner product and its maximum is no longer 1 for
+# waveforms that genuinely differ by a rotation.
+#
+# Measured on SXS:BBH:0161 against an exactly-rotated copy of itself, where the
+# true answer is 1 by construction:
+#
+#     rotation          complete blocks   positive-m only
+#     identity          1.000000          1.000000
+#     pure z-rotation   1.000000          1.000000
+#     general SO(3)     0.999974          0.977307
+#
+# 2.3e-2, an order of magnitude above the mismatches this function measures --
+# and exactly zero for a z-rotation, which is diagonal in m and moves nothing
+# out of the retained set.  That is why aligned-spin work never exposed it.
+
+
+def _rotate_block(modes, euler, ells):
+    """h'_lm = sum_m' h_lm' D^l_{m'm}(R), matching modes_worker's convention."""
+    import quaternionic
+    import spherical
+
+    R = quaternionic.array.from_euler_angles(*euler)
+    wig = spherical.Wigner(max(ells))
+    D = wig.D(R)
+    out = {}
+    for ell in ells:
+        block = np.stack([np.asarray(modes[(ell, m)])
+                          for m in range(-ell, ell + 1)], axis=1)
+        Dm = np.array([[D[wig.Dindex(ell, m, mp)] for mp in range(-ell, ell + 1)]
+                       for m in range(-ell, ell + 1)])
+        rotated = block @ Dm
+        for j, m in enumerate(range(-ell, ell + 1)):
+            out[(ell, m)] = rotated[:, j]
+    return out
+
+
+def _as_timeseries(d):
+    from pycbc.types import TimeSeries
+
+    return {k: TimeSeries(np.asarray(v).astype(np.complex128), delta_t=DT)
+            for k, v in d.items()}
+
+
+def test_complete_blocks_recover_a_general_so3_rotation(setup):
+    """The property partial blocks destroy: an exact rotation costs nothing."""
+    wfm, psd = setup
+    ells = tuple(sorted({ell for ell, _ in map(tuple, wfm.LM)}))
+    modes = {k: np.asarray(_mode_dict(wfm)[k]) for k in map(tuple, wfm.LM)}
+    rotated = _as_timeseries(_rotate_block(modes, (0.3, 0.7, 1.1), ells))
+    m = wfm.match_sphere_averaged(rotated, psd, F_LOWER, delta_t=DT,
+                                  total_mass=40.0, distance=1.0)
+    assert m == pytest.approx(1.0, abs=5e-4)
+
+
+def test_partial_block_raises_instead_of_returning_a_biased_number(setup):
+    """Positive-m only leaves no complete block, so there is nothing to score.
+
+    Returning 0.977 for waveforms that are identical up to a rotation is worse
+    than refusing: the number looks like a measurement.
+    """
+    wfm, psd = setup
+    positive_m = {k: v for k, v in _mode_dict(wfm).items() if k[1] > 0}
+    with pytest.raises(ValueError, match="complete ell block"):
+        wfm.match_sphere_averaged(positive_m, psd, F_LOWER, delta_t=DT,
+                                  total_mass=40.0, distance=1.0)
+
+
+def test_incomplete_ell_is_dropped_and_the_complete_one_still_scores(setup, caplog):
+    """A partial ell must not poison the blocks that are whole."""
+    import logging
+
+    wfm, psd = setup
+    modes = _mode_dict(wfm)
+    # ell=2 complete, ell=3 missing a single m.
+    trimmed = {k: v for k, v in modes.items() if not (k[0] == 3 and k[1] == -1)}
+    with caplog.at_level(logging.WARNING):
+        m = wfm.match_sphere_averaged(trimmed, psd, F_LOWER, delta_t=DT,
+                                      total_mass=40.0, distance=1.0)
+    assert m == pytest.approx(1.0, abs=5e-4)
+    assert any("dropping ell=[3]" in r.getMessage() for r in caplog.records)

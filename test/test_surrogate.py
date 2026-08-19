@@ -58,6 +58,11 @@ def _mock_surrogate(n=4096):
         (3, 2): (0.03 * envelope * np.exp(2j * t)).astype(np.complex128),
         (4, 3): (0.01 * envelope * np.exp(3j * t)).astype(np.complex128),
     }
+    # NRSur7dq4 returns negative m as well, and since NR_MODES gained them the
+    # generator asks for them.  A mock that omits them would make the code look
+    # broken for supplying exactly what it was told to supply.
+    for (ell, em), wave in list(h_sur.items()):
+        h_sur[(ell, -em)] = (((-1) ** ell) * np.conj(wave)).astype(np.complex128)
     mock = MagicMock()
     mock.return_value = (t, h_sur, None)
     return mock
@@ -125,12 +130,19 @@ def test_surrogate_modes_all_within_ell4():
         assert ell <= 4
 
 
-def test_modes_are_positive_m_only():
-    """Both mode lists store only positive m (convention for mode labelling)."""
-    for ell, em in NR_MODES:
-        assert em > 0, f"Expected positive m, got ({ell}, {em})"
-    for ell, em in SURROGATE_MODES:
-        assert em > 0, f"Expected positive m, got ({ell}, {em})"
+def test_modes_come_in_plus_minus_m_pairs():
+    """Both lists carry each mode with both signs of m.
+
+    They used to be positive-m only.  That was fine while every consumer either
+    reported one mode at a time or could rebuild the missing half from
+    ``h_{l,-m} = (-1)^l conj(h_lm)``, but precession breaks that relation and a
+    Wigner rotation needs the complete -ell..+ell block to be unitary, so the
+    negative-m modes became load-bearing rather than decorative.
+    """
+    for lst, name in ((NR_MODES, "NR_MODES"), (SURROGATE_MODES, "SURROGATE_MODES")):
+        for ell, em in lst:
+            assert (ell, -em) in lst, f"({ell},{em}) has no partner in {name}"
+        assert all(em != 0 for _, em in lst), f"{name} should not carry m = 0"
 
 
 # ── load_nrsur7dq4 ────────────────────────────────────────────────────────────
