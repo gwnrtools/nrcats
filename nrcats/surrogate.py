@@ -70,7 +70,14 @@ def load_nrsur7dq4():
 # the surrogate (e.g. (5,5)) will appear with match=NaN in the output.
 NR_MODES = [(2, 2), (2, 1), (3, 3), (4, 4), (5, 5), (3, 2), (4, 3)]
 
-# Positive-m modes produced by NRSur7dq4 (ellMax=4); subset of NR_MODES.
+# The subset of NR_MODES the per-mode analysis reports.  NOT "the modes
+# NRSur7dq4 produces": the model is precessing and returns every (ell, em) with
+# 2 <= ell <= ellMax, negative m included.  For an aligned-spin binary the
+# negative-m modes are fixed by h_{l,-m} = (-1)^l conj(h_{lm}) and dropping them
+# costs nothing, but precession breaks that symmetry and they become independent
+# signal -- measured on SXS:BBH:1346, |h_{2,-2}| is 0.82 of |h_{2,2}| and this
+# list retains only 59% of sum |h_lm|^2 at peak.  Any sphere-averaged or
+# frame-maximized quantity needs the complete set; pass modes="all".
 SURROGATE_MODES = [(ell, em) for ell, em in NR_MODES if ell <= 4]
 
 # Approximate surrogate minimum frequency in cycles/M (= M * f_GW in seconds).
@@ -226,6 +233,7 @@ def generate_surrogate_modes(
     sim_name: str | None = None,
     catalog=None,
     nr_wfm=None,
+    modes="all",
 ) -> tuple[dict, float]:
     """Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
 
@@ -248,6 +256,12 @@ def generate_surrogate_modes(
         Catalog instance; enables Phase 2 epoch alignment when the catalog is SXS.
     nr_wfm : WaveformModes, optional
         Unused; kept for API compatibility.
+    modes : list[tuple[int, int]] or "all" or None, optional
+        Which modes to return.  ``None`` (default) keeps the historical
+        :data:`SURROGATE_MODES` subset, so existing per-mode results are
+        unchanged.  ``"all"`` returns every mode the model produced, which is
+        what a sphere-averaged or BMS-maximized comparison of a *precessing*
+        binary requires -- see the note on :data:`SURROGATE_MODES`.
 
     Returns
     -------
@@ -384,8 +398,15 @@ def generate_surrogate_modes(
     omega_gw_start = abs(phase22[1] - phase22[0]) / dt_dimless
     f_lower_effective = omega_gw_start / (2.0 * np.pi) / m_secs
 
+    if modes is None:
+        wanted = SURROGATE_MODES
+    elif isinstance(modes, str) and modes == "all":
+        wanted = sorted(h_sur.keys())
+    else:
+        wanted = list(modes)
+
     result = {}
-    for (ell, em) in SURROGATE_MODES:
+    for ell, em in wanted:
         if (ell, em) not in h_sur:
             continue
         h_phys = h_sur[(ell, em)] * amp_scale

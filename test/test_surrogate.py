@@ -219,3 +219,137 @@ def test_generate_surrogate_modes_clips_f_ref_on_omega_error():
         call_count["n"] == 2
     ), "Expected exactly two surrogate calls (initial + retry)"
     assert set(result.keys()) == set(SURROGATE_MODES)
+
+
+# ── generate_surrogate_modes: the `modes` selector ────────────────────────────
+#
+# NRSur7dq4 is a precessing model and returns the complete ell <= 4 block, m
+# from -ell to +ell.  `generate_surrogate_modes` used to discard everything
+# except the six positive-m modes in SURROGATE_MODES.  For an aligned-spin
+# binary that is lossless -- equatorial symmetry gives
+# h_{l,-m} = (-1)^l conj(h_lm), verified against SXS data to 3e-6 for (2,2).
+# Precession breaks that symmetry, so for a precessing binary the discarded
+# modes are independent signal: measured on SXS:BBH:1346 (chi_perp = 0.244),
+# |h_{2,-2}| is 0.85 of |h_{2,2}| at the (2,2) peak.
+#
+# The selector has to satisfy two things at once, and each test below pins one
+# of them: `modes="all"` must return everything, and the *default* must keep
+# returning exactly the old six, because every per-mode table in the analysis
+# iterates SURROGATE_MODES and a silent widening would rewrite all of them.
+
+
+def _mock_surrogate_full_block(n=4096, asymmetric=True):
+    """Mock returning every mode NRSur7dq4 produces at ellMax=4.
+
+    With ``asymmetric``, the m < 0 modes deliberately violate
+    ``h_{l,-m} = (-1)^l conj(h_lm)`` -- which is what precession does to a real
+    waveform.  That lets a test distinguish a mode that was *preserved* from one
+    that could have been reconstructed from its positive-m partner, which is the
+    entire point of carrying them.
+    """
+    t = np.linspace(-1000.0, 100.0, n)
+    envelope = np.exp(-((t - 10.0) ** 2) / (2 * 200.0**2))
+    h_sur = {}
+    for ell in (2, 3, 4):
+        for em in range(-ell, ell + 1):
+            amp = 0.5 / (1.0 + abs(em - 2))
+            wave = amp * envelope * np.exp(1j * em * t / 50.0)
+            if em < 0 and asymmetric:
+                # Break the equatorial relation by a scale and a phase.
+                wave = 0.6 * np.exp(0.7j) * wave
+            h_sur[(ell, em)] = wave.astype(np.complex128)
+    mock = MagicMock()
+    mock.return_value = (t, h_sur, None)
+    return mock
+
+
+def _generate(modes=None):
+    params = _params(q=2.0, chi1x=0.4, chi1z=0.1, chi2z=-0.2)
+    with patch(
+        "nrcats.surrogate.load_nrsur7dq4", return_value=_mock_surrogate_full_block()
+    ):
+        result, _ = generate_surrogate_modes(
+            params,
+            total_mass=60.0,
+            distance=1.0,
+            delta_t_seconds=1.0 / 4096,
+            modes=modes,
+        )
+    return result
+
+
+def test_default_keeps_the_reporting_subset_even_when_more_is_available():
+    """Backwards compatibility, and the reason the selector is opt-in.
+
+    Every per-mode table and figure iterates SURROGATE_MODES.  Widening what the
+    generator returns must not widen those, or every stored result silently
+    changes meaning.
+    """
+    assert set(_generate().keys()) == set(SURROGATE_MODES)
+
+
+def test_modes_all_returns_the_complete_ell4_block():
+    result = _generate(modes="all")
+    expected = {(ell, em) for ell in (2, 3, 4) for em in range(-ell, ell + 1)}
+    assert set(result.keys()) == expected
+    assert len(result) == 21
+    assert any(em < 0 for _, em in result)
+    assert (2, 0) in result  # m = 0 is a real mode, not a placeholder
+
+
+def test_modes_all_returns_timeseries_of_the_right_dtype():
+    for mode, ts in _generate(modes="all").items():
+        assert isinstance(ts, TimeSeries), f"mode {mode} is not a TimeSeries"
+        assert ts.dtype == np.complex128, f"mode {mode} dtype is {ts.dtype}"
+
+
+def test_modes_all_preserves_negative_m_rather_than_reconstructing_it():
+    """The whole point: for a precessing binary these carry independent signal.
+
+    If the negative-m modes were being synthesized from their positive-m
+    partners, they would satisfy ``h_{l,-m} = (-1)^l conj(h_lm)`` exactly.  The
+    mock violates that relation on purpose, so satisfying it here would mean the
+    model's own data had been thrown away and rebuilt from an assumption that is
+    false under precession.
+    """
+    result = _generate(modes="all")
+    for ell, em in [(2, 2), (3, 3), (4, 4)]:
+        got = np.asarray(result[(ell, -em)])
+        reconstructed = ((-1) ** ell) * np.conj(np.asarray(result[(ell, em)]))
+        # Relative, with no absolute floor.  np.allclose would be useless here:
+        # its default atol is 1e-8 and these are physical strains of order
+        # 1e-19, so every pair of modes compares equal to zero and the assertion
+        # passes no matter what the code does.
+        residual = np.linalg.norm(got - reconstructed) / np.linalg.norm(got)
+        assert residual > 1e-3, (
+            f"({ell},{-em}) reproduces the equatorial reconstruction to "
+            f"{residual:.2e}, so the model's own negative-m data was not "
+            "preserved"
+        )
+
+
+def test_modes_all_recovers_power_the_default_discards():
+    """Quantify what the default drops, so the cost is a number and not a claim."""
+    full = _generate(modes="all")
+    subset = _generate()
+    peak = int(np.argmax(np.abs(np.asarray(full[(2, 2)]))))
+    total = sum(abs(np.asarray(v)[peak]) ** 2 for v in full.values())
+    kept = sum(abs(np.asarray(full[k])[peak]) ** 2 for k in subset)
+    assert 0.0 < kept / total < 1.0
+    # The discarded remainder is not a rounding error.
+    assert kept / total < 0.9
+
+
+def test_modes_accepts_an_explicit_list():
+    wanted = [(2, 2), (2, -2), (3, 1)]
+    assert set(_generate(modes=wanted).keys()) == set(wanted)
+
+
+def test_modes_silently_skips_what_the_model_did_not_produce():
+    """Current behaviour, pinned so a change to it is deliberate.
+
+    ``(5, 5)`` is in NR_MODES but outside the surrogate's ellMax=4, so it is
+    dropped rather than raising.
+    """
+    result = _generate(modes=[(2, 2), (5, 5)])
+    assert set(result.keys()) == {(2, 2)}
