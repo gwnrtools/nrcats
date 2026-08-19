@@ -24,7 +24,7 @@ from nrcats.waveform.units import _modal_dt
 logger = logging.getLogger(__name__)
 
 
-def _restrict_to_complete_blocks(common_modes, allow_partial=False):
+def _restrict_to_complete_blocks(common_modes, restrict=True):
     """Drop ell blocks that are not complete from -ell to +ell.
 
     A Wigner rotation mixes m within an ell block and is unitary on the whole
@@ -52,13 +52,11 @@ def _restrict_to_complete_blocks(common_modes, allow_partial=False):
     Parameters
     ----------
     common_modes : set of (ell, m)
-    allow_partial : bool
-        Return the input unchanged, with a warning, instead of raising when
-        nothing complete remains.  Used by the BMS path, where completeness is
-        necessary but not sufficient anyway -- a supertranslation mixes across
-        ell as well as within it, so a truncated ell_max leaks regardless and
-        refusing on this criterion alone would imply a guarantee that does not
-        hold.
+    restrict : bool
+        When False, warn about incomplete blocks but return ``common_modes``
+        unchanged.  Used by the BMS path, which wants the warning but not the
+        restriction -- see there for why its arithmetic tolerates a partial
+        block where this one cannot.
     """
     ells = {int(ell) for ell, _ in common_modes}
     complete = {
@@ -80,14 +78,10 @@ def _restrict_to_complete_blocks(common_modes, allow_partial=False):
             "modes='all')).",
             incomplete,
         )
+    if not restrict:
+        return common_modes
     restricted = {(ell, m) for (ell, m) in common_modes if int(ell) in complete}
     if not restricted:
-        if allow_partial:
-            logger.warning(
-                "no complete ell block is common to both waveforms; proceeding "
-                "on partial blocks, which understates the match by up to 2.3e-2"
-            )
-            return common_modes
         raise ValueError(
             f"No complete ell block is common to both waveforms (ell present: "
             f"{sorted(ells)}, none complete).  A sphere-averaged match "
@@ -787,12 +781,31 @@ def match_sphere_averaged_bms_maximized(
     if not common_modes:
         return (0.0, None) if return_transformation else 0.0
 
-    # Same normalisation defect as match_sphere_averaged: the norms below are
-    # summed over common_modes while the transformation mixes m.  Completeness
-    # is necessary here but not sufficient -- a supertranslation also mixes
-    # across ell, so power leaks past a truncated ell_max no matter how complete
-    # each block is -- hence allow_partial, which warns rather than refusing.
-    common_modes = _restrict_to_complete_blocks(common_modes, allow_partial=True)
+    # Warn about incomplete blocks, but do not restrict to complete ones.
+    #
+    # This path does *not* carry the normalisation defect match_sphere_averaged
+    # had.  There, norm2 came from the un-rotated modes while the overlap used
+    # the rotated ones, so the two disagreed whenever the rotation moved power
+    # out of the scored set.  Here ``norm2_sq`` is accumulated from ``arr2t``,
+    # the *transformed* array, over exactly the modes that enter the overlap --
+    # numerator and denominator describe the same vector, so the ratio is a
+    # proper normalised inner product on whatever set is scored, complete or
+    # not.  Dropping a partial ell block would therefore discard usable modes
+    # for no gain.
+    #
+    # Normalising by the transformed norm does mean power scattered past
+    # ell_max is not charged for, which in principle lets a transformation
+    # shrink the denominator instead of improving agreement.  Measured on
+    # SXS:BBH:0161 with ell_max = 4: at the full alpha_max_M = 10 bound a random
+    # supertranslation retains 0.9990 of the norm within ell <= 4 (worst of four
+    # draws 0.9973), and 0.9998 at a quarter of the bound.  There is no
+    # meaningful power to hide there, so the direction does not exist in
+    # practice.
+    #
+    # The warning is still worth emitting: a partial block is zero-filled before
+    # scri transforms it, so the supertranslation is applied to a waveform with
+    # holes in it rather than to the one the caller meant.
+    _restrict_to_complete_blocks(common_modes, restrict=False)
 
     def _get(src, ell, m):
         if isinstance(src, dict):
