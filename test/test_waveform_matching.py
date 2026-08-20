@@ -107,12 +107,23 @@ def test_compute_mode_match_zero_sur_waveform():
     assert np.isnan(mm)
 
 
-def test_compute_mode_match_non_overlapping_time_windows():
-    """Waveforms that don't share a time window should return NaN."""
+def test_compute_mode_match_ignores_the_epoch():
+    """Disjoint epochs no longer produce NaN: alignment is epoch-independent.
+
+    Both alignment backends align on waveform content -- the merger index or
+    the cross-correlation lag -- and discard the epoch, so two signals that
+    share no absolute time window still align and match.  The epoch is a
+    translation-invariant label and a match maximised over time shifts should
+    not depend on it, so this is the intended behaviour; it is asserted because
+    it reverses what this test previously required.
+    """
     h1 = _real_ts(epoch=0.0)  # t ∈ [0, 2)
-    h2 = _real_ts(epoch=3.0)  # t ∈ [3, 5) — no overlap
+    h2 = _real_ts(epoch=3.0)  # t ∈ [3, 5) — disjoint in absolute time
     mm = compute_mode_match(h1, h2, f_lower_mode=20.0)
-    assert np.isnan(mm)
+    assert not np.isnan(mm)
+    # The two are the same signal, so the match is 1 up to roundoff; pycbc can
+    # return a few ULP above unity, hence the tolerance rather than mm <= 1.0.
+    assert mm == pytest.approx(1.0, abs=1e-12)
 
 
 def test_compute_mode_match_in_range():
@@ -158,11 +169,12 @@ def test_phase_diff_zero_norm_second_arg():
     assert np.isnan(diff) and np.isnan(n_cyc)
 
 
-def test_phase_diff_non_overlapping_time_windows():
+def test_phase_diff_ignores_the_epoch():
+    """Same epoch-independence for the phase metric -- see the match test above."""
     h1 = _complex_ts(epoch=0.0)
     h2 = _complex_ts(epoch=3.0)
     diff, n_cyc = compute_phase_diff_per_cycle(h1, h2)
-    assert np.isnan(diff) and np.isnan(n_cyc)
+    assert not np.isnan(diff) and not np.isnan(n_cyc)
 
 
 def test_phase_diff_too_few_cycles_returns_nan():

@@ -9,8 +9,12 @@ from nrcats.waveform.matching import (  # noqa: F401
     interpolate_in_amp_phase,
     load_psd,
     compute_mode_match,
+    compute_mode_match_detailed,
     compute_phase_diff_per_cycle,
     mode_f_lower,
+    ModeMatchResult,
+    MIN_CYCLES_AT_BAND_EDGE,
+    MIN_BINS_IN_BAND,
 )
 from nrcats.waveform.units import ELL_MIN, ELL_MAX, _modal_dt  # noqa: F401
 
@@ -20,8 +24,12 @@ __all__ = [
     "interpolate_in_amp_phase",
     "load_psd",
     "compute_mode_match",
+    "compute_mode_match_detailed",
     "compute_phase_diff_per_cycle",
     "mode_f_lower",
+    "ModeMatchResult",
+    "MIN_CYCLES_AT_BAND_EDGE",
+    "MIN_BINS_IN_BAND",
     "ELL_MIN",
     "ELL_MAX",
     "_modal_dt",

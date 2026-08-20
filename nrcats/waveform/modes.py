@@ -4,7 +4,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-import warnings
 
 import h5py
 import lal
@@ -14,7 +13,6 @@ import spherical
 from pycbc.types import TimeSeries
 from pycbc.waveform import frequency_from_polarizations
 from scipy.interpolate import InterpolatedUnivariateSpline
-from sxs import TimeSeries as sxs_TimeSeries
 from sxs import WaveformModes as sxs_WaveformModes
 
 from nrcats import metadata as md
@@ -24,6 +22,7 @@ from nrcats.lvc import (
     get_nr_to_lal_rotation_angles,
     get_ref_vals,
 )
+from nrcats.waveform import modes_worker
 from nrcats.waveform.units import _modal_dt
 
 
@@ -420,61 +419,18 @@ class WaveformModes(sxs_WaveformModes):
         -------
         pycbc.types.TimeSeries or sxs.TimeSeries
         """
-        if delta_t_seconds is not None and delta_t_Msun is not None:
-            raise ValueError(
-                "Provide only one of `delta_t_seconds` or `delta_t_Msun`, not both."
-            )
-
-        m_secs = utils.time_to_physical(total_mass)
-
-        if delta_t_seconds is not None:
-            dt_physical = delta_t_seconds
-            dt_dimless = delta_t_seconds / m_secs
-        elif delta_t_Msun is not None:
-            dt_dimless = delta_t_Msun
-            dt_physical = delta_t_Msun * m_secs
-        else:
-            if delta_t is not None:
-                warnings.warn(
-                    "The `delta_t` parameter of get_mode() is deprecated and will be "
-                    "removed in a future release. Use `delta_t_seconds` for physical "
-                    "seconds or `delta_t_Msun` for dimensionless M units instead.",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
-            else:
-                delta_t = _modal_dt(self.time)
-            if delta_t > 1.0 / 128:
-                dt_dimless = delta_t
-                dt_physical = delta_t * m_secs
-            else:
-                dt_physical = delta_t
-                dt_dimless = delta_t / m_secs
-
-        new_time_start = min(self.time)
-        if t_relax is not None:
-            new_time_start = max(new_time_start, float(t_relax))
-        new_time = np.arange(new_time_start, max(self.time), dt_dimless)
-
-        mode_data = np.array(self.data[:, self.index(ell, em)], dtype=complex)
-        mode_ts = sxs_TimeSeries(mode_data, time=self.time)
-        interpolated_mode_ts = mode_ts.interpolate(new_time)
-
-        h_mode_complex = np.array(interpolated_mode_ts.data, dtype=complex)
-        h_mode_complex *= utils.amp_to_physical(total_mass, distance)
-
-        peak_time_sec = self.peak_time_22 * m_secs
-        start_time_sec = new_time[0] * m_secs
-        epoch = start_time_sec - peak_time_sec
-
-        retval = self.to_pycbc(
-            input_array=h_mode_complex,
-            delta_t=dt_physical,
-            epoch=epoch,
+        return modes_worker.get_mode(
+            self,
+            ell=ell,
+            em=em,
+            total_mass=total_mass,
+            distance=distance,
+            delta_t=delta_t,
+            to_pycbc=to_pycbc,
+            delta_t_seconds=delta_t_seconds,
+            delta_t_Msun=delta_t_Msun,
+            t_relax=t_relax,
         )
-        if not to_pycbc:
-            retval = sxs_TimeSeries(retval.data, time=retval.sample_times)
-        return retval
 
     def f_lower_at_1Msun(self, t=None):
         """Return the instantaneous GW frequency of the (2,2) mode at 1 M☉.
@@ -616,60 +572,23 @@ class WaveformModes(sxs_WaveformModes):
         -------
         pycbc.types.TimeSeries (complex128)
         """
-        from nrcats.waveform.matching import interpolate_in_amp_phase
-
-        if delta_t_seconds is not None and delta_t_Msun is not None:
-            raise ValueError(
-                "Provide only one of `delta_t_seconds` or `delta_t_Msun`, not both."
-            )
-
-        m_secs = utils.time_to_physical(total_mass)
-
-        if delta_t_seconds is not None:
-            dt_dimless = delta_t_seconds / m_secs
-        elif delta_t_Msun is not None:
-            dt_dimless = delta_t_Msun
-        else:
-            if delta_t is not None:
-                warnings.warn(
-                    "The `delta_t` parameter of get_td_waveform() is deprecated and "
-                    "will be removed in a future release. Use `delta_t_seconds` for "
-                    "physical seconds or `delta_t_Msun` for dimensionless M units.",
-                    DeprecationWarning,
-                    stacklevel=2,
-                )
-            else:
-                delta_t = _modal_dt(self.time)
-            if delta_t > 1.0 / 128:
-                dt_dimless = delta_t
-            else:
-                dt_dimless = delta_t / m_secs
-
-        new_time_start = min(self.time)
-        if t_relax is not None:
-            new_time_start = max(new_time_start, float(t_relax))
-        new_time = np.arange(new_time_start, max(self.time), dt_dimless)
-
-        angles = self.get_angles(
+        return modes_worker.get_td_waveform(
+            self,
+            total_mass=total_mass,
+            distance=distance,
             inclination=inclination,
             coa_phase=coa_phase,
+            delta_t=delta_t,
             f_ref=f_ref,
             t_ref=t_ref,
-            tol=tol,
-        )
-        h = interpolate_in_amp_phase(
-            self.evaluate([angles["theta"], angles["psi"], angles["alpha"]]),
-            new_time,
             k=k,
             kind=kind,
-        ) * utils.amp_to_physical(total_mass, distance)
-
-        h.time *= m_secs
-
-        if lal_convention:
-            return self.to_pycbc(h)
-        else:
-            return self.to_pycbc(np.conjugate(h))
+            tol=tol,
+            lal_convention=lal_convention,
+            delta_t_seconds=delta_t_seconds,
+            delta_t_Msun=delta_t_Msun,
+            t_relax=t_relax,
+        )
 
     def get_angles(self, inclination, coa_phase, f_ref=None, t_ref=None, tol=1e-6):
         """Get the inclination, azimuthal and polarization angles
@@ -830,18 +749,30 @@ class WaveformModes(sxs_WaveformModes):
         wigner = spherical.Wigner(self.ell_max)
         rotated_data = np.zeros_like(self.data)
 
+        # spherical.Wigner.D(R) returns the whole flat D array, indexed by
+        # Dindex(ell, m, mp); there is no per-ell D(R, ell) overload, and there
+        # is no `ells` attribute on this class or on sxs.WaveformModes.  Both
+        # were called here, so every path through this method raised
+        # AttributeError.  This is the same construction match_sphere_averaged
+        # uses, which is exercised by the sphere-averaged tests.
+        D_full = wigner.D(R)
+
         for ell in range(self.ell_min, self.ell_max + 1):
-            if ell not in self.ells:
-                continue
             l_modes_indices = np.where(self.LM[:, 0] == ell)[0]
             if len(l_modes_indices) == 0:
                 continue
-            l_modes = self.data[:, l_modes_indices]
-            D = wigner.D(R, ell)
-            rotated_data[:, l_modes_indices] = l_modes @ D
+            D_ell = np.zeros((2 * ell + 1, 2 * ell + 1), dtype=complex)
+            for i, m in enumerate(range(-ell, ell + 1)):
+                for j, mp in enumerate(range(-ell, ell + 1)):
+                    D_ell[i, j] = D_full[wigner.Dindex(ell, m, mp)]
+            rotated_data[:, l_modes_indices] = self.data[:, l_modes_indices] @ D_ell
 
-        rotated_self.data = rotated_data
-        rotated_self.frame = R * self.frame
+        # `data` and `frame` are both read-only properties; the array buffer is
+        # shared with the object itself, and frame lives in the metadata dict
+        # that sxs propagates.  Assigning to either attribute, as this did,
+        # raised AttributeError.
+        np.asarray(rotated_self)[:] = rotated_data
+        rotated_self._metadata["frame"] = R * self.frame
         return rotated_self
 
     def rotate_frame(self, R):
@@ -863,7 +794,6 @@ class WaveformModes(sxs_WaveformModes):
             A new WaveformModes object rotated to the J-frame.
         """
         import numpy as np
-        import quaternionic
 
         J = np.array(J_vector, dtype=float)
         norm_J = np.linalg.norm(J)
@@ -897,58 +827,91 @@ class WaveformModes(sxs_WaveformModes):
         f_lower,
         delta_t=1.0 / 4096,
         f_upper=None,
+        total_mass=1.0,
+        distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
     ):
         """Compute the noise-weighted match for a single spherical harmonic mode.
+
+        Thin object-oriented entry point to
+        :func:`~nrcats.waveform.matching.compute_mode_match`: this method
+        extracts the ``(ell, em)`` mode from both waveforms and hands the pair
+        to that function, which performs the match itself.
+
+        .. versionchanged::
+           Previously this filtered the modes directly.  That path zero-padded
+           the shorter mode to the length of the longer one instead of
+           restricting to the window the two share, so a model waveform that
+           started later was penalised for signal it never claimed to cover --
+           an artifact of the same order as the mismatches being measured.  It
+           also never forwarded ``total_mass``, so the modes were always built
+           at 1 solar mass regardless of the system, and it required the caller
+           to supply a PSD at a ``delta_f`` that could not be known in advance.
+           All three are fixed by delegating.  **Values returned by this method
+           have changed accordingly.**
 
         Parameters
         ----------
         other : WaveformModes or dict
-            The second waveform.
+            The second waveform.  A dict maps ``(ell, em)`` to a PyCBC
+            TimeSeries (or a tuple whose first element is one).
         ell, em : int
             Spherical harmonic indices.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise PSD.
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise PSD.  Resampled onto the grid actually integrated,
+            so its ``delta_f`` need not match.  Pass ``None`` to build one from
+            ``psd_name`` instead.
         f_lower : float
-            Orbital reference frequency in Hz.
+            Reference GW frequency of the (2,2) mode in Hz.  The cutoff for
+            this mode is derived from it via
+            :func:`~nrcats.waveform.matching.mode_f_lower`.
         delta_t : float, optional
             Sample spacing in physical seconds (default 1/4096).
         f_upper : float, optional
             Upper frequency cutoff in Hz.
+        total_mass : float, optional
+            Total mass in solar masses (default 1.0) used to scale both modes.
+        distance : float, optional
+            Luminosity distance in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`; pass 0
+            to disable.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window is located.
 
         Returns
         -------
         float
-            Match value in [0, 1].
+            Match value in [0, 1], or NaN when the mode carries no signal, the
+            waveforms do not overlap, or the band cannot be resolved.  Use
+            :func:`~nrcats.waveform.matching.compute_mode_match_detailed` to
+            tell those cases apart.
+
+        See Also
+        --------
+        nrcats.waveform.matching.compute_mode_match_detailed
         """
-        from pycbc.filter import match as pycbc_match
-
-        h1 = self.get_mode(ell, em, to_pycbc=True, delta_t_seconds=delta_t).real()
-
-        if isinstance(other, dict):
-            if (ell, em) not in other:
-                raise KeyError(f"Mode ({ell}, {em}) not found in other waveform dict.")
-            val = other[(ell, em)]
-            h2 = val[0] if isinstance(val, (tuple, list)) else val.real()
-        else:
-            h2 = other.get_mode(ell, em, to_pycbc=True, delta_t_seconds=delta_t).real()
-
-        target_len = max(len(h1), len(h2))
-        h1.resize(target_len)
-        h2.resize(target_len)
-
-        psd_copy = psd.copy()
-        psd_copy.resize(len(h1.to_frequencyseries()))
-
-        mode_f_lower = f_lower * abs(em) / 2.0 if em != 0 else f_lower
-
-        mm, _ = pycbc_match(
-            h1,
-            h2,
-            psd=psd_copy,
-            low_frequency_cutoff=mode_f_lower,
-            high_frequency_cutoff=f_upper,
+        return modes_worker.match_single_mode(
+            self,
+            other=other,
+            ell=ell,
+            em=em,
+            psd=psd,
+            f_lower=f_lower,
+            delta_t=delta_t,
+            f_upper=f_upper,
+            total_mass=total_mass,
+            distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
         )
-        return float(mm)
 
     def match_sphere_averaged(
         self,
@@ -960,6 +923,10 @@ class WaveformModes(sxs_WaveformModes):
         return_rotation=False,
         total_mass=1.0,
         distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
+        taper_fraction=None,
     ):
         r"""Calculate the match (noise-weighted overlap) between this waveform
         and another, integrated over all observer directions on the sphere
@@ -1009,7 +976,8 @@ class WaveformModes(sxs_WaveformModes):
         -----------------------------
         Because the two waveforms may be defined in different coordinate systems (source frames)
         and have arbitrary reference times/phases, we align the target waveform $h_2$ to $h_1$
-        by active/passive rigid rotation $R \in SO(3)$, time translation $t_c$, and coalescence phase shift $\phi_c$:
+        by active/passive rigid rotation $R \in SO(3)$, time translation $t_c$, and an
+        overall phase $\alpha$:
         1. **Rotation ($R$)**: Rotates the modes using Wigner D-matrices:
            $$
            h_{2, \ell m}^{\mathrm{rot}}(t) = \sum_{m'=-\ell}^{\ell} h_{2, \ell m'}(t) \, D^{\ell}_{m' m}(R)
@@ -1017,18 +985,18 @@ class WaveformModes(sxs_WaveformModes):
 
         2. **Time Shift ($t_c$)**: Shifts time via $t \to t - t_c$,
            implemented efficiently as a linear phase in the frequency domain.
-        3. **Phase Shift ($\phi_c$)**: Twist around the rotated $z$-axis via:
-           $$
-           h_{2, \ell m}^{\mathrm{rot, shifted}}(t) \to e^{-i m \phi_c} \, h_{2, \ell m}^{\mathrm{rot}}(t - t_c)
-           $$
+        3. **Coalescence phase**: *not* a separate parameter.  A twist about the rotated
+           $z$-axis, $h_{2,\ell m} \to e^{-i m \phi_c} h_{2,\ell m}$, is precisely what the
+           third Euler angle of $R$ already does, so it is subsumed into $R$.
 
         The method then returns the maximized match (overlap):
 
         $$
-        \mathcal{O}_{\mathrm{max}} = \max_{t_c, \phi_c, R \in SO(3)} \left[
+        \mathcal{O}_{\mathrm{max}} =
+        \max_{t_c, \alpha, R \in SO(3)} \left|
         \frac{
             \sum_{\ell, m} \langle h_{1, \ell m} \mid
-            h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, \phi_c, R) \rangle_t
+            e^{i\alpha} h_{2, \ell m}^{\mathrm{rot, shifted}}(t_c, R) \rangle_t
         }{
             \sqrt{
                 \left( \sum_{\ell, m} \langle h_{1, \ell m} \mid
@@ -1036,22 +1004,40 @@ class WaveformModes(sxs_WaveformModes):
                 \left( \sum_{\ell, m} \langle h_{2, \ell m} \mid
                 h_{2, \ell m} \rangle_t \right)
             }
-        } \right]
+        } \right|
         $$
 
+        4. **Overall phase ($\alpha$)**: a single constant phase applied to every mode,
+           $h_{\ell m} \to e^{i\alpha} h_{\ell m}$, which is the polarization angle
+           $\alpha = 2\psi$.  It is maximized analytically by taking the modulus of the
+           overlap.  This is *not* reachable by any $R \in SO(3)$: the Wigner matrices mix
+           $m$ within an $\ell$ block but never scale the block by a phase.
+
         The maximization over $t_c$ is performed efficiently using Fast Fourier Transforms (FFTs),
-        $\phi_c$ is maximized analytically, and the SO(3) rotation $R$ (parameterized by
-        Euler angles $\alpha, \beta, \gamma$) is optimized using the differential evolution algorithm.
+        $\alpha$ is maximized analytically, and the SO(3) rotation $R$
+        (parameterized by Euler angles) is optimized using the differential evolution algorithm.
+
+        .. note::
+           There is no separate $\phi_c$ parameter.  A twist about $z$ is already the
+           third Euler angle, so the two entered the objective only through their sum and
+           were exactly degenerate (verified to 3e-16).  The search is over three angles,
+           and the returned rotation describes the whole transformation.
+
+           The result is never worse than the identity: the search is seeded there and the
+           two are compared before returning.
 
         Parameters
         ----------
         other : WaveformModes or dict
             The second waveform to compare against. Can be a `WaveformModes` object or a dict
             of PyCBC TimeSeries modes.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise power spectral density (PSD).
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise power spectral density (PSD).  Resampled onto the
+            frequency grid actually integrated, so its ``delta_f`` need not
+            match anything; pass ``None`` to build one from ``psd_name``.
         f_lower : float
-            Lower frequency cutoff in Hz.
+            Lower frequency cutoff in Hz.  Raised if the common window cannot
+            resolve it, or if the PSD has no support that low.
         f_upper : float, optional
             Upper frequency cutoff in Hz. If None, the Nyquist frequency of the PSD is used.
         delta_t : float, optional
@@ -1063,6 +1049,28 @@ class WaveformModes(sxs_WaveformModes):
             Total mass of the binary system in solar masses (default 1.0).
         distance : float, optional
             Luminosity distance to the source in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`; 0
+            disables the raise.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window shared by all modes is located.
+        taper_fraction : float, optional
+            Fraction of the window over which the start taper rises.  ``None``
+            uses :data:`~nrcats.waveform.matching.TAPER_FRACTION`.
+
+        Notes
+        -----
+        Both waveforms are restricted to the time window they share, located
+        from the reference mode and applied identically to every mode, then
+        start-tapered before transforming.  Windowing each mode on its own peak
+        would move modes relative to one another, and that relative phase is
+        what the SO(3) rotation is fitted to.  Without the shared window a
+        model waveform that simply starts later is charged for signal it never
+        claimed to cover.
 
         Returns
         -------
@@ -1071,156 +1079,21 @@ class WaveformModes(sxs_WaveformModes):
             If `return_rotation` is True, returns `(match, R_opt)` where `R_opt` is the
             optimal `quaternionic.array` unit quaternion representing the rotation.
         """
-        import numpy as np
-        from scipy.optimize import differential_evolution
-        from scipy.fft import fft, ifft
-        import quaternionic
-        import spherical
-
-        # Compute overlapping frequency range
-        df = psd.delta_f
-        low_idx = int(f_lower / df) if f_lower else 0
-        high_idx = int(np.ceil(f_upper / df)) if f_upper else len(psd)
-
-        if isinstance(other, dict):
-            other_LM = list(other.keys())
-        else:
-            other_LM = list(map(tuple, other.LM))
-
-        common_modes = set(map(tuple, self.LM)) & set(other_LM)
-        if not common_modes:
-            return (0.0, None) if return_rotation else 0.0
-
-        h1_ts_dict = {}
-        h2_ts_dict = {}
-
-        # Load modes and align lengths
-        for ell, m in common_modes:
-            h1_ts_dict[(ell, m)] = self.get_mode(
-                ell,
-                m,
-                total_mass=total_mass,
-                distance=distance,
-                to_pycbc=True,
-                delta_t_seconds=delta_t,
-            )
-            if isinstance(other, dict):
-                h2_ts_dict[(ell, m)] = other[(ell, m)]
-            else:
-                h2_ts_dict[(ell, m)] = other.get_mode(
-                    ell,
-                    m,
-                    total_mass=total_mass,
-                    distance=distance,
-                    to_pycbc=True,
-                    delta_t_seconds=delta_t,
-                )
-
-        # Determine required length to match PSD's delta_f
-        N_pad = int(np.round(1.0 / (df * delta_t)))
-
-        # Build two-sided PSD array
-        psd_full = np.ones(N_pad) * np.inf
-        psd_len = N_pad // 2 + 1
-        for i in range(low_idx, min(high_idx, len(psd))):
-            if i < psd_len:
-                val = psd.data[i]
-                if val > 0:
-                    psd_full[i] = val
-                    if i > 0 and (N_pad - i) < N_pad:
-                        psd_full[N_pad - i] = val
-
-        # Compute full complex FFTs, zero-padded to N_pad
-        h1_f_dict = {}
-        h2_f_dict = {}
-        for k in common_modes:
-            ts1 = h1_ts_dict[k].data
-            ts2 = h2_ts_dict[k].data
-
-            # Zero-pad arrays to N_pad
-            pad1 = np.zeros(N_pad, dtype=complex)
-            pad2 = np.zeros(N_pad, dtype=complex)
-
-            pad1[: len(ts1)] = ts1
-            pad2[: len(ts2)] = ts2
-
-            h1_f_dict[k] = fft(pad1)
-            h2_f_dict[k] = fft(pad2)
-
-        wigner = spherical.Wigner(self.ell_max)
-        ells_in_common = set(ell for ell, m in common_modes)
-
-        def objective_function(x):
-            phi_c, alpha, beta, gamma = x
-            R = quaternionic.array.from_euler_angles(alpha, beta, gamma)
-            D_full = wigner.D(R)
-
-            total_norm1_sq = 0.0
-            total_norm2_sq = 0.0
-            for k in common_modes:
-                total_norm1_sq += df * np.sum((np.abs(h1_f_dict[k]) ** 2) / psd_full)
-                total_norm2_sq += df * np.sum((np.abs(h2_f_dict[k]) ** 2) / psd_full)
-
-            if total_norm1_sq == 0 or total_norm2_sq == 0:
-                return 1.0
-
-            I_f_full = np.zeros(N_pad, dtype=complex)
-
-            for ell in ells_in_common:
-                D_ell = np.zeros((2 * ell + 1, 2 * ell + 1), dtype=complex)
-                for i, m in enumerate(range(-ell, ell + 1)):
-                    for j, mp in enumerate(range(-ell, ell + 1)):
-                        D_ell[i, j] = D_full[wigner.Dindex(ell, m, mp)]
-
-                h2_matrix = np.zeros((N_pad, 2 * ell + 1), dtype=complex)
-                for i, m in enumerate(range(-ell, ell + 1)):
-                    if (ell, m) in h2_f_dict:
-                        h2_matrix[:, i] = h2_f_dict[(ell, m)]
-
-                h2_rot_matrix = h2_matrix @ D_ell
-
-                for j, m in enumerate(range(-ell, ell + 1)):
-                    if (ell, m) not in common_modes:
-                        continue
-                    term = (
-                        h1_f_dict[(ell, m)] * np.conj(h2_rot_matrix[:, j])
-                    ) / psd_full
-                    term *= np.exp(1j * m * phi_c)
-                    I_f_full += term
-
-            _q = ifft(I_f_full)
-            max_inner_prod = df * N_pad * np.max(np.real(_q))
-
-            overlap = max_inner_prod / np.sqrt(total_norm1_sq * total_norm2_sq)
-            if np.isnan(overlap):
-                return 1.0
-
-            return 1.0 - overlap
-
-        bounds = [(0, 2 * np.pi), (0, 2 * np.pi), (0, np.pi), (0, 2 * np.pi)]
-
-        identity_mismatch = objective_function([0.0, 0.0, 0.0, 0.0])
-        logger.info(
-            f"      [DEBUG] Sphere-averaged match at Identity Rotation: {1.0 - identity_mismatch:.6f}"
+        return modes_worker.match_sphere_averaged(
+            self,
+            other=other,
+            psd=psd,
+            f_lower=f_lower,
+            f_upper=f_upper,
+            delta_t=delta_t,
+            return_rotation=return_rotation,
+            total_mass=total_mass,
+            distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
+            taper_fraction=taper_fraction,
         )
-
-        result = differential_evolution(
-            objective_function,
-            bounds,
-            popsize=10,
-            maxiter=50,
-            tol=1e-3,
-            mutation=(0.5, 1.0),
-            recombination=0.7,
-        )
-        match = 1.0 - result.fun
-
-        if return_rotation:
-            R_opt = quaternionic.array.from_euler_angles(
-                result.x[1], result.x[2], result.x[3]
-            )
-            return match, R_opt
-        return match
 
     def match_sphere_averaged_bms_maximized(
         self,
@@ -1229,6 +1102,20 @@ class WaveformModes(sxs_WaveformModes):
         f_lower,
         f_upper=None,
         j_max=1,
+        delta_t=1.0 / 4096,
+        total_mass=1.0,
+        distance=1.0,
+        psd_name="aLIGOZeroDetHighPower",
+        min_cycles=None,
+        alignment="peak",
+        taper_fraction=None,
+        alpha_max_M=10.0,
+        seed_rotation=True,
+        n_coarse=128,
+        n_starts=3,
+        maxfev=800,
+        seed=None,
+        return_transformation=False,
     ):
         r"""Calculate the match maximized over BMS supertranslations in addition to
         standard time shift, phase shift, and SO(3) rotation.
@@ -1275,8 +1162,9 @@ class WaveformModes(sxs_WaveformModes):
         ----------
         other : WaveformModes
             The second waveform to compare against.
-        psd : pycbc.types.FrequencySeries
-            One-sided noise power spectral density (PSD).
+        psd : pycbc.types.FrequencySeries or None
+            One-sided noise power spectral density (PSD).  Resampled onto the
+            grid actually integrated; ``None`` builds one from ``psd_name``.
         f_lower : float
             Lower frequency cutoff in Hz.
         f_upper : float, optional
@@ -1284,129 +1172,106 @@ class WaveformModes(sxs_WaveformModes):
         j_max : int, optional
             Maximum spherical-harmonic order of the supertranslation field to optimize
             (default 1, which corresponds to time translation + spatial translation).
+        delta_t : float, optional
+            Sample spacing in physical seconds (default 1/4096).
+        total_mass : float, optional
+            Total mass in solar masses (default 1.0) used to scale both waveforms.
+        distance : float, optional
+            Luminosity distance in Mpc (default 1.0).
+        psd_name : str, optional
+            PyCBC analytic PSD name, used only when ``psd`` is None.
+        min_cycles : float, optional
+            Cycles at the band edge the common window must contain before the
+            cutoff is raised.  ``None`` uses
+            :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`.
+        alignment : {'peak', 'crosscorr'}, optional
+            How the common window shared by all modes is located.
+        taper_fraction : float, optional
+            Fraction of the window over which the start taper rises.
+        alpha_max_M : float, optional
+            Bound on each supertranslation coefficient, in units of the total
+            mass M (default 10).  Mass-independent by construction; converted
+            to seconds internally.  ``u' = u - alpha`` costs data at both ends,
+            so a supertranslation much larger than the usable window cannot be
+            tested on the data at all.
+        seed_rotation : bool, optional
+            Seed the search from the rotation-only maximization (default True).
+            That search is cheap and finds a large frame offset, which a local
+            simplex started at the identity will not; NR and model mode sets
+            routinely differ by one.
+        n_coarse : int, optional
+            Quasi-random (Sobol) supertranslation samples used to bracket the
+            optimum before any local search (default 128).  The objective is a
+            broad shallow plateau with a narrow deep well at the answer, so the
+            coarse pass is what finds the well; a global population method
+            spreads over the plateau and stalls.  Pass 0 to start only from the
+            identity.
+        n_starts : int, optional
+            How many of the best coarse samples to polish (default 3), on top of
+            the identity, which is always polished.
+        maxfev : int, optional
+            Objective evaluations allowed per local polish (default 800).  Cost
+            is dominated by one exact ``scri`` grid transformation per
+            evaluation, measured at ~250 ms for a 4096-sample, ell_max=3
+            waveform, so these three numbers decide the runtime.
+        seed : int or None, optional
+            Seed for the optimizer, for reproducible results.
+        return_transformation : bool, optional
+            If True, return ``(match, info)`` where ``info`` carries the fitted
+            supertranslation (complex coefficients and the real parameters in
+            units of M), the frame rotation, and the match at the identity.
+
+        .. versionchanged::
+           The supertranslation is now applied by ``scri``'s **exact** grid
+           transformation rather than a first-order expansion in Gaunt
+           coefficients.  The previous implementation called
+           ``scri.coupling_coefficients``, which does not exist in current scri,
+           so no ``j_max >= 1`` call could ever have run.  Working to first
+           order also made the transformation only approximately a BMS group
+           element, which is the wrong tool for asking whether two waveforms are
+           related by one.  ``ell = 0`` remains excluded from the search: a
+           rigid time translation is maximized exactly and for free by the FFT
+           over ``t_c``.
+
+        .. versionchanged::
+           This method previously raised ``TypeError`` for every input: it fed
+           complex modes to ``pycbc``'s ``to_frequencyseries``, which rejects
+           them.  It now transforms with ``scipy.fft`` over the full two-sided
+           spectrum.  That matters beyond simply running -- ``h_lm`` is complex,
+           so its spectrum is not conjugate-symmetric, and for ``m > 0`` the
+           signal sits at negative frequencies, which the previous
+           positive-frequency-only integral would have discarded.  It also
+           gained the merger-aligned common window, the start taper and the
+           PSD handling used by :meth:`match_sphere_averaged`, and no longer
+           builds its modes at a hardcoded 1 solar mass.
 
         Returns
         -------
         float
             Maximum match value in $[0, 1]$.
         """
-        from scipy.optimize import minimize
-
-        try:
-            import scri
-        except ImportError as e:
-            raise ImportError(
-                "The 'scri' package is required for BMS supertranslation optimization. "
-                "Install it with: pip install scri"
-            ) from e
-
-        alpha_jk_indices = [
-            (j, k) for j in range(1, j_max + 1) for k in range(-j, j + 1)
-        ]
-
-        max_len = 0
-        for ell, m in self.LM:
-            max_len = max(
-                max_len,
-                len(self.get_mode(ell, m, to_pycbc=True, delta_t_seconds=1 / 4096)),
-            )
-
-        ref_mode_ts = self.get_mode(2, 2, to_pycbc=True, delta_t_seconds=1 / 4096)
-        ref_mode_ts.resize(max_len)
-        ref_fs = ref_mode_ts.to_frequencyseries()
-        freqs = ref_fs.sample_frequencies
-        delta_f = ref_fs.delta_f
-
-        self_modes_tilde = {}
-        self_modes_dot_tilde = {}
-        for ell, m in self.LM:
-            h_ts = self.get_mode(ell, m, to_pycbc=True, delta_t_seconds=1 / 4096)
-            h_ts.resize(max_len)
-            h_tilde = h_ts.to_frequencyseries(delta_f=delta_f)
-            self_modes_tilde[(ell, m)] = h_tilde
-            h_dot_tilde = h_tilde.copy()
-            h_dot_tilde.data *= 1j * 2 * np.pi * freqs
-            self_modes_dot_tilde[(ell, m)] = h_dot_tilde
-
-        def objective_function(x):
-            time_shift, phi_c, alpha, beta, gamma = x[:5]
-            alpha_jk_values = x[5:]
-            alpha_jk_coeffs = dict(zip(alpha_jk_indices, alpha_jk_values))
-
-            R = quaternionic.array.from_euler_angles(alpha, beta, gamma)
-            other_rot = other.rotated(R)
-
-            total_inner_prod = 0.0
-            total_norm1_sq = 0.0
-            total_norm2_sq = 0.0
-
-            common_modes = set(map(tuple, self.LM)) & set(map(tuple, other_rot.LM))
-
-            self_modes_tilde_st = {}
-            for ell, m in common_modes:
-                h1_tilde = self_modes_tilde[(ell, m)]
-                st_correction = np.zeros_like(h1_tilde.data, dtype=complex)
-
-                for (j, k), alpha_jk in alpha_jk_coeffs.items():
-                    for p, q in self.LM:
-                        G = scri.coupling_coefficients(
-                            s_prime=-2,
-                            l_prime=ell,
-                            m_prime=m,
-                            s1=0,
-                            l1=j,
-                            m1=k,
-                            s2=-2,
-                            l2=p,
-                            m2=q,
-                        )
-                        if G == 0:
-                            continue
-                        h_dot_pq = self_modes_dot_tilde[(p, q)]
-                        st_correction += alpha_jk * G * h_dot_pq.data
-
-                h1_tilde_st = h1_tilde.copy()
-                h1_tilde_st.data -= st_correction
-                self_modes_tilde_st[(ell, m)] = h1_tilde_st
-
-            for ell, m in common_modes:
-                h1_tilde = self_modes_tilde_st[(ell, m)]
-                h2_mode_ts = other_rot.get_mode(
-                    ell, m, to_pycbc=True, delta_t_seconds=1 / 4096
-                )
-                h2_mode_ts.resize(max_len)
-                h2_tilde = h2_mode_ts.to_frequencyseries(delta_f=delta_f)
-
-                temp_psd = psd.copy()
-                temp_psd.resize(len(h1_tilde))
-
-                h2_tilde *= np.exp(-1j * m * phi_c)
-                h2_tilde.data *= np.exp(-2j * np.pi * freqs * time_shift)
-
-                df = delta_f
-                low_idx = int(f_lower / df) if f_lower else 0
-                high_idx = int(np.ceil(f_upper / df)) if f_upper else len(temp_psd)
-
-                h1 = h1_tilde.data[low_idx:high_idx]
-                h2 = h2_tilde.data[low_idx:high_idx]
-                psd_vals = temp_psd.data[low_idx:high_idx]
-                psd_vals[np.isinf(psd_vals)] = 1.0
-
-                total_norm1_sq += 4 * df * np.sum((np.abs(h1) ** 2) / psd_vals)
-                total_norm2_sq += 4 * df * np.sum((np.abs(h2) ** 2) / psd_vals)
-                total_inner_prod += 4 * df * np.sum((h1 * np.conj(h2)) / psd_vals)
-
-            if total_norm1_sq == 0 or total_norm2_sq == 0:
-                return 1.0
-
-            overlap = np.abs(total_inner_prod) / np.sqrt(
-                total_norm1_sq * total_norm2_sq
-            )
-            return 1.0 - overlap
-
-        x0 = [0.0] * (5 + len(alpha_jk_indices))
-        result = minimize(objective_function, x0, method="Nelder-Mead")
-        return 1.0 - result.fun
+        return modes_worker.match_sphere_averaged_bms_maximized(
+            self,
+            other=other,
+            psd=psd,
+            f_lower=f_lower,
+            f_upper=f_upper,
+            j_max=j_max,
+            delta_t=delta_t,
+            total_mass=total_mass,
+            distance=distance,
+            psd_name=psd_name,
+            min_cycles=min_cycles,
+            alignment=alignment,
+            taper_fraction=taper_fraction,
+            alpha_max_M=alpha_max_M,
+            seed_rotation=seed_rotation,
+            n_coarse=n_coarse,
+            n_starts=n_starts,
+            maxfev=maxfev,
+            seed=seed,
+            return_transformation=return_transformation,
+        )
 
     def diff_l2_norm(self, other, time_window=None, phase_align=True):
         """Calculate the relative L2 error norm between self and another waveform object.
@@ -1425,67 +1290,9 @@ class WaveformModes(sxs_WaveformModes):
         float
             The relative L2 error norm (i.e. ||self - other|| / ||self||).
         """
-        import numpy as np
-
-        t_min = max(self.time[0], other.time[0])
-        t_max = min(self.time[-1], other.time[-1])
-        if time_window is not None:
-            t_min = max(t_min, time_window[0])
-            t_max = min(t_max, time_window[1])
-
-        if t_min >= t_max:
-            return float("nan")
-
-        mask1 = (self.time >= t_min) & (self.time <= t_max)
-        t1 = self.time[mask1]
-
-        if len(t1) < 2:
-            return float("nan")
-
-        data1 = self.data[mask1, :]
-        other_interp = other.interpolate(t1)
-        data2 = other_interp.data
-
-        common_modes = set(map(tuple, self.LM)) & set(map(tuple, other.LM))
-        if not common_modes:
-            return float("nan")
-
-        idx1 = [self.index(*lm) for lm in common_modes]
-        idx2 = [other_interp.index(*lm) for lm in common_modes]
-
-        d1 = data1[:, idx1]
-        d2 = data2[:, idx2]
-
-        if phase_align:
-            from scipy.optimize import minimize_scalar
-
-            C_m = {}
-            for i, lm in enumerate(common_modes):
-                ell, m = lm
-                C_m[m] = C_m.get(m, 0) + np.trapz(d1[:, i] * np.conj(d2[:, i]), x=t1)
-
-            def obj(dphi):
-                val = 0.0
-                for m, C in C_m.items():
-                    val += np.real(np.exp(-1j * m * dphi) * C)
-                return -val
-
-            res = minimize_scalar(obj, bounds=(0, 2 * np.pi), method="bounded")
-            dphi = res.x
-
-            for i, lm in enumerate(common_modes):
-                ell, m = lm
-                d2[:, i] *= np.exp(1j * m * dphi)
-
-        diff = d1 - d2
-        error_norm_sq = np.sum(
-            [np.trapz(np.abs(diff[:, i]) ** 2, x=t1) for i in range(len(common_modes))]
+        return modes_worker.diff_l2_norm(
+            self,
+            other=other,
+            time_window=time_window,
+            phase_align=phase_align,
         )
-        norm1_sq = np.sum(
-            [np.trapz(np.abs(d1[:, i]) ** 2, x=t1) for i in range(len(common_modes))]
-        )
-
-        if norm1_sq == 0:
-            return float("nan")
-
-        return float(np.sqrt(max(0, error_norm_sq) / max(0, norm1_sq)))

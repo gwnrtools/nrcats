@@ -338,8 +338,14 @@ class SXSCatalog(catalog.CatalogBase):
         meta.update({"waveform_data_location": ""})
         meta.pop("metadata", None)  # avoid nested dict conflict
         meta.pop("time", None)
+        # `metadata`, not `sim_metadata`: WaveformModes.sim_metadata reads
+        # _metadata["metadata"], which is the key waveform/loaders.py sets for
+        # RIT and MAYA.  Passing it under a different name left every SXS
+        # waveform raising KeyError from .sim_metadata, and so from .metadata,
+        # .get_parameters() and .label.  The pop above is what makes the name
+        # free to reuse here.
         return waveform.WaveformModes(
-            raw_obj.data, raw_obj.time, sim_metadata=sim_metadata, **meta
+            raw_obj.data, raw_obj.time, metadata=sim_metadata, **meta
         )
 
     def available_extrapolation_orders(

@@ -17,6 +17,7 @@ from .surrogate import (
     generate_surrogate_modes,
     check_surrogate_prior,
     NR_MODES,
+    SURROGATE_MODES,
 )
 from .waveform.matching import (
     compute_mode_match,
@@ -129,7 +130,14 @@ def compare_sim_vs_surrogate(
         f"[3/6] Generating NRSur7dq4 modes (M={total_mass:.1f} M☉, D={DISTANCE:.1f} Mpc)..."
     )
     try:
-        h_sur, f_lower_sur = generate_surrogate_modes(
+        # Generate the complete ell block once and take the reporting subset
+        # from it, rather than generating twice.  The SO(3) step below needs
+        # every m from -ell to +ell -- a Wigner rotation is unitary on a whole
+        # block, not a subset, and scoring a partial one understates the match
+        # by up to 2.3e-2 -- while the per-mode table must keep reporting
+        # exactly SURROGATE_MODES.  The surrogate call dominates the cost here,
+        # so deriving one from the other is much cheaper than two calls.
+        h_sur_all, f_lower_sur = generate_surrogate_modes(
             params,
             total_mass,
             DISTANCE,
@@ -137,7 +145,9 @@ def compare_sim_vs_surrogate(
             sim_name=sim_name,
             catalog=cat,
             nr_wfm=wfm,
+            modes="all",
         )
+        h_sur = {k: h_sur_all[k] for k in SURROGATE_MODES if k in h_sur_all}
     except Exception as exc:
         print(f"      Failed to generate surrogate: {exc}")
         raise
@@ -230,7 +240,7 @@ def compare_sim_vs_surrogate(
             )
 
             mm_rot, R_opt = wfm.match_sphere_averaged(
-                h_sur,
+                h_sur_all,
                 psd=psd_rot,
                 f_lower=f_lower_match,
                 delta_t=delta_t,
