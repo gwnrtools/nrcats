@@ -1,0 +1,34 @@
+# Campaign OUTPUT is deliberately not tracked here.
+#
+# This repository is the library; the analysis inputs to a manuscript belong
+# with the manuscript, under the same reproducibility guard as every other
+# number in it.  The merged form of these shards is committed in
+# catalog-comparison-paper as project/results/precessing_campaign.csv (via
+# git-lfs), and the raw shards move to project/results/precessing_campaign/
+# once the campaign finishes -- see that repo's paper_plan.md, Phase 6.
+#
+# Tracking them here as well would mean two sources of truth for the same
+# numbers, and these files are rewritten after every simulation while a campaign
+# is running, so each commit would add tens of megabytes of churn.
+results_*.json
+retry_results_*.json
+*.log
+*.npz
+*.png
+*.bak
+*.tmp
+__pycache__/
+
+# Scratch plotting scripts, superseded by the paper repo's production versions
+# (catalog-comparison-paper project/scripts/plot_precessing_results.py, wrapped
+# by project/bin/make_fig_*.sh).  Keeping a second copy here would let the two
+# drift, and only the paper-repo one is covered by the artifact-script check.
+make_figs.py
+fig_permode_paper.py
+
+# One-off diagnostic plotters from the frame investigation.  They produced the
+# Lhat(t) comparison figures that led to the frame-A/frame-B result, but nothing
+# in the manuscript is built from them -- that result is reported from the
+# campaign, in catalog-comparison-paper sec:frame_appendix.  Left untracked
+# rather than cleaned up to satisfy the hooks, since they are throwaway.
+precession_frame/
