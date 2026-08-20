@@ -16,6 +16,7 @@ bms_partial_results.json
 *.log
 *.npz
 *.png
+*.pdf
 *.bak
 *.tmp
 __pycache__/
