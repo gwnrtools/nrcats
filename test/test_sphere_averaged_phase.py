@@ -77,17 +77,19 @@ def _chirp_wfm(n_times=4096, ell_max=3, seed=0):
     lm = [(ell, em) for ell in range(2, ell_max + 1) for em in range(-ell, ell + 1)]
     data = np.zeros((n_times, len(lm)), dtype=complex)
     for i, (ell, em) in enumerate(lm):
-            # Amplitude hierarchy matters, and not only for realism.  The
-            # shared analysis window is located from the reference mode, so it
-            # is only stable when that mode dominates.  With flat amplitudes a
-            # rotation mixes m strongly enough that the rotated (2,2) beats,
-            # its peak moves, and the two waveforms end up windowed
-            # differently: measured at the *exact* inverse rotation, flat
-            # amplitudes score 0.679 where a (2,2)-dominated waveform scores
-            # 1.000000.  Real NR has the hierarchy; a mock without it tests the
-            # mock.
-        amp = 1.0 if (ell, abs(em)) == (2, 2) else 0.15 * (
-            1.0 + 0.2 * rng.standard_normal()
+        # Amplitude hierarchy matters, and not only for realism.  The
+        # shared analysis window is located from the reference mode, so it
+        # is only stable when that mode dominates.  With flat amplitudes a
+        # rotation mixes m strongly enough that the rotated (2,2) beats,
+        # its peak moves, and the two waveforms end up windowed
+        # differently: measured at the *exact* inverse rotation, flat
+        # amplitudes score 0.679 where a (2,2)-dominated waveform scores
+        # 1.000000.  Real NR has the hierarchy; a mock without it tests the
+        # mock.
+        amp = (
+            1.0
+            if (ell, abs(em)) == (2, 2)
+            else 0.15 * (1.0 + 0.2 * rng.standard_normal())
         )
         data[:, i] = amp * env * np.exp(-1j * em * phase)
 
@@ -320,10 +322,15 @@ def _rotate_block(modes, euler, ells):
     D = wig.D(R)
     out = {}
     for ell in ells:
-        block = np.stack([np.asarray(modes[(ell, m)])
-                          for m in range(-ell, ell + 1)], axis=1)
-        Dm = np.array([[D[wig.Dindex(ell, m, mp)] for mp in range(-ell, ell + 1)]
-                       for m in range(-ell, ell + 1)])
+        block = np.stack(
+            [np.asarray(modes[(ell, m)]) for m in range(-ell, ell + 1)], axis=1
+        )
+        Dm = np.array(
+            [
+                [D[wig.Dindex(ell, m, mp)] for mp in range(-ell, ell + 1)]
+                for m in range(-ell, ell + 1)
+            ]
+        )
         rotated = block @ Dm
         for j, m in enumerate(range(-ell, ell + 1)):
             out[(ell, m)] = rotated[:, j]
@@ -333,8 +340,10 @@ def _rotate_block(modes, euler, ells):
 def _as_timeseries(d):
     from pycbc.types import TimeSeries
 
-    return {k: TimeSeries(np.asarray(v).astype(np.complex128), delta_t=DT)
-            for k, v in d.items()}
+    return {
+        k: TimeSeries(np.asarray(v).astype(np.complex128), delta_t=DT)
+        for k, v in d.items()
+    }
 
 
 def test_complete_blocks_recover_a_general_so3_rotation(setup):
@@ -343,8 +352,9 @@ def test_complete_blocks_recover_a_general_so3_rotation(setup):
     ells = tuple(sorted({ell for ell, _ in map(tuple, wfm.LM)}))
     modes = {k: np.asarray(_mode_dict(wfm)[k]) for k in map(tuple, wfm.LM)}
     rotated = _as_timeseries(_rotate_block(modes, (0.3, 0.7, 1.1), ells))
-    m = wfm.match_sphere_averaged(rotated, psd, F_LOWER, delta_t=DT,
-                                  total_mass=40.0, distance=1.0)
+    m = wfm.match_sphere_averaged(
+        rotated, psd, F_LOWER, delta_t=DT, total_mass=40.0, distance=1.0
+    )
     assert m == pytest.approx(1.0, abs=5e-4)
 
 
@@ -357,8 +367,9 @@ def test_partial_block_raises_instead_of_returning_a_biased_number(setup):
     wfm, psd = setup
     positive_m = {k: v for k, v in _mode_dict(wfm).items() if k[1] > 0}
     with pytest.raises(ValueError, match="complete ell block"):
-        wfm.match_sphere_averaged(positive_m, psd, F_LOWER, delta_t=DT,
-                                  total_mass=40.0, distance=1.0)
+        wfm.match_sphere_averaged(
+            positive_m, psd, F_LOWER, delta_t=DT, total_mass=40.0, distance=1.0
+        )
 
 
 def test_incomplete_ell_is_dropped_and_the_complete_one_still_scores(setup, caplog):
@@ -370,7 +381,8 @@ def test_incomplete_ell_is_dropped_and_the_complete_one_still_scores(setup, capl
     # ell=2 complete, ell=3 missing a single m.
     trimmed = {k: v for k, v in modes.items() if not (k[0] == 3 and k[1] == -1)}
     with caplog.at_level(logging.WARNING):
-        m = wfm.match_sphere_averaged(trimmed, psd, F_LOWER, delta_t=DT,
-                                      total_mass=40.0, distance=1.0)
+        m = wfm.match_sphere_averaged(
+            trimmed, psd, F_LOWER, delta_t=DT, total_mass=40.0, distance=1.0
+        )
     assert m == pytest.approx(1.0, abs=5e-4)
     assert any("dropping ell=[3]" in r.getMessage() for r in caplog.records)
