@@ -12,6 +12,7 @@
 # is running, so each commit would add tens of megabytes of churn.
 results_*.json
 retry_results_*.json
+bms_partial_results.json
 *.log
 *.npz
 *.png
