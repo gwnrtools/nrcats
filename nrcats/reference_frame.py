@@ -245,7 +245,9 @@ def omega_0_of(sur, q, chiA, chiB):
 
 
 def _lm_list(ell_min, ell_max):
-    return [(ell, m) for ell in range(ell_min, ell_max + 1) for m in range(-ell, ell + 1)]
+    return [
+        (ell, m) for ell in range(ell_min, ell_max + 1) for m in range(-ell, ell + 1)
+    ]
 
 
 def _mode_block(wfm, ell_max=4):
@@ -489,7 +491,9 @@ def _short_catalog_state(wfm, sur, frame_method, catalog, window_M):
             "inspiral_M": t_merger - epoch,
             "coprecessing_branch_flipped": bool(flipped),
             "lhat": np.asarray(lhat).tolist(),
-            "lhat_published": None if lhat_pub is None else np.asarray(lhat_pub).tolist(),
+            "lhat_published": None
+            if lhat_pub is None
+            else np.asarray(lhat_pub).tolist(),
         },
     )
 
@@ -548,8 +552,9 @@ def _tilt_and_azimuth(chi, lhat, nhat):
     return mag, tilt, az
 
 
-def validate_frame(wfm, sim_obj=None, catalog=None,
-                   tol_deg=FRAME_VALIDATION_TOL_DEG, window_M=100.0):
+def validate_frame(
+    wfm, sim_obj=None, catalog=None, tol_deg=FRAME_VALIDATION_TOL_DEG, window_M=100.0
+):
     """Check the production frame against an independent published one.
 
     For SXS this is the gate that matters: method A reconstructs Lhat from
@@ -571,13 +576,14 @@ def validate_frame(wfm, sim_obj=None, catalog=None,
     """
     if catalog is None:
         catalog = str(wfm.sim_metadata.get("catalog_type", "")).upper()
-    out = {"catalog": catalog, "tol_deg": tol_deg, "passed": None,
-           "reason": None}
+    out = {"catalog": catalog, "tol_deg": tol_deg, "passed": None, "reason": None}
 
     if catalog != "SXS":
         out["passed"] = None
-        out["reason"] = ("not_applicable: this catalog publishes Lhat directly "
-                         "(RIT) or not at all (MAYA); no independent source")
+        out["reason"] = (
+            "not_applicable: this catalog publishes Lhat directly "
+            "(RIT) or not at all (MAYA); no independent source"
+        )
         return out
     if sim_obj is None:
         raise ValueError("SXS validation needs sim_obj")
@@ -588,8 +594,9 @@ def validate_frame(wfm, sim_obj=None, catalog=None,
 
     w = np.asarray(md["reference_orbital_frequency"], dtype=float)
     lhat_pub = w / np.linalg.norm(w)
-    r = (np.asarray(md["reference_position1"], dtype=float)
-         - np.asarray(md["reference_position2"], dtype=float))
+    r = np.asarray(md["reference_position1"], dtype=float) - np.asarray(
+        md["reference_position2"], dtype=float
+    )
     s1 = np.asarray(md["reference_dimensionless_spin1"], dtype=float)
     s2 = np.asarray(md["reference_dimensionless_spin2"], dtype=float)
     if float(md["reference_mass1"]) < float(md["reference_mass2"]):
@@ -622,12 +629,14 @@ def validate_frame(wfm, sim_obj=None, catalog=None,
     out["spin_relative_azimuth_deviation_deg"] = float((rel + 180) % 360 - 180)
     # gauge: reported, never gated
     out["spin_common_azimuth_deg"] = float(
-        ((np.mean(az_fd) - np.mean(az_pub)) + 180) % 360 - 180)
+        ((np.mean(az_fd) - np.mean(az_pub)) + 180) % 360 - 180
+    )
 
     checks = {
         "lhat": out["lhat_deviation_deg"] <= tol_deg,
         "spin_tilt": out["spin_tilt_deviation_deg"] <= tol_deg,
-        "spin_relative_azimuth": abs(out["spin_relative_azimuth_deviation_deg"]) <= tol_deg,
+        "spin_relative_azimuth": abs(out["spin_relative_azimuth_deviation_deg"])
+        <= tol_deg,
         "spin_magnitude": out["spin_magnitude_deviation"] <= 1e-2,
         "mass_ratio": out["q_deviation"] <= 1e-2,
     }

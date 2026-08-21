@@ -69,15 +69,26 @@ def _chirp_wfm(n_times=4096, ell_max=3, seed=0):
     attrs["spin_weight"] = translate_data_type_to_spin_weight(attrs["data_type"])
     attrs["data_type"] = translate_data_type_to_sxs_string(attrs["data_type"])
     return WaveformModes(
-        data, time=times, time_axis=0, modes_axis=1,
-        ell_min=2, ell_max=ell_max, **attrs,
+        data,
+        time=times,
+        time_axis=0,
+        modes_axis=1,
+        ell_min=2,
+        ell_max=ell_max,
+        **attrs,
     )
 
 
 def _mode_dict(wfm, total_mass=M_TOT):
     return {
-        (ell, em): wfm.get_mode(ell, em, total_mass=total_mass, distance=1.0,
-                                to_pycbc=True, delta_t_seconds=DT)
+        (ell, em): wfm.get_mode(
+            ell,
+            em,
+            total_mass=total_mass,
+            distance=1.0,
+            to_pycbc=True,
+            delta_t_seconds=DT,
+        )
         for ell, em in map(tuple, wfm.LM)
     }
 
@@ -97,13 +108,15 @@ def wfm():
 def psd(wfm):
     import pycbc.psd
 
-    n = len(wfm.get_mode(2, 2, total_mass=M_TOT, distance=1.0, to_pycbc=True,
-                         delta_t_seconds=DT))
+    n = len(
+        wfm.get_mode(
+            2, 2, total_mass=M_TOT, distance=1.0, to_pycbc=True, delta_t_seconds=DT
+        )
+    )
     n_fft = 1
     while n_fft < n:
         n_fft <<= 1
-    return pycbc.psd.aLIGOZeroDetHighPower(n_fft // 2 + 1, 1.0 / (n_fft * DT),
-                                           F_LOWER)
+    return pycbc.psd.aLIGOZeroDetHighPower(n_fft // 2 + 1, 1.0 / (n_fft * DT), F_LOWER)
 
 
 # --------------------------------------------------------------- single mode
@@ -112,8 +125,16 @@ def psd(wfm):
 @pytest.mark.parametrize("lm", [(2, 2), (3, 3), (2, 1)])
 def test_identical_modes_match_exactly(wfm, psd, lm):
     ell, em = lm
-    got = wfm.match_single_mode(_mode_dict(wfm), ell, em, psd, F_LOWER,
-                                delta_t=DT, total_mass=M_TOT, distance=1.0)
+    got = wfm.match_single_mode(
+        _mode_dict(wfm),
+        ell,
+        em,
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=M_TOT,
+        distance=1.0,
+    )
     assert got == pytest.approx(1.0, abs=1e-6)
 
 
@@ -121,9 +142,16 @@ def test_identical_modes_match_exactly(wfm, psd, lm):
 def test_a_shorter_model_costs_nothing(wfm, psd, frac):
     """The regression this file exists for: identical over the common span."""
     md = _mode_dict(wfm)
-    got = wfm.match_single_mode({(2, 2): _truncate(md[(2, 2)], frac)}, 2, 2, psd,
-                                F_LOWER, delta_t=DT, total_mass=M_TOT,
-                                distance=1.0)
+    got = wfm.match_single_mode(
+        {(2, 2): _truncate(md[(2, 2)], frac)},
+        2,
+        2,
+        psd,
+        F_LOWER,
+        delta_t=DT,
+        total_mass=M_TOT,
+        distance=1.0,
+    )
     assert got == pytest.approx(1.0, abs=1e-6)
 
 
@@ -141,8 +169,9 @@ def test_psd_delta_f_need_not_match(wfm, psd):
 
 def test_psd_none_builds_from_name(wfm):
     md = _mode_dict(wfm)
-    got = wfm.match_single_mode(md, 2, 2, None, F_LOWER, delta_t=DT,
-                                total_mass=M_TOT, distance=1.0)
+    got = wfm.match_single_mode(
+        md, 2, 2, None, F_LOWER, delta_t=DT, total_mass=M_TOT, distance=1.0
+    )
     assert got == pytest.approx(1.0, abs=1e-6)
 
 
@@ -152,20 +181,25 @@ def test_total_mass_is_forwarded(wfm, psd):
 
     md = _mode_dict(wfm)
     direct = compute_mode_match(
-        wfm.get_mode(2, 2, total_mass=M_TOT, distance=1.0, to_pycbc=True,
-                     delta_t_seconds=DT),
-        md[(2, 2)], mode_f_lower(F_LOWER, 2), psd=psd,
+        wfm.get_mode(
+            2, 2, total_mass=M_TOT, distance=1.0, to_pycbc=True, delta_t_seconds=DT
+        ),
+        md[(2, 2)],
+        mode_f_lower(F_LOWER, 2),
+        psd=psd,
     )
-    via = wfm.match_single_mode(md, 2, 2, psd, F_LOWER, delta_t=DT,
-                                total_mass=M_TOT, distance=1.0)
+    via = wfm.match_single_mode(
+        md, 2, 2, psd, F_LOWER, delta_t=DT, total_mass=M_TOT, distance=1.0
+    )
     assert via == pytest.approx(direct, rel=1e-12)
 
 
 def test_missing_mode_still_raises(wfm, psd):
     md = _mode_dict(wfm)
     with pytest.raises(KeyError):
-        wfm.match_single_mode({(2, 2): md[(2, 2)]}, 3, 3, psd, F_LOWER,
-                              delta_t=DT, total_mass=M_TOT)
+        wfm.match_single_mode(
+            {(2, 2): md[(2, 2)]}, 3, 3, psd, F_LOWER, delta_t=DT, total_mass=M_TOT
+        )
 
 
 # ------------------------------------------------------------ sphere averaged
@@ -176,8 +210,9 @@ def test_sphere_averaged_shared_window(wfm, psd, frac):
     """One window for every mode: truncating them all together costs nothing."""
     cut = {k: _truncate(v, frac) for k, v in _mode_dict(wfm).items()}
     np.random.seed(7)
-    got = wfm.match_sphere_averaged(cut, psd, F_LOWER, delta_t=DT,
-                                    total_mass=M_TOT, distance=1.0)
+    got = wfm.match_sphere_averaged(
+        cut, psd, F_LOWER, delta_t=DT, total_mass=M_TOT, distance=1.0
+    )
     assert got == pytest.approx(1.0, abs=1e-6)
 
 
@@ -234,8 +269,9 @@ def test_bms_j_max_0_runs_and_is_exact():
     """j = 0 is rotation + time shift + phase, and needs no Gaunt coefficients."""
     pytest.importorskip("scri")
     w = _chirp_wfm(n_times=512, ell_max=2)
-    got = w.match_sphere_averaged_bms_maximized(w, None, F_LOWER, j_max=0,
-                                                total_mass=M_TOT, distance=1.0)
+    got = w.match_sphere_averaged_bms_maximized(
+        w, None, F_LOWER, j_max=0, total_mass=M_TOT, distance=1.0
+    )
     assert got == pytest.approx(1.0, abs=1e-6)
 
 
@@ -279,8 +315,17 @@ def test_bms_identical_waveforms_match_exactly():
     pytest.importorskip("scri")
     w = _chirp_wfm(n_times=512, ell_max=2)
     got = w.match_sphere_averaged_bms_maximized(
-        _mode_dict(w), None, F_LOWER, j_max=1, delta_t=DT, total_mass=M_TOT,
-        distance=1.0, n_coarse=16, n_starts=1, maxfev=120, seed=0,
+        _mode_dict(w),
+        None,
+        F_LOWER,
+        j_max=1,
+        delta_t=DT,
+        total_mass=M_TOT,
+        distance=1.0,
+        n_coarse=16,
+        n_starts=1,
+        maxfev=120,
+        seed=0,
     )
     assert got == pytest.approx(1.0, abs=1e-5)
 
@@ -291,8 +336,18 @@ def test_bms_is_never_worse_than_the_identity():
     pytest.importorskip("scri")
     w = _chirp_wfm(n_times=512, ell_max=2)
     got, info = w.match_sphere_averaged_bms_maximized(
-        _mode_dict(w), None, F_LOWER, j_max=1, delta_t=DT, total_mass=M_TOT,
-        distance=1.0, n_coarse=16, n_starts=1, maxfev=120, seed=0, return_transformation=True,
+        _mode_dict(w),
+        None,
+        F_LOWER,
+        j_max=1,
+        delta_t=DT,
+        total_mass=M_TOT,
+        distance=1.0,
+        n_coarse=16,
+        n_starts=1,
+        maxfev=120,
+        seed=0,
+        return_transformation=True,
     )
     assert got >= info["identity_match"] - 1e-12
     assert len(info["supertranslation"]) == 4  # (j_max+1)^2 for j_max=1
@@ -315,9 +370,14 @@ def _supertranslate(md, coeffs):
     for k, v in md.items():
         d[:, sidx(*k)] = np.asarray(v)[:n]
     sw = scri.WaveformModes(
-        t=t, data=np.ascontiguousarray(d), ell_min=lo, ell_max=hi,
-        frameType=scri.Inertial, dataType=scri.h,
-        r_is_scaled_out=True, m_is_scaled_out=True,
+        t=t,
+        data=np.ascontiguousarray(d),
+        ell_min=lo,
+        ell_max=hi,
+        frameType=scri.Inertial,
+        dataType=scri.h,
+        r_is_scaled_out=True,
+        m_is_scaled_out=True,
     )
     tr = sw.transform(supertranslation=coeffs)
     tw = t[(t >= tr.t[0]) & (t <= tr.t[-1])]
@@ -345,15 +405,24 @@ def test_bms_recovers_a_known_supertranslation():
     w = _chirp_wfm(n_times=512, ell_max=2)
     m_secs = utils.time_to_physical(M_TOT)
     alpha = np.zeros(4, dtype=complex)
-    alpha[2] = 4.0 * m_secs                      # (l, m) = (1, 0), in standard form
+    alpha[2] = 4.0 * m_secs  # (l, m) = (1, 0), in standard form
     shifted = _supertranslate(_mode_dict(w), alpha)
 
     kw = dict(delta_t=DT, total_mass=M_TOT, distance=1.0)
     np.random.seed(5)
     plain = w.match_sphere_averaged(shifted, None, F_LOWER, **kw)
     got, info = w.match_sphere_averaged_bms_maximized(
-        shifted, None, F_LOWER, j_max=1, return_transformation=True,
-        n_coarse=32, n_starts=2, maxfev=250, seed=0, alpha_max_M=8.0, **kw,
+        shifted,
+        None,
+        F_LOWER,
+        j_max=1,
+        return_transformation=True,
+        n_coarse=32,
+        n_starts=2,
+        maxfev=250,
+        seed=0,
+        alpha_max_M=8.0,
+        **kw,
     )
 
     # The supertranslation costs the plain match something a rotation and a time
@@ -363,5 +432,5 @@ def test_bms_recovers_a_known_supertranslation():
     assert (1.0 - got) < 0.2 * (1.0 - plain)
 
     fitted = info["supertranslation_M"]
-    assert fitted[0] < -2.0                      # the inverse of the +4 M applied
-    assert abs(fitted[1]) < 2.0 and abs(fitted[2]) < 2.0   # m=1 stays near zero
+    assert fitted[0] < -2.0  # the inverse of the +4 M applied
+    assert abs(fitted[1]) < 2.0 and abs(fitted[2]) < 2.0  # m=1 stays near zero
