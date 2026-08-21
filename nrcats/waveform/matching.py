@@ -523,12 +523,23 @@ def compute_mode_match_detailed(
     h1_re = h1.real() if h1.kind == "complex" else h1
     h2_re = h2.real() if h2.kind == "complex" else h2
 
+    # subsample_interpolation=True: without it match() reports the largest
+    # sample of the SNR time series, quantizing the time shift to one sample.
+    # The error that introduces grows as the mismatch shrinks -- a sharper peak
+    # is worse approximated by its nearest sample -- so it contaminates exactly
+    # the small-mismatch regime the catalog comparison lives in.  It is the
+    # mechanism behind the sample-rate sensitivity of findings 5k: the SXS
+    # (2,2) median moved by a factor of 2.5 between 4096 and 16384 Hz with
+    # nothing near Nyquist, and the approach was not even monotone.  The
+    # sphere-averaged matches maximize over time themselves and get the same
+    # correction from _interpolated_peak_abs(), so the two remain comparable.
     mm, _ = pycbc_match(
         h1_re,
         h2_re,
         psd=psd_used,
         low_frequency_cutoff=f_lower_used,
         high_frequency_cutoff=f_upper,
+        subsample_interpolation=True,
     )
     return ModeMatchResult(
         match=float(mm),
