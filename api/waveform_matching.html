@@ -1,0 +1,1479 @@
+
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-default.css">
+
+  <link rel="stylesheet" href="/nrcats/assets/css/just-the-docs-head-nav.css" id="jtd-head-nav-stylesheet">
+
+  <style id="jtd-nav-activation">
+  
+
+    .site-nav > ul.nav-list:first-child > li > a,
+    
+    .site-nav > ul.nav-list:first-child > li > ul > li:not(:nth-child(6)) > a,
+    .site-nav > ul.nav-list:first-child > li > ul > li > ul > li a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:not(:first-child) a,
+    .site-nav li.external a {
+      background-image: none;
+    }
+
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(6) > a {
+      font-weight: 600;
+      text-decoration: none;
+    }.site-nav > ul.nav-list:first-child > li:nth-child(8) > button svg,
+    .site-nav > ul.nav-list:first-child > li:nth-child(8) > ul > li:nth-child(6) > button svg {
+      transform: rotate(-90deg);
+    }.site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list,
+    .site-nav > ul.nav-list:first-child > li.nav-list-item:nth-child(8) > ul.nav-list > li.nav-list-item:nth-child(6) > ul.nav-list {
+      display: block;
+    }
+  </style>
+
+  
+
+  
+    <script src="/nrcats/assets/js/vendor/lunr.min.js"></script>
+  
+
+  <script src="/nrcats/assets/js/just-the-docs.js"></script>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+
+
+  <!-- Begin Jekyll SEO tag v2.9.0 -->
+<title>nrcats.waveform.matching | nrcats</title>
+<meta name="generator" content="Jekyll v4.4.1" />
+<meta property="og:title" content="nrcats.waveform.matching" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<meta name="twitter:description" property="og:description" content="A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison." />
+<link rel="canonical" href="https://gwnrtools.github.io/nrcats/api/waveform_matching.html" />
+<meta property="og:url" content="https://gwnrtools.github.io/nrcats/api/waveform_matching.html" />
+<meta property="og:site_name" content="nrcats" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="nrcats.waveform.matching" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebPage","description":"A stable, unified Python interface to NR binary black-hole waveform catalogs for LVK analyses, waveform modeling, and cross-catalog comparison.","headline":"nrcats.waveform.matching","url":"https://gwnrtools.github.io/nrcats/api/waveform_matching.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  <!-- Emoji favicon (data URI) — no static asset needed. -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌀</text></svg>">
+
+<!-- MathJax v3: renders the \(...\) / \[...\] wrappers that kramdown's
+     math_engine: mathjax emits for $$...$$ spans and blocks. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['\\(', '\\)']],
+      displayMath: [['\\[', '\\]']],
+      processEscapes: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+
+
+</head>
+
+<body>
+  <a class="skip-to-main" href="#main-content">Skip to main content</a>
+  <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
+  <symbol id="svg-link" viewBox="0 0 24 24">
+  <title>Link</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-link">
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+  </svg>
+</symbol>
+
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+  <title>Menu</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-menu">
+    <line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+</symbol>
+
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+  <title>Expand</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+    <polyline points="9 18 15 12 9 6"></polyline>
+  </svg>
+</symbol>
+
+  <!-- Feather. MIT License: https://github.com/feathericons/feather/blob/master/LICENSE -->
+<symbol id="svg-external-link" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-external-link">
+  <title id="svg-external-link-title">(external link)</title>
+  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line>
+</symbol>
+
+  
+    <symbol id="svg-doc" viewBox="0 0 24 24">
+  <title>Document</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+    <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline>
+  </svg>
+</symbol>
+
+    <symbol id="svg-search" viewBox="0 0 24 24">
+  <title>Search</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search">
+    <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+</symbol>
+
+  
+  
+    <!-- Bootstrap Icons. MIT License: https://github.com/twbs/icons/blob/main/LICENSE.md -->
+<symbol id="svg-copy" viewBox="0 0 16 16">
+  <title>Copy</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+  </svg>
+</symbol>
+<symbol id="svg-copied" viewBox="0 0 16 16">
+  <title>Copied</title>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clipboard-check-fill" viewBox="0 0 16 16">
+    <path d="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z"/>
+    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0 0 1 4 2.5v-1Zm6.854 7.354-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708Z"/>
+  </svg>
+</symbol>
+
+  
+</svg>
+
+  
+    <header class="side-bar">
+  <div class="site-header">
+    <a href="/nrcats/" class="site-title lh-tight">
+  nrcats
+
+</a>
+    <button id="menu-button" class="site-button btn-reset" aria-label="Menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" class="icon" aria-hidden="true"><use xlink:href="#svg-menu"></use></svg>
+    </button>
+  </div>
+
+  <nav aria-label="Main" id="site-nav" class="site-nav">
+  
+  
+    <ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/" class="nav-list-link">Home</a></li><li class="nav-list-item"><a href="/nrcats/installation.html" class="nav-list-link">Installation</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="Tutorials submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/tutorials/" class="nav-list-link">Tutorials</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/tutorials/load-waveform.html" class="nav-list-link">Loading a waveform</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/cross-catalog.html" class="nav-list-link">Cross-catalog comparison</a></li><li class="nav-list-item"><a href="/nrcats/tutorials/surrogate-comparison.html" class="nav-list-link">NR vs surrogate comparison</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/catalogs.html" class="nav-list-link">Catalog Reference</a></li><li class="nav-list-item"><a href="/nrcats/catalog_organization.html" class="nav-list-link">Catalog Organization</a></li><li class="nav-list-item"><a href="/nrcats/waveform.html" class="nav-list-link">WaveformModes Guide</a></li><li class="nav-list-item"><a href="/nrcats/architecture.html" class="nav-list-link">Architecture</a></li><li class="nav-list-item"><button class="nav-list-expander btn-reset" aria-label="API Reference submenu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use xlink:href="#svg-arrow-right"></use></svg>
+      </button><a href="/nrcats/api/" class="nav-list-link">API Reference</a><ul class="nav-list"><li class="nav-list-item"><a href="/nrcats/api/catalog.html" class="nav-list-link">nrcats.catalog</a></li><li class="nav-list-item"><a href="/nrcats/api/rit.html" class="nav-list-link">nrcats.rit</a></li><li class="nav-list-item"><a href="/nrcats/api/sxs.html" class="nav-list-link">nrcats.sxs</a></li><li class="nav-list-item"><a href="/nrcats/api/maya.html" class="nav-list-link">nrcats.maya</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_modes.html" class="nav-list-link">nrcats.waveform.modes</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_matching.html" class="nav-list-link">nrcats.waveform.matching</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_loaders.html" class="nav-list-link">nrcats.waveform.loaders</a></li><li class="nav-list-item"><a href="/nrcats/api/waveform_units.html" class="nav-list-link">nrcats.waveform.units</a></li><li class="nav-list-item"><a href="/nrcats/api/surrogate.html" class="nav-list-link">nrcats.surrogate</a></li><li class="nav-list-item"><a href="/nrcats/api/comparisons.html" class="nav-list-link">nrcats.comparisons</a></li><li class="nav-list-item"><a href="/nrcats/api/classification.html" class="nav-list-link">nrcats.classification</a></li><li class="nav-list-item"><a href="/nrcats/api/metadata.html" class="nav-list-link">nrcats.metadata</a></li><li class="nav-list-item"><a href="/nrcats/api/registry.html" class="nav-list-link">nrcats.registry</a></li><li class="nav-list-item"><a href="/nrcats/api/lvc.html" class="nav-list-link">nrcats.lvc</a></li><li class="nav-list-item"><a href="/nrcats/api/utils.html" class="nav-list-link">nrcats.utils</a></li></ul></li><li class="nav-list-item"><a href="/nrcats/package.html" class="nav-list-link">Package Internals</a></li><li class="nav-list-item"><a href="/nrcats/goal.html" class="nav-list-link">Scientific Goal</a></li><li class="nav-list-item"><a href="/nrcats/contributing.html" class="nav-list-link">Contributing</a></li><li class="nav-list-item"><a href="/nrcats/changelog.html" class="nav-list-link">Changelog</a></li></ul>
+  
+</nav>
+
+
+<div class="d-md-block d-none site-footer">
+  
+  
+    This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+  
+  </div>
+</header>
+
+  
+  <div class="main" id="top">
+    <div id="main-header" class="main-header">
+  
+    
+
+<div class="search" role="search">
+  <div class="search-input-wrap">
+    <input type="text" id="search-input" class="search-input" tabindex="0" placeholder="Search nrcats" autocomplete="off">
+    <label for="search-input" class="search-label">
+      <span class="sr-only">Search nrcats</span>
+      <svg viewBox="0 0 24 24" class="search-icon" aria-hidden="true"><use xlink:href="#svg-search"></use></svg>
+    </label>
+  </div>
+  <div id="search-results" class="search-results"></div>
+</div>
+
+  
+  
+  
+    <nav aria-label="Auxiliary" class="aux-nav">
+  <ul class="aux-nav-list">
+    
+      <li class="aux-nav-list-item">
+        <a href="https://github.com/gwnrtools/nrcats" class="site-button"
+          
+          target="_blank" rel="noopener noreferrer"
+          
+        >
+          nrcats on GitHub
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+  
+</div>
+
+    <div class="main-content-wrap">
+      <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+  <ol class="breadcrumb-nav-list">
+    <li class="breadcrumb-nav-list-item"><a href="/nrcats/api/">API Reference</a></li>
+    <li class="breadcrumb-nav-list-item"><span>nrcats.waveform.matching</span></li>
+  </ol>
+</nav>
+
+
+      <div id="main-content" class="main-content">
+        <main>
+          
+            <!-- GENERATED FILE — DO NOT EDIT. Regenerate with `python bin/generate_api_docs.py`. -->
+<h1 id="nrcatswaveformmatching">
+  
+  
+    <a href="#nrcatswaveformmatching" class="anchor-heading" aria-labelledby="nrcatswaveformmatching"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">nrcats.waveform.matching</code>
+  
+  
+</h1>
+    
+
+<p>Standalone waveform matching and rotation helpers.</p>
+
+<p>These are module-level functions (not bound to WaveformModes) so they can
+be unit-tested and used independently of the class.</p>
+<h2 class="no_toc text-delta" id="contents">
+  
+  
+    <a href="#contents" class="anchor-heading" aria-labelledby="contents"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Contents
+  
+  
+</h2>
+    
+
+<ol id="markdown-toc">
+  <li><a href="#nrcatswaveformmatching" id="markdown-toc-nrcatswaveformmatching"><code class="language-plaintext highlighter-rouge">nrcats.waveform.matching</code></a>    <ol>
+      <li><a href="#constants" id="markdown-toc-constants">Constants</a></li>
+      <li><a href="#class-modematchresult" id="markdown-toc-class-modematchresult"><em>class</em> <code class="language-plaintext highlighter-rouge">ModeMatchResult</code></a>        <ol>
+          <li><a href="#attributes" id="markdown-toc-attributes">Attributes</a></li>
+          <li><a href="#property-is_usable" id="markdown-toc-property-is_usable"><em>property</em> <code class="language-plaintext highlighter-rouge">is_usable</code></a></li>
+        </ol>
+      </li>
+      <li><a href="#class-strainmatchresult" id="markdown-toc-class-strainmatchresult"><em>class</em> <code class="language-plaintext highlighter-rouge">StrainMatchResult</code></a>        <ol>
+          <li><a href="#attributes-1" id="markdown-toc-attributes-1">Attributes</a></li>
+        </ol>
+      </li>
+      <li><a href="#functions" id="markdown-toc-functions">Functions</a>        <ol>
+          <li><a href="#apply_wigner_rotation_to_mode_dict" id="markdown-toc-apply_wigner_rotation_to_mode_dict"><code class="language-plaintext highlighter-rouge">apply_wigner_rotation_to_mode_dict</code></a>            <ol>
+              <li><a href="#parameters" id="markdown-toc-parameters">Parameters</a></li>
+              <li><a href="#returns" id="markdown-toc-returns">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#load_psd" id="markdown-toc-load_psd"><code class="language-plaintext highlighter-rouge">load_psd</code></a>            <ol>
+              <li><a href="#parameters-1" id="markdown-toc-parameters-1">Parameters</a></li>
+              <li><a href="#returns-1" id="markdown-toc-returns-1">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#compute_mode_match_detailed" id="markdown-toc-compute_mode_match_detailed"><code class="language-plaintext highlighter-rouge">compute_mode_match_detailed</code></a>            <ol>
+              <li><a href="#parameters-2" id="markdown-toc-parameters-2">Parameters</a></li>
+              <li><a href="#returns-2" id="markdown-toc-returns-2">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#compute_mode_match" id="markdown-toc-compute_mode_match"><code class="language-plaintext highlighter-rouge">compute_mode_match</code></a>            <ol>
+              <li><a href="#parameters-3" id="markdown-toc-parameters-3">Parameters</a></li>
+              <li><a href="#returns-3" id="markdown-toc-returns-3">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#compute_phase_diff_per_cycle" id="markdown-toc-compute_phase_diff_per_cycle"><code class="language-plaintext highlighter-rouge">compute_phase_diff_per_cycle</code></a>            <ol>
+              <li><a href="#parameters-4" id="markdown-toc-parameters-4">Parameters</a></li>
+              <li><a href="#returns-4" id="markdown-toc-returns-4">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#mode_f_lower" id="markdown-toc-mode_f_lower"><code class="language-plaintext highlighter-rouge">mode_f_lower</code></a>            <ol>
+              <li><a href="#parameters-5" id="markdown-toc-parameters-5">Parameters</a></li>
+              <li><a href="#returns-5" id="markdown-toc-returns-5">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#interpolate_in_amp_phase" id="markdown-toc-interpolate_in_amp_phase"><code class="language-plaintext highlighter-rouge">interpolate_in_amp_phase</code></a>            <ol>
+              <li><a href="#parameters-6" id="markdown-toc-parameters-6">Parameters</a></li>
+              <li><a href="#returns-6" id="markdown-toc-returns-6">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#sylm" id="markdown-toc-sylm"><code class="language-plaintext highlighter-rouge">sylm</code></a></li>
+          <li><a href="#complete_negative_m" id="markdown-toc-complete_negative_m"><code class="language-plaintext highlighter-rouge">complete_negative_m</code></a></li>
+          <li><a href="#compute_strain_match" id="markdown-toc-compute_strain_match"><code class="language-plaintext highlighter-rouge">compute_strain_match</code></a>            <ol>
+              <li><a href="#parameters-7" id="markdown-toc-parameters-7">Parameters</a></li>
+              <li><a href="#returns-7" id="markdown-toc-returns-7">Returns</a></li>
+            </ol>
+          </li>
+          <li><a href="#compute_strain_mismatch_averaged" id="markdown-toc-compute_strain_mismatch_averaged"><code class="language-plaintext highlighter-rouge">compute_strain_mismatch_averaged</code></a>            <ol>
+              <li><a href="#returns-8" id="markdown-toc-returns-8">Returns</a></li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol><hr />
+<h2 id="constants">
+  
+  
+    <a href="#constants" class="anchor-heading" aria-labelledby="constants"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Constants
+  
+  
+</h2>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MIN_CYCLES_AT_BAND_EDGE</code></td>
+      <td><code class="language-plaintext highlighter-rouge">2.0</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">MIN_BINS_IN_BAND</code></td>
+      <td><code class="language-plaintext highlighter-rouge">8</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">TAPER_FRACTION</code></td>
+      <td><code class="language-plaintext highlighter-rouge">0.05</code></td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">STRAIN_MATCH_N_BETA</code></td>
+      <td><code class="language-plaintext highlighter-rouge">720</code></td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h2 id="class-modematchresult">
+  
+  
+    <a href="#class-modematchresult" class="anchor-heading" aria-labelledby="class-modematchresult"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">ModeMatchResult</code>
+  
+  
+</h2>
+    
+
+<p>Outcome of a single-mode match, with the reason it succeeded or failed.</p>
+
+<p><code class="language-plaintext highlighter-rouge">compute_mode_match</code> returns only <code class="language-plaintext highlighter-rouge">match</code> and therefore cannot say why a
+NaN appeared.  A bare NaN is indistinguishable between “the mode carries no
+signal”, “the two waveforms do not overlap in time” and “the requested band
+lies below where this waveform has support” – three different problems with
+three different remedies.  This type keeps them separable.</p>
+<h4 id="attributes">
+  
+  
+    <a href="#attributes" class="anchor-heading" aria-labelledby="attributes"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Attributes
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">match</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Match in [0, 1], or NaN when <code class="language-plaintext highlighter-rouge">reason</code> describes a failure.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">reason</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>One of <code class="language-plaintext highlighter-rouge">'ok'</code>, <code class="language-plaintext highlighter-rouge">'band_raised'</code>, <code class="language-plaintext highlighter-rouge">'no_overlap'</code>, <code class="language-plaintext highlighter-rouge">'zero_norm'</code>, <code class="language-plaintext highlighter-rouge">'insufficient_bins'</code>, <code class="language-plaintext highlighter-rouge">'no_psd_support'</code>. Both <code class="language-plaintext highlighter-rouge">'ok'</code> and <code class="language-plaintext highlighter-rouge">'band_raised'</code> carry a usable <code class="language-plaintext highlighter-rouge">match</code>; the rest carry NaN.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_requested</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The cutoff the caller asked for, in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_used</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The cutoff actually integrated from, in Hz. Differs from <code class="language-plaintext highlighter-rouge">f_lower_requested</code> only when <code class="language-plaintext highlighter-rouge">reason == 'band_raised'</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">overlap_seconds</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Duration of the common time window of the two waveforms.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">cycles_at_band_edge</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td><code class="language-plaintext highlighter-rouge">overlap_seconds * f_lower_requested</code> – how many cycles of the <em>requested</em> band edge fit in the window. Values below <code class="language-plaintext highlighter-rouge">MIN_CYCLES_AT_BAND_EDGE</code> are what trigger a raise.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_bins_in_band</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Resolved frequency bins between <code class="language-plaintext highlighter-rouge">f_lower_used</code> and the upper cutoff.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3 id="property-is_usable">
+  
+  
+    <a href="#property-is_usable" class="anchor-heading" aria-labelledby="property-is_usable"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>property</em> <code class="language-plaintext highlighter-rouge">is_usable</code>
+  
+  
+</h3>
+    
+
+<p>True when the match is a number rather than a failure code.</p><hr />
+<h2 id="class-strainmatchresult">
+  
+  
+    <a href="#class-strainmatchresult" class="anchor-heading" aria-labelledby="class-strainmatchresult"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <em>class</em> <code class="language-plaintext highlighter-rouge">StrainMatchResult</code>
+  
+  
+</h2>
+    
+
+<p>Outcome of a frame-maximised match between two mode sets.</p>
+<h4 id="attributes-1">
+  
+  
+    <a href="#attributes-1" class="anchor-heading" aria-labelledby="attributes-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Attributes
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">match</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Match in [0, 1] maximised over <code class="language-plaintext highlighter-rouge">(alpha, beta, t_c)</code>, or NaN on failure.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mismatch</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td><code class="language-plaintext highlighter-rouge">1 - match</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">alpha</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Overall phase of the complex strain, in radians on (-pi, pi]. Applied <em>after</em> the mode sum, so it is a rotation of the polarisation basis by <code class="language-plaintext highlighter-rouge">alpha / 2</code> – not an orbital phase.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">beta</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Rotation of the source frame about the orbital angular momentum axis, in radians on [0, 2pi). Degenerate with the azimuthal viewing angle.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">phase_offsets</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{m: alpha + m * beta}</code> wrapped to (-pi, pi], the composite offset actually applied to each <code class="language-plaintext highlighter-rouge">m</code>. This is the quantity a single-mode match absorbs and therefore cannot report.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">time_shift</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Time offset applied to <code class="language-plaintext highlighter-rouge">modes_a</code>, in seconds, relative to the (2,2)-peak alignment.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">match_at_zero_beta</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>The same match with <code class="language-plaintext highlighter-rouge">beta</code> held at 0 (<code class="language-plaintext highlighter-rouge">alpha</code> and <code class="language-plaintext highlighter-rouge">t_c</code> still maximised). <code class="language-plaintext highlighter-rouge">match - match_at_zero_beta</code> is what the extra degree of freedom bought, and a large gap means the two mode sets are reported in different frames rather than disagreeing physically.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination, azimuth</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Viewing angles the strain was evaluated at, in radians.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_used, f_upper_used</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Band actually integrated over, in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_bins_in_band</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Positive-frequency bins between the two cutoffs.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ms_used</code></td>
+      <td><code class="language-plaintext highlighter-rouge">tuple</code></td>
+      <td>The <code class="language-plaintext highlighter-rouge">m</code> values that contributed, sorted.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">reason</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td><code class="language-plaintext highlighter-rouge">'ok'</code>, or a failure code: <code class="language-plaintext highlighter-rouge">'no_common_modes'</code>, <code class="language-plaintext highlighter-rouge">'zero_norm'</code>, <code class="language-plaintext highlighter-rouge">'insufficient_bins'</code>.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h2 id="functions">
+  
+  
+    <a href="#functions" class="anchor-heading" aria-labelledby="functions"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Functions
+  
+  
+</h2>
+    
+<h3 id="apply_wigner_rotation_to_mode_dict">
+  
+  
+    <a href="#apply_wigner_rotation_to_mode_dict" class="anchor-heading" aria-labelledby="apply_wigner_rotation_to_mode_dict"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">apply_wigner_rotation_to_mode_dict</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">apply_wigner_rotation_to_mode_dict</span><span class="p">(</span><span class="n">mode_dict</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">ell_max</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Apply a Wigner rotation to a dictionary of spherical harmonic modes.</p>
+
+<p>This is useful for rotating the output of <code class="language-plaintext highlighter-rouge">gwsurrogate</code> or
+<code class="language-plaintext highlighter-rouge">pycbc.waveform.get_td_waveform_modes</code> (which return dicts) into the
+NR source frame before computing mode-by-mode matches.</p>
+
+<p>The rotation is applied mode-by-mode via Wigner D-matrices:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>h'_{ℓm}(t) = Σ_{m'} D^{(ℓ)}_{m'm}(R) h_{ℓm'}(t)
+</code></pre></div></div>
+
+<p>where R ∈ SO(3) is a unit quaternion and D^{(ℓ)} is the (2ℓ+1)×(2ℓ+1)
+Wigner D-matrix for angular momentum ℓ.</p>
+<h4 id="parameters">
+  
+  
+    <a href="#parameters" class="anchor-heading" aria-labelledby="parameters"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">mode_dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>Keys are <code class="language-plaintext highlighter-rouge">(l, m)</code> integer tuples; values are complex <code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code> objects (or 1-D numpy arrays of matching length).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">R</code></td>
+      <td><code class="language-plaintext highlighter-rouge">quaternionic.array</code></td>
+      <td>Unit quaternion representing the rotation.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">ell_max</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Maximum ℓ to include (default 4).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns">
+  
+  
+    <a href="#returns" class="anchor-heading" aria-labelledby="returns"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td>Rotated mode dictionary with the same <code class="language-plaintext highlighter-rouge">(l, m)</code> keys.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="load_psd">
+  
+  
+    <a href="#load_psd" class="anchor-heading" aria-labelledby="load_psd"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">load_psd</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">load_psd</span><span class="p">(</span><span class="n">f_lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">waveform_length_seconds</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">psd_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Load a named analytic PSD sampled to match a waveform’s frequency grid.</p>
+<h4 id="parameters-1">
+  
+  
+    <a href="#parameters-1" class="anchor-heading" aria-labelledby="parameters-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Low-frequency cutoff in Hz.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Time step of the waveforms in seconds (sets the Nyquist limit).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">waveform_length_seconds</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Duration of the longest waveform in seconds (sets frequency resolution).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>PyCBC analytic PSD name (default <code class="language-plaintext highlighter-rouge">'aLIGOZeroDetHighPower'</code>).</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-1">
+  
+  
+    <a href="#returns-1" class="anchor-heading" aria-labelledby="returns-1"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="compute_mode_match_detailed">
+  
+  
+    <a href="#compute_mode_match_detailed" class="anchor-heading" aria-labelledby="compute_mode_match_detailed"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_mode_match_detailed</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_mode_match_detailed</span><span class="p">(</span><span class="n">h_nr</span><span class="p">,</span> <span class="n">h_sur</span><span class="p">,</span> <span class="n">f_lower_mode</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">psd</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">psd_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">'</span><span class="p">,</span> <span class="n">f_upper</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">min_cycles</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">MIN_CYCLES_AT_BAND_EDGE</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">peak</span><span class="sh">'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ModeMatchResult</span>
+</code></pre></div></div>
+
+<p>Match one NR mode against one model mode, reporting <em>why</em> on failure.</p>
+
+<p>Same computation as :func:<code class="language-plaintext highlighter-rouge">compute_mode_match</code>, but it returns a
+:class:<code class="language-plaintext highlighter-rouge">ModeMatchResult</code> instead of a bare float and it will <strong>raise the
+lower cutoff</strong> rather than return NaN when the requested band lies below
+what the common time window can resolve.</p>
+
+<blockquote>
+  <p><strong>Why the band is raised rather than the simulation discarded</strong>
+The per-mode cutoff scales as <code class="language-plaintext highlighter-rouge">|m|/2</code> (see :func:<code class="language-plaintext highlighter-rouge">mode_f_lower</code>), which
+<em>lowers</em> the cutoff for <code class="language-plaintext highlighter-rouge">m=1</code> by a factor of two.  That mapping is
+physically correct but presumes the waveform extends to the lower
+frequency.  For a short waveform it does not: the integral then runs over a
+band where one input has no support, the normalisation degenerates, and
+<code class="language-plaintext highlighter-rouge">pycbc.filter.match</code> returns a bare NaN.  Measured, the transition sits at
+<code class="language-plaintext highlighter-rouge">overlap * f_lower ≈ 1</code> cycle.</p>
+
+  <p>Discarding the simulation is the wrong remedy, because the failure is
+per-mode: at the duration where <code class="language-plaintext highlighter-rouge">(2,1)</code> fails, <code class="language-plaintext highlighter-rouge">(2,2)</code>, <code class="language-plaintext highlighter-rouge">(4,4)</code> and
+<code class="language-plaintext highlighter-rouge">(3,2)</code> are still fine, and dropping the simulation throws those away
+too.  Raising the cutoff to the resolvable value instead reports the band
+that was <em>actually</em> integrated, and is close to value-neutral in practice
+because the detector PSD already suppresses the trimmed region.</p>
+</blockquote>
+<h4 id="parameters-2">
+  
+  
+    <a href="#parameters-2" class="anchor-heading" aria-labelledby="parameters-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_nr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex NR and model mode time series, same <code class="language-plaintext highlighter-rouge">delta_t</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_sur</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex NR and model mode time series, same <code class="language-plaintext highlighter-rouge">delta_t</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_mode</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Requested low-frequency cutoff in Hz, normally <code class="language-plaintext highlighter-rouge">mode_f_lower(f, m)</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries or None</code></td>
+      <td>A pre-built one-sided PSD. It is <strong>resampled</strong> onto the frequency grid this function actually integrates on, so its <code class="language-plaintext highlighter-rouge">delta_f</code> need not match the padded segment – the caller cannot generally know that resolution in advance, since it depends on the common window found here. Outside the supplied range the PSD is taken as infinite, excluding those bins. When <code class="language-plaintext highlighter-rouge">None</code> (default) the PSD is built from <code class="language-plaintext highlighter-rouge">psd_name</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>PyCBC analytic PSD name (default <code class="language-plaintext highlighter-rouge">'aLIGOZeroDetHighPower'</code>). Ignored when <code class="language-plaintext highlighter-rouge">psd</code> is given.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float or None</code></td>
+      <td>Upper frequency cutoff in Hz (default: Nyquist).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">min_cycles</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Cycles at the band edge the window must contain (default :data:<code class="language-plaintext highlighter-rouge">MIN_CYCLES_AT_BAND_EDGE</code>). Pass <code class="language-plaintext highlighter-rouge">0</code> to disable the raise and reproduce the historical behaviour exactly.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">alignment</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Method to align waveforms before matching: ‘peak’ (default) finds the merger robustly from the end; ‘crosscorr’ uses a fast-FFT matched filter over the full envelope to find maximum phase coherence.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-2">
+  
+  
+    <a href="#returns-2" class="anchor-heading" aria-labelledby="returns-2"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">ModeMatchResult</code></td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="compute_mode_match">
+  
+  
+    <a href="#compute_mode_match" class="anchor-heading" aria-labelledby="compute_mode_match"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_mode_match</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_mode_match</span><span class="p">(</span><span class="n">h_nr</span><span class="p">,</span> <span class="n">h_sur</span><span class="p">,</span> <span class="n">f_lower_mode</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">psd</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">psd_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">'</span><span class="p">,</span> <span class="n">f_upper</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">min_cycles</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">MIN_CYCLES_AT_BAND_EDGE</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">peak</span><span class="sh">'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Compute the noise-weighted match between one NR and one model mode.</p>
+
+<p>Thin wrapper over :func:<code class="language-plaintext highlighter-rouge">compute_mode_match_detailed</code> that returns only the
+numeric match, for callers that do not need the failure reason.  The
+signature and return type are unchanged from earlier versions.</p>
+
+<p>Both inputs should be the <em>complex</em> strain mode, sampled at the same
+<code class="language-plaintext highlighter-rouge">delta_t</code>.  The function pads to the next power-of-two, builds a PSD at
+the matching frequency resolution, and calls <code class="language-plaintext highlighter-rouge">pycbc.filter.match()</code>.</p>
+<h4 id="parameters-3">
+  
+  
+    <a href="#parameters-3" class="anchor-heading" aria-labelledby="parameters-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_nr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex NR mode time series.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_sur</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex surrogate mode time series.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower_mode</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Low-frequency cutoff for this mode in Hz. Use <code class="language-plaintext highlighter-rouge">f_lower * \|m\| / 2</code> (GW frequency scales as |m| × f_orbital).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries or None</code></td>
+      <td>Pre-built one-sided PSD, resampled onto the grid actually integrated. When <code class="language-plaintext highlighter-rouge">None</code> (default) it is built from <code class="language-plaintext highlighter-rouge">psd_name</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd_name</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>PyCBC analytic PSD name (default <code class="language-plaintext highlighter-rouge">'aLIGOZeroDetHighPower'</code>).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float or None</code></td>
+      <td>Upper frequency cutoff in Hz (default: Nyquist).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">min_cycles</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Cycles at the band edge the common window must contain before the cutoff is raised (default :data:<code class="language-plaintext highlighter-rouge">MIN_CYCLES_AT_BAND_EDGE</code>). Pass <code class="language-plaintext highlighter-rouge">0</code> to reproduce the historical behaviour exactly.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">alignment</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Method used to align waveforms before matching. ‘peak’ (default) finds the merger peak robustly from the end; ‘crosscorr’ uses a fast-FFT matched filter over the full envelope to find the maximum phase coherence.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-3">
+  
+  
+    <a href="#returns-3" class="anchor-heading" aria-labelledby="returns-3"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Match in [0, 1], or <code class="language-plaintext highlighter-rouge">float('nan')</code> if the mode carries no signal, the two waveforms do not overlap in time, or the band cannot be resolved. Use :func:<code class="language-plaintext highlighter-rouge">compute_mode_match_detailed</code> to tell those cases apart.</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<blockquote>
+  <p><strong>See Also</strong>
+compute_mode_match_detailed : same computation, with the reason attached.</p>
+</blockquote><hr />
+<h3 id="compute_phase_diff_per_cycle">
+  
+  
+    <a href="#compute_phase_diff_per_cycle" class="anchor-heading" aria-labelledby="compute_phase_diff_per_cycle"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_phase_diff_per_cycle</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_phase_diff_per_cycle</span><span class="p">(</span><span class="n">h_nr</span><span class="p">,</span> <span class="n">h_sur</span><span class="p">,</span> <span class="n">alignment</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">peak</span><span class="sh">'</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span>
+</code></pre></div></div>
+
+<p>Compute accumulated phase difference per GW cycle over the common window.</p>
+
+<p>Both inputs are the <em>complex</em> mode time series (h_lm = h+ - i h×).
+The two waveforms are trimmed to their shared time window (both should have
+epoch set so t=0 is at peak amplitude), then the total accumulated phase of
+each is computed from the unwrapped angle.</p>
+
+<p>The metric returned is::</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>phase_diff_per_cycle = |ΔΦ_NR - ΔΦ_sur| / N_cycles_NR   [rad / cycle]
+</code></pre></div></div>
+
+<p>where <code class="language-plaintext highlighter-rouge">ΔΦ = |φ(t_end) - φ(t_start)|</code> is the total phase evolved and
+<code class="language-plaintext highlighter-rouge">N_cycles_NR = ΔΦ_NR / (2π)</code>.</p>
+<h4 id="parameters-4">
+  
+  
+    <a href="#parameters-4" class="anchor-heading" aria-labelledby="parameters-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_nr</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex NR mode time series.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">h_sur</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.TimeSeries</code></td>
+      <td>Complex surrogate mode time series.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">alignment</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Method to align waveforms before computing phase diff. ‘peak’ (default) or ‘crosscorr’.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-4">
+  
+  
+    <a href="#returns-4" class="anchor-heading" aria-labelledby="returns-4"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">tuple[float, float]</code></td>
+      <td><code class="language-plaintext highlighter-rouge">(phase_diff_per_cycle, n_cycles_nr)</code>. Returns <code class="language-plaintext highlighter-rouge">(nan, nan)</code> if either waveform has zero norm or the common window contains fewer than 2 samples.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="mode_f_lower">
+  
+  
+    <a href="#mode_f_lower" class="anchor-heading" aria-labelledby="mode_f_lower"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">mode_f_lower</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">mode_f_lower</span><span class="p">(</span><span class="n">f_lower</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span>
+</code></pre></div></div>
+
+<p>Return the GW frequency cutoff for mode (ell, m).</p>
+
+<p>GW frequency for the (ell, |m|) mode is approximately |m| times the
+orbital frequency: <code class="language-plaintext highlighter-rouge">f_gw ≈ |m| * f_orbital = |m| * f_lower / 2</code>
+(since the (2,2) mode has <code class="language-plaintext highlighter-rouge">f_gw = 2 * f_orbital</code>).</p>
+<h4 id="parameters-5">
+  
+  
+    <a href="#parameters-5" class="anchor-heading" aria-labelledby="parameters-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>GW frequency of the (2,2) mode in Hz (= 2 × orbital frequency). This is what <code class="language-plaintext highlighter-rouge">CatalogBase.get_parameters()</code> returns as <code class="language-plaintext highlighter-rouge">f_lower</code>.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">em</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Azimuthal mode number m. For m=0 the mode carries no oscillatory GW power at a well-defined frequency; <code class="language-plaintext highlighter-rouge">f_lower</code> is returned as a conservative lower bound but the result should not be interpreted as a physically meaningful frequency cutoff for that mode.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-5">
+  
+  
+    <a href="#returns-5" class="anchor-heading" aria-labelledby="returns-5"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Mode-specific GW frequency cutoff in Hz.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="interpolate_in_amp_phase">
+  
+  
+    <a href="#interpolate_in_amp_phase" class="anchor-heading" aria-labelledby="interpolate_in_amp_phase"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">interpolate_in_amp_phase</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">interpolate_in_amp_phase</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">new_time</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Interpolate in amplitude and phase using a variety of methods.</p>
+<h4 id="parameters-6">
+  
+  
+    <a href="#parameters-6" class="anchor-heading" aria-labelledby="parameters-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">obj</code></td>
+      <td><code class="language-plaintext highlighter-rouge">sxs.TimeSeries</code></td>
+      <td>Complex waveform time series.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">new_time</code></td>
+      <td><code class="language-plaintext highlighter-rouge">array_like</code></td>
+      <td>New time axis to interpolate onto.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">k</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Spline order for <code class="language-plaintext highlighter-rouge">InterpolatedUnivariateSpline</code> (default 3).</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">kind</code></td>
+      <td><code class="language-plaintext highlighter-rouge">str</code></td>
+      <td>Alternative interpolation: <code class="language-plaintext highlighter-rouge">'linear'</code>, <code class="language-plaintext highlighter-rouge">'quadratic'</code>, <code class="language-plaintext highlighter-rouge">'cubic'</code>, or <code class="language-plaintext highlighter-rouge">'CubicSpline'</code>. When specified, <code class="language-plaintext highlighter-rouge">k</code> is ignored.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-6">
+  
+  
+    <a href="#returns-6" class="anchor-heading" aria-labelledby="returns-6"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">sxs.TimeSeries</code></td>
+      <td>Interpolated complex waveform on <code class="language-plaintext highlighter-rouge">new_time</code>.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="sylm">
+  
+  
+    <a href="#sylm" class="anchor-heading" aria-labelledby="sylm"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">sylm</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">sylm</span><span class="p">(</span><span class="n">ell</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">em</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">complex</span>
+</code></pre></div></div>
+
+<p>Spin-weight -2 spherical harmonic <code class="language-plaintext highlighter-rouge">{}_{-2}Y_{lm}(iota, phi)</code>.</p>
+
+<p>Thin wrapper over LAL so that every caller in this package uses one
+convention.  <code class="language-plaintext highlighter-rouge">spherical</code> is also a dependency here but indexes its
+harmonics differently, and mixing the two is exactly the kind of silent
+convention error this function exists to prevent.</p><hr />
+<h3 id="complete_negative_m">
+  
+  
+    <a href="#complete_negative_m" class="anchor-heading" aria-labelledby="complete_negative_m"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">complete_negative_m</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">complete_negative_m</span><span class="p">(</span><span class="n">modes</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Add the <code class="language-plaintext highlighter-rouge">m &lt; 0</code> modes implied by equatorial symmetry.</p>
+
+<p>For a non-precessing binary <code class="language-plaintext highlighter-rouge">h_{l,-m} = (-1)^l conj(h_lm)</code>.  Verified
+against SXS data carrying both signs: the relation holds to 3e-6 (2,2) and
+4e-4 (3,3), i.e. to the numerical error of the simulation.</p>
+
+<p><strong>This is wrong for precessing systems</strong>, which have no such symmetry, and
+is why it is a separate function rather than something applied silently
+inside the match.  Modes already present are never overwritten.</p><hr />
+<h3 id="compute_strain_match">
+  
+  
+    <a href="#compute_strain_match" class="anchor-heading" aria-labelledby="compute_strain_match"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_strain_match</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_strain_match</span><span class="p">(</span><span class="n">modes_a</span><span class="p">,</span> <span class="n">modes_b</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">psd</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">psd_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sh">'</span><span class="s">aLIGOZeroDetHighPower</span><span class="sh">'</span><span class="p">,</span> <span class="n">f_lower</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">20.0</span><span class="p">,</span> <span class="n">f_upper</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="bp">None</span><span class="p">,</span> <span class="n">n_beta</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">STRAIN_MATCH_N_BETA</span><span class="p">,</span> <span class="n">taper_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">TAPER_FRACTION</span><span class="p">,</span> <span class="n">symmetrize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StrainMatchResult</span>
+</code></pre></div></div>
+
+<p>Match two mode sets as coherent strain, maximised over the frame offset.</p>
+
+<p>Builds the complex strain :math:<code class="language-plaintext highlighter-rouge">h = h_+ - i h_\times</code> from each mode set,</p>
+
+<p>.. math::</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>h^A(t; \alpha, \beta) = e^{i\alpha}
+    \sum_{\ell m} e^{i m \beta}\, h^A_{\ell m}(t)\,
+    {}_{-2}Y_{\ell m}(\iota, \varphi)
+</code></pre></div></div>
+
+<p>and returns the noise-weighted match maximised over :math:<code class="language-plaintext highlighter-rouge">\alpha</code>,
+:math:<code class="language-plaintext highlighter-rouge">\beta</code> and the time shift :math:<code class="language-plaintext highlighter-rouge">t_c</code>.</p>
+
+<blockquote>
+  <p><strong>Why these three and no others</strong>
+:math:<code class="language-plaintext highlighter-rouge">t_c</code> and :math:<code class="language-plaintext highlighter-rouge">\alpha</code> are the parameters a per-mode match already
+maximises over – :math:<code class="language-plaintext highlighter-rouge">\alpha</code> multiplies :math:<code class="language-plaintext highlighter-rouge">h_+ - i h_\times</code> by a
+constant phase, which is a rotation of the polarisation basis by
+:math:<code class="language-plaintext highlighter-rouge">\alpha/2</code>.  :math:<code class="language-plaintext highlighter-rouge">\beta</code> is the one that per-mode matching cannot
+see: it rotates the source about the orbital angular momentum axis and is
+exactly degenerate with the azimuthal viewing angle, so it is unobservable
+and must be maximised over, but because it acts as :math:<code class="language-plaintext highlighter-rouge">e^{im\beta}</code> it is
+<em>not</em> absorbed by any single-mode phase maximisation.  Leaving it in place
+reports a mismatch dominated by a convention difference: measured at
+:math:<code class="language-plaintext highlighter-rouge">\iota = 60^\circ</code>, 5.7e-2 against 2.1e-4 for SXS:BBH:0201.</p>
+
+  <p>Nothing else is maximised over.  Inclination is a physical parameter of the
+comparison, not a nuisance, so it is an argument rather than a search
+dimension; a mode set that only agrees at some fitted inclination is not the
+same waveform.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>Argument order and azimuth</strong>
+<code class="language-plaintext highlighter-rouge">beta</code> is applied to <code class="language-plaintext highlighter-rouge">modes_a</code>, which makes the result mildly asymmetric
+under swapping the arguments: measured on SXS:BBH:0201 at
+:math:<code class="language-plaintext highlighter-rouge">\iota = 60^\circ</code>, 1.87e-3 one way against 1.45e-3 the other.  That
+asymmetry is not an artefact – an independent reference implementation
+reproduces both numbers – and it is not really about argument order either.
+Rotating the source by <code class="language-plaintext highlighter-rouge">beta</code> is the same as viewing it from azimuth
+<code class="language-plaintext highlighter-rouge">beta</code>, so putting the rotation on <code class="language-plaintext highlighter-rouge">a</code> rather than <code class="language-plaintext highlighter-rouge">b</code> amounts to
+evaluating the pair at a different absolute azimuth, and the mismatch
+genuinely depends on azimuth: the same simulation spans 1.35e-3 to 2.09e-3
+over a uniform azimuth grid, a range that contains both of the numbers
+above.  <code class="language-plaintext highlighter-rouge">beta</code> itself is unaffected, agreeing to 2e-4 rad under a swap.</p>
+
+  <p>Use :func:<code class="language-plaintext highlighter-rouge">compute_strain_mismatch_averaged</code> when a single
+convention-independent number is wanted; use this function when the
+dependence on viewing geometry is the thing being studied.</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>The inner product</strong>
+Two-sided, so that it is correct for the <em>complex</em> strain and agrees with
+the usual real-signal convention without a case split:</p>
+
+  <p>.. math::</p>
+
+  <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\langle a | b \rangle = 2 \int_{-\infty}^{\infty}
+    \frac{\tilde a(f)\, \tilde b^*(f)}{S_n(|f|)}\, df
+</code></pre></div>  </div>
+
+  <p>For real :math:<code class="language-plaintext highlighter-rouge">a, b</code> the negative-frequency half is the conjugate of the
+positive half and this collapses to :math:<code class="language-plaintext highlighter-rouge">4\,\mathrm{Re}\int_0^\infty</code>.
+Restricting to positive frequencies instead would silently discard the
+counter-rotating content, which is exactly the <code class="language-plaintext highlighter-rouge">m &lt; 0</code> half of the mode
+sum.</p>
+</blockquote>
+<h4 id="parameters-7">
+  
+  
+    <a href="#parameters-7" class="anchor-heading" aria-labelledby="parameters-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Parameters
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">modes_a</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{(ell, em): complex array}</code>, both sampled at <code class="language-plaintext highlighter-rouge">delta_t</code>. Need not be the same length or contain the same modes; only the common <code class="language-plaintext highlighter-rouge">(l, m)</code> are used.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">modes_b</code></td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{(ell, em): complex array}</code>, both sampled at <code class="language-plaintext highlighter-rouge">delta_t</code>. Need not be the same length or contain the same modes; only the common <code class="language-plaintext highlighter-rouge">(l, m)</code> are used.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">delta_t</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Sample spacing in seconds. Must be the same for both.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">inclination</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Viewing angles in radians.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">azimuth</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Viewing angles in radians.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">psd</code></td>
+      <td><code class="language-plaintext highlighter-rouge">pycbc.types.FrequencySeries</code></td>
+      <td>Supply to override <code class="language-plaintext highlighter-rouge">psd_name</code>. Resampled onto the internal grid.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_lower</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Band in Hz. <code class="language-plaintext highlighter-rouge">f_upper</code> defaults to Nyquist. Note <code class="language-plaintext highlighter-rouge">f_lower</code> here is the <em>strain</em> band edge and should be the (2,2) cutoff, not a value scaled by <code class="language-plaintext highlighter-rouge">\|m\|/2</code>: the mode-wise scaling in :func:<code class="language-plaintext highlighter-rouge">mode_f_lower</code> exists because each mode is filtered separately, whereas the coherent strain carries every mode at once.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">f_upper</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Band in Hz. <code class="language-plaintext highlighter-rouge">f_upper</code> defaults to Nyquist. Note <code class="language-plaintext highlighter-rouge">f_lower</code> here is the <em>strain</em> band edge and should be the (2,2) cutoff, not a value scaled by <code class="language-plaintext highlighter-rouge">\|m\|/2</code>: the mode-wise scaling in :func:<code class="language-plaintext highlighter-rouge">mode_f_lower</code> exists because each mode is filtered separately, whereas the coherent strain carries every mode at once.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">n_beta</code></td>
+      <td><code class="language-plaintext highlighter-rouge">int</code></td>
+      <td>Coarse <code class="language-plaintext highlighter-rouge">beta</code> grid size; refined locally afterwards.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">taper_fraction</code></td>
+      <td><code class="language-plaintext highlighter-rouge">float</code></td>
+      <td>Start-only taper, as elsewhere in this module. 0 disables.</td>
+    </tr>
+    <tr>
+      <td><code class="language-plaintext highlighter-rouge">symmetrize</code></td>
+      <td><code class="language-plaintext highlighter-rouge">bool</code></td>
+      <td>Fill in absent <code class="language-plaintext highlighter-rouge">m &lt; 0</code> modes via :func:<code class="language-plaintext highlighter-rouge">complete_negative_m</code>. Leave on for non-precessing systems and <strong>off</strong> for precessing ones.</td>
+    </tr>
+  </tbody>
+</table></div>
+<h4 id="returns-7">
+  
+  
+    <a href="#returns-7" class="anchor-heading" aria-labelledby="returns-7"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">StrainMatchResult</code></td>
+      <td>Carries <code class="language-plaintext highlighter-rouge">alpha</code>, <code class="language-plaintext highlighter-rouge">beta</code> and <code class="language-plaintext highlighter-rouge">phase_offsets = {m: alpha + m*beta}</code> alongside the match.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+<h3 id="compute_strain_mismatch_averaged">
+  
+  
+    <a href="#compute_strain_mismatch_averaged" class="anchor-heading" aria-labelledby="compute_strain_mismatch_averaged"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">compute_strain_mismatch_averaged</code>
+  
+  
+</h3>
+    
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">compute_strain_mismatch_averaged</span><span class="p">(</span><span class="n">modes_a</span><span class="p">,</span> <span class="n">modes_b</span><span class="p">,</span> <span class="n">delta_t</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">inclination</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">n_azimuth</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span>
+</code></pre></div></div>
+
+<p>Frame-maximised strain mismatch averaged over azimuth.</p>
+
+<p>:func:<code class="language-plaintext highlighter-rouge">compute_strain_match</code> is evaluated at a single azimuth, and its value
+depends on that choice – 1.55x between the best and worst azimuth for
+SXS:BBH:0201.  Averaging removes both that dependence and the residual
+asymmetry under swapping <code class="language-plaintext highlighter-rouge">modes_a</code> and <code class="language-plaintext highlighter-rouge">modes_b</code>, since the two argument
+orders differ only by which absolute azimuth the pair is evaluated at.  This
+is the number to quote when the viewing geometry is a nuisance rather than
+the subject.</p>
+<h4 id="returns-8">
+  
+  
+    <a href="#returns-8" class="anchor-heading" aria-labelledby="returns-8"><svg viewBox="0 0 16 16" aria-hidden="true"><use xlink:href="#svg-link"></use></svg></a> Returns
+  
+  
+</h4>
+    
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><code class="language-plaintext highlighter-rouge">dict</code></td>
+      <td><code class="language-plaintext highlighter-rouge">mean</code>, <code class="language-plaintext highlighter-rouge">median</code>, <code class="language-plaintext highlighter-rouge">min</code>, <code class="language-plaintext highlighter-rouge">max</code> of the mismatch over the grid, plus <code class="language-plaintext highlighter-rouge">per_azimuth</code> (the individual :class:<code class="language-plaintext highlighter-rouge">StrainMatchResult</code> objects) so the spread can be inspected rather than assumed small.</td>
+    </tr>
+  </tbody>
+</table></div><hr />
+
+          
+
+          
+            
+          
+        </main>
+        
+<hr>
+<footer>
+  
+    <p><a href="#top" id="back-to-top">Back to top</a></p>
+  
+
+  <p class="text-small mb-0">Copyright &copy; the nrcats developers. Distributed under the <a href="https://github.com/gwnrtools/nrcats/blob/master/LICENSE">GPL license</a>.</p>
+
+  <div class="d-md-none mt-4 fs-2">
+    
+    
+      This site uses <a href="https://github.com/just-the-docs/just-the-docs">Just the Docs</a>, a documentation theme for Jekyll.
+    
+  </div>
+</footer>
+
+      </div>
+    </div>
+    
+      
+
+<div class="search-overlay"></div>
+
+    
+  </div>
+
+  
+</body>
+</html>
+
