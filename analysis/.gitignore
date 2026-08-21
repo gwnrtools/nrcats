@@ -2,10 +2,10 @@
 #
 # This repository is the library; the analysis inputs to a manuscript belong
 # with the manuscript, under the same reproducibility guard as every other
-# number in it.  The merged form of these shards is committed in
-# catalog-comparison-paper as project/results/precessing_campaign.csv (via
-# git-lfs), and the raw shards move to project/results/precessing_campaign/
-# once the campaign finishes -- see that repo's paper_plan.md, Phase 6.
+# number in it.  The precessing campaigns have since moved there in full --
+# code to project/scripts/precessing_campaign/, shards to
+# project/results/precessing_campaign/srNNNNN/, both git-lfs tracked.  The rules
+# below still apply to whatever else is run out of this directory.
 #
 # Tracking them here as well would mean two sources of truth for the same
 # numbers, and these files are rewritten after every simulation while a campaign
