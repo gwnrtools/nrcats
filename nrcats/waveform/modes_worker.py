@@ -24,6 +24,54 @@ from nrcats.waveform.units import _modal_dt
 logger = logging.getLogger(__name__)
 
 
+def _interpolated_peak_abs(q):
+    """Peak of ``|q|`` refined below the sample spacing.
+
+    The time maximization in the sphere-averaged matches is a discrete argmax
+    over ``|ifft(...)|``, which quantizes the time shift to one sample.  That
+    quantization is not a small effect at the mismatches this code exists to
+    measure: a peak sitting half a sample from a grid point is recovered at the
+    value of its neighbour, and the resulting error grows as the mismatch
+    shrinks, because a smaller mismatch means a sharper peak.  It is the
+    mechanism behind the sample-rate sensitivity documented in findings 5k of
+    the catalog-comparison-paper repo, where the SXS (2,2) median moved by a
+    factor of 2.5 between 4096 Hz and 16384 Hz with nothing near Nyquist.
+
+    Three points around the discrete maximum determine a parabola, and its
+    vertex estimates the true peak.  This is the same correction
+    ``pycbc.filter.match(subsample_interpolation=True)`` applies, reproduced
+    here because these functions maximize over time themselves rather than
+    calling pycbc; keeping the two consistent is what makes a sphere-averaged
+    mismatch comparable with a single-mode one.
+
+    Neighbours wrap: ``q`` is a circular correlation, so index ``-1`` and index
+    ``n`` are the genuine adjacent lags, not out-of-range.
+
+    Returns the interpolated peak value.  Degenerate parabolas -- a flat or
+    upward-curving triple, which occur when the peak is exactly on a sample or
+    the series is constant -- fall back to the discrete maximum.
+    """
+    a = np.abs(q)
+    i = int(np.argmax(a))
+    n = a.size
+    if n < 3:
+        return float(a[i])
+    left, middle, right = float(a[(i - 1) % n]), float(a[i]), float(a[(i + 1) % n])
+    denom = left - 2.0 * middle + right
+    # denom == 0 is a straight line through the three points; denom > 0 is a
+    # local minimum, which argmax cannot have returned unless the array is
+    # constant.  Neither has a usable vertex.
+    if denom >= 0.0:
+        return middle
+    offset = 0.5 * (left - right) / denom
+    if not (-0.5 <= offset <= 0.5):
+        return middle
+    peak = middle - 0.25 * (left - right) * offset
+    # The parabola through three samples of |q| can overshoot slightly; the
+    # true peak is never below the largest sample.
+    return peak if peak >= middle else middle
+
+
 def _restrict_to_complete_blocks(common_modes, restrict=True):
     """Drop ell blocks that are not complete from -ell to +ell.
 
@@ -636,7 +684,7 @@ def match_sphere_averaged(
         # same order as the NR-against-surrogate mismatches this function
         # exists to measure -- and a quarter-turn destroyed the match
         # outright.
-        max_inner_prod = df * N_pad * np.max(np.abs(_q))
+        max_inner_prod = df * N_pad * _interpolated_peak_abs(_q)
 
         overlap = max_inner_prod / np.sqrt(total_norm1_sq * total_norm2_sq)
         if np.isnan(overlap):
@@ -942,7 +990,7 @@ def match_sphere_averaged_bms_maximized(
         # np.abs, not np.real: the modulus maximizes over one constant phase
         # common to every mode -- the polarization angle -- which no BMS
         # transformation reproduces.  Same convention as match_sphere_averaged.
-        peak = df * n_fft * np.max(np.abs(ifft(inner)))
+        peak = df * n_fft * _interpolated_peak_abs(ifft(inner))
         overlap = peak / np.sqrt(norm1_sq * norm2_sq)
         if not np.isfinite(overlap):
             return 1.0
