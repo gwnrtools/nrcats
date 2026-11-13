@@ -138,3 +138,17 @@ The docs site is deployed automatically from `master` via GitHub Actions
 ## License
 
 GPLv3 — see [LICENSE](LICENSE).
+
+---
+
+## AI Assistance Disclaimer
+
+Since the beginning of 2026, this codebase has been developed with significant assistance from multiple AI coding assistants and generative AI systems. These tools were used throughout the development process for tasks such as code generation, refactoring, documentation drafting, and debugging. No single AI tool was used exclusively, and the set of tools employed may vary across contributors and over time.
+
+**However**:
+
+- All code in this repository has been reviewed, tested, and validated by the human authors at each stage of development.
+- AI tools used in this project are **not considered authors or contributors** in any legal or attributional sense. They are treated as instruments of development, analogous to compilers, linters, or IDEs.
+- The human authors bear **full and sole responsibility** for the correctness, security, and reliability of this code. Any errors, bugs, or unintended behavior are the responsibility of the human authors, not of the AI systems or their developers.
+
+We believe in transparency about modern software development practices and have made this declaration in that spirit. Users and contributors are encouraged to apply the same scrutiny to this code as they would to any other software project.
