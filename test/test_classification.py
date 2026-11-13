@@ -235,3 +235,85 @@ def test_nrsur_calibration_filtering():
             ValueError, match="only_nrsur_calibration=True is only supported"
         ):
             classifier.get_simulations("RIT", "f", only_nrsur_calibration=True)
+
+
+# ── Per-catalog eccentricity thresholds ──────────────────────────────────────
+#
+# The three catalogs do not publish the same quantity.  SXS reports
+# ``reference_eccentricity``; RIT and MAYA report an ``eccentricity`` measured by
+# their own procedures at their own epochs.  A single threshold applied to all
+# three therefore selects a different physical population from each, which is
+# why the classifier accepts a mapping.  These tests fix the behaviour of that
+# mapping; the *values* are derived in the paper repository
+# (project/scripts/fit_eccentricity_floor.py) and are deliberately not baked in
+# here.
+
+
+def test_scalar_threshold_applies_to_every_catalog():
+    """The uniform case must keep costing nothing and reading the same."""
+    c = NRCatalogClassifier(ecc_threshold=0.005)
+    assert c.ecc_threshold_for("SXS") == 0.005
+    assert c.ecc_threshold_for("RIT") == 0.005
+    assert c.ecc_threshold_for("MAYA") == 0.005
+    # A scalar covers catalogs that do not exist yet, by construction.
+    assert c.ecc_threshold_for("SOMETHING_ELSE") == 0.005
+
+
+def test_mapping_threshold_is_per_catalog_and_case_insensitive():
+    c = NRCatalogClassifier(
+        ecc_threshold={"sxs": 1.2e-2, "RIT": 4.9e-3, "Maya": 8.2e-3}
+    )
+    assert c.ecc_threshold_for("SXS") == 1.2e-2
+    assert c.ecc_threshold_for("sxs") == 1.2e-2
+    assert c.ecc_threshold_for("rit") == 4.9e-3
+    assert c.ecc_threshold_for("MAYA") == 8.2e-3
+
+
+def test_missing_catalog_raises_rather_than_defaulting():
+    """Silently defaulting would apply one catalog's threshold to another.
+
+    That is precisely the error the mapping exists to prevent, so the mapping
+    must not be able to cause it.
+    """
+    c = NRCatalogClassifier(ecc_threshold={"SXS": 1.2e-2})
+    with pytest.raises(ValueError) as exc:
+        c.ecc_threshold_for("RIT")
+    assert "RIT" in str(exc.value)
+
+
+@pytest.mark.parametrize(
+    "catalog,meta,ecc_key",
+    [
+        ("SXS", {"reference_eccentricity": 8.0e-3}, "reference_eccentricity"),
+        ("RIT", {"eccentricity": 8.0e-3}, "eccentricity"),
+        ("MAYA", {"eccentricity": 8.0e-3}, "eccentricity"),
+    ],
+)
+def test_the_same_eccentricity_classifies_differently_per_catalog(
+    catalog, meta, ecc_key
+):
+    """The point of the whole exercise, as one assertion.
+
+    e = 8e-3 sits above the SXS threshold and below the RIT one under the
+    mapping used here, so the identical number classifies as eccentric in one
+    catalog and quasi-circular in another.  That is not an inconsistency: the
+    two numbers are not the same measurement.
+    """
+    mapping = {"SXS": 1.2e-2, "RIT": 4.9e-3, "MAYA": 8.2e-3}
+    expected_eccentric = 8.0e-3 > mapping[catalog]
+
+    meta = dict(meta)
+    if catalog == "SXS":
+        meta["reference_dimensionless_spin1"] = [0.0, 0.0, 0.0]
+        meta["reference_dimensionless_spin2"] = [0.0, 0.0, 0.0]
+
+    c = NRCatalogClassifier(ecc_threshold=mapping)
+    with patch.object(c, "load_catalog") as loader:
+        cat = MagicMock()
+        cat.get_metadata.return_value = meta
+        loader.return_value = cat
+        result = c.classify_simulation(catalog, "sim")
+
+    assert ("eccentric" in result and "non-eccentric" not in result) is (
+        expected_eccentric
+    )

@@ -23,9 +23,20 @@ import argparse
 
 # import gwsurrogate as gws
 # nrsur = gws.LoadSurrogate("NRSur7dq4")
-os.environ["LAL_DATA_PATH"] = (
-    "/media/prayush/Data/src/lalsuite-extra/data/lalsimulation/:"
-    "/media/prayush/Data/src/lalsuite-waveform-data/waveform_data"
+# Respect an already-configured LAL_DATA_PATH.  The previous version overwrote
+# it unconditionally with paths from one machine, which clobbered a correct
+# environment rather than merely defaulting badly.  Fall back to the usual
+# sibling checkouts of this one only when nothing is set.
+_REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+os.environ.setdefault(
+    "LAL_DATA_PATH",
+    os.pathsep.join(
+        os.path.normpath(os.path.join(_REPO, "..", d))
+        for d in (
+            "lalsuite-extra/data/lalsimulation",
+            "lalsuite-waveform-data/waveform_data",
+        )
+    ),
 )
 
 

@@ -631,7 +631,7 @@ active/passive SO(3) coordinate rotation of the source frame.
 ### `match_sphere_averaged_bms_maximized`
 
 ```python
-match_sphere_averaged_bms_maximized(other, psd, f_lower, f_upper=None, j_max=1, delta_t=1.0 / 4096, total_mass=1.0, distance=1.0, psd_name='aLIGOZeroDetHighPower', min_cycles=None, alignment='peak', taper_fraction=None, alpha_max_M=10.0, seed_rotation=True, n_coarse=128, n_starts=3, maxfev=800, seed=None, return_transformation=False)
+match_sphere_averaged_bms_maximized(other, psd, f_lower, f_upper=None, j_max=1, delta_t=1.0 / 4096, total_mass=1.0, distance=1.0, psd_name='aLIGOZeroDetHighPower', min_cycles=None, alignment='peak', taper_fraction=None, alpha_max_M=10.0, boost_max=0.0, seed_rotation=True, n_coarse=128, n_starts=3, maxfev=800, seed=None, return_transformation=False)
 ```
 
 Calculate the match maximized over BMS supertranslations in addition to
@@ -690,13 +690,14 @@ standard time shift, phase shift, and SO(3) rotation.
 | `min_cycles` | `float` | Cycles at the band edge the common window must contain before the cutoff is raised. ``None`` uses :data:`~nrcats.waveform.matching.MIN_CYCLES_AT_BAND_EDGE`. |
 | `alignment` | `(peak, crosscorr)` | How the common window shared by all modes is located. |
 | `taper_fraction` | `float` | Fraction of the window over which the start taper rises. |
-| `alpha_max_M` | `float` | Bound on each supertranslation coefficient, in units of the total mass M (default 10). Mass-independent by construction; converted to seconds internally. ``u' = u - alpha`` costs data at both ends, so a supertranslation much larger than the usable window cannot be tested on the data at all. |
+| `alpha_max_M` | `float` | Bound on each supertranslation coefficient, in units of the total mass M (default 10). Mass-independent by construction: the search runs in geometric units, time in M and strain with r and M scaled out. ``u' = u - alpha`` costs data at both ends, so a supertranslation much larger than the usable window cannot be tested on the data at all. |
+| `boost_max` | `float` | Bound on each Cartesian component of a Lorentz boost added to the search, in units of c (default 0, which searches no boost and leaves the search exactly as it was without this argument). SXS v3 records centre-of-mass boosts of median 1.4e-5 c and at most 1.7e-3 c, which sets the scale to choose. |
 | `seed_rotation` | `bool` | Seed the search from the rotation-only maximization (default True). That search is cheap and finds a large frame offset, which a local simplex started at the identity will not; NR and model mode sets routinely differ by one. |
 | `n_coarse` | `int` | Quasi-random (Sobol) supertranslation samples used to bracket the optimum before any local search (default 128). The objective is a broad shallow plateau with a narrow deep well at the answer, so the coarse pass is what finds the well; a global population method spreads over the plateau and stalls. Pass 0 to start only from the identity. |
 | `n_starts` | `int` | How many of the best coarse samples to polish (default 3), on top of the identity, which is always polished. |
 | `maxfev` | `int` | Objective evaluations allowed per local polish (default 800). Cost is dominated by one exact ``scri`` grid transformation per evaluation, measured at ~250 ms for a 4096-sample, ell_max=3 waveform, so these three numbers decide the runtime. |
 | `seed` | `int or None` | Seed for the optimizer, for reproducible results. |
-| `return_transformation` | `bool` | If True, return ``(match, info)`` where ``info`` carries the fitted supertranslation (complex coefficients and the real parameters in units of M), the frame rotation, and the match at the identity. |
+| `return_transformation` | `bool` | If True, return ``(match, info)`` where ``info`` carries the fitted supertranslation (complex coefficients and the real parameters, both in units of M), the fitted boost velocity in units of c (``boost_velocity``, empty when ``boost_max`` is 0), the frame rotation, and the match at the identity. |
 
 #### Returns
 

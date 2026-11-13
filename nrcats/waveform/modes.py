@@ -1110,6 +1110,7 @@ class WaveformModes(sxs_WaveformModes):
         alignment="peak",
         taper_fraction=None,
         alpha_max_M=10.0,
+        boost_max=0.0,
         seed_rotation=True,
         n_coarse=128,
         n_starts=3,
@@ -1190,10 +1191,17 @@ class WaveformModes(sxs_WaveformModes):
             Fraction of the window over which the start taper rises.
         alpha_max_M : float, optional
             Bound on each supertranslation coefficient, in units of the total
-            mass M (default 10).  Mass-independent by construction; converted
-            to seconds internally.  ``u' = u - alpha`` costs data at both ends,
-            so a supertranslation much larger than the usable window cannot be
+            mass M (default 10).  Mass-independent by construction: the search
+            runs in geometric units, time in M and strain with r and M scaled
+            out.  ``u' = u - alpha`` costs data at both ends, so a
+            supertranslation much larger than the usable window cannot be
             tested on the data at all.
+        boost_max : float, optional
+            Bound on each Cartesian component of a Lorentz boost added to the
+            search, in units of c (default 0, which searches no boost and
+            leaves the search exactly as it was without this argument).  SXS
+            v3 records centre-of-mass boosts of median 1.4e-5 c and at most
+            1.7e-3 c, which sets the scale to choose.
         seed_rotation : bool, optional
             Seed the search from the rotation-only maximization (default True).
             That search is cheap and finds a large frame offset, which a local
@@ -1218,8 +1226,10 @@ class WaveformModes(sxs_WaveformModes):
             Seed for the optimizer, for reproducible results.
         return_transformation : bool, optional
             If True, return ``(match, info)`` where ``info`` carries the fitted
-            supertranslation (complex coefficients and the real parameters in
-            units of M), the frame rotation, and the match at the identity.
+            supertranslation (complex coefficients and the real parameters,
+            both in units of M), the fitted boost velocity in units of c
+            (``boost_velocity``, empty when ``boost_max`` is 0), the frame
+            rotation, and the match at the identity.
 
         .. versionchanged::
            The supertranslation is now applied by ``scri``'s **exact** grid
@@ -1265,6 +1275,7 @@ class WaveformModes(sxs_WaveformModes):
             alignment=alignment,
             taper_fraction=taper_fraction,
             alpha_max_M=alpha_max_M,
+            boost_max=boost_max,
             seed_rotation=seed_rotation,
             n_coarse=n_coarse,
             n_starts=n_starts,

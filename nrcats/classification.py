@@ -26,23 +26,73 @@ class NRCatalogClassifier:
         "f": "precessing-spin non-eccentric",
     }
 
-    def __init__(self, spin_threshold: float = 0.001, ecc_threshold: float = 0.005):
+    def __init__(
+        self,
+        spin_threshold: float = 0.001,
+        ecc_threshold: float | dict[str, float] = 0.005,
+    ):
         """Initialize the classifier with threshold limits.
 
         Parameters
         ----------
         spin_threshold : float, optional
             Threshold below which spin components are treated as 0 (default 0.001).
-        ecc_threshold : float, optional
-            Threshold below which initial/reference eccentricity is treated as 0 (default 0.005).
+        ecc_threshold : float or dict, optional
+            Threshold below which the reference eccentricity is treated as 0
+            (default 0.005).
+
+            A **mapping** ``{catalog: threshold}`` applies a different value to
+            each catalog, which is the physically correct thing to do and the
+            reason this accepts one.  The three catalogs do not publish the same
+            quantity: SXS reports ``reference_eccentricity``, RIT and MAYA report
+            an ``eccentricity`` measured by their own procedures at their own
+            epochs, and one number applied to all three does not select the same
+            population from each.  Catalog names are matched case-insensitively.
+
+            The scalar form is retained and remains the default: it is the
+            documented API, other callers depend on it, and a uniform threshold
+            is still the right choice when the question is "what does the
+            conventional cut give?" rather than "which simulations are
+            measurably eccentric?".
+
+        Raises
+        ------
+        ValueError
+            If a mapping is given and a catalog being classified is absent from
+            it.  Falling back to a default would silently apply one catalog's
+            threshold to another, which is the error this parameter exists to
+            prevent.
         """
         self.spin_threshold = spin_threshold
-        self.ecc_threshold = ecc_threshold
+        if isinstance(ecc_threshold, dict):
+            self.ecc_threshold = {k.upper(): float(v) for k, v in ecc_threshold.items()}
+        else:
+            self.ecc_threshold = float(ecc_threshold)
         self._sxs_catalog = None
         self._rit_catalog = None
         self._maya_catalog = None
         self._nrsur_sims = None
         self._classifications = {"SXS": {}, "RIT": {}, "MAYA": {}}
+
+    def ecc_threshold_for(self, catalog_name: str) -> float:
+        """The eccentricity threshold applied to *catalog_name*.
+
+        Returns the scalar unchanged when a scalar was configured, so the
+        uniform case costs nothing and reads the same.
+        """
+        if not isinstance(self.ecc_threshold, dict):
+            return self.ecc_threshold
+        tag = catalog_name.upper()
+        try:
+            return self.ecc_threshold[tag]
+        except KeyError:
+            raise ValueError(
+                f"no eccentricity threshold for catalog '{catalog_name}': the "
+                f"classifier was given a per-catalog mapping covering "
+                f"{sorted(self.ecc_threshold)}. Add an entry for '{tag}' or pass "
+                f"a scalar. Defaulting here would apply one catalog's threshold "
+                f"to another, which is what the mapping exists to prevent."
+            ) from None
 
     def load_catalog(self, catalog_name: str):
         """Lazy load a catalog by name tag.
@@ -215,7 +265,7 @@ class NRCatalogClassifier:
         s2y_approx = 0.0 if abs(s2y) < self.spin_threshold else s2y
         s2z_approx = 0.0 if abs(s2z) < self.spin_threshold else s2z
 
-        ecc_approx = 0.0 if abs(ecc) < self.ecc_threshold else ecc
+        ecc_approx = 0.0 if abs(ecc) < self.ecc_threshold_for(tag) else ecc
 
         is_ecc = ecc_approx > 0.0
 

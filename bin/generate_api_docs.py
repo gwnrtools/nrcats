@@ -62,7 +62,7 @@ MODULES = [
     (
         "surrogate",
         "nrcats.surrogate",
-        "NRSur7dq4 loading, evaluation, and prior check",
+        "NRSur7dq4, NRSur7dq4v2 and NRHJSur3dq8 loading, evaluation, and prior check",
     ),
     (
         "comparisons",
@@ -85,6 +85,16 @@ MODULES = [
         "utils",
         "nrcats.utils",
         "Cache paths, download helpers, unit conversions",
+    ),
+    (
+        "waveform.frame",
+        "nrcats.waveform.frame",
+        "BMS frame operations a catalog records, and the coprecessing frame",
+    ),
+    (
+        "waveform.detectors",
+        "nrcats.waveform.detectors",
+        "Observatory registry: noise curves, bands, PSD resolution",
     ),
 ]
 
@@ -201,11 +211,14 @@ def format_signature(func, is_method: bool = False) -> str:
     for i, p in enumerate(func.parameters):
         if i == 0 and is_method and p.name in ("self", "cls"):
             continue
-        kind = str(getattr(p, "kind", ""))
-        if "var_positional" in kind:
+        # The enum member's name, not str(): griffe 2.3 stringifies
+        # ParameterKind to its value ("variadic keyword"), which a substring
+        # test on "var_keyword" misses, rendering **kwargs as kwargs={}.
+        kind = getattr(getattr(p, "kind", None), "name", "")
+        if kind == "var_positional":
             parts.append(f"*{p.name}")
             continue
-        if "var_keyword" in kind:
+        if kind == "var_keyword":
             parts.append(f"**{p.name}")
             continue
         name = p.name

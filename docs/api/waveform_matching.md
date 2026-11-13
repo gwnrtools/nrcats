@@ -30,6 +30,9 @@ be unit-tested and used independently of the class.
 | `MIN_CYCLES_AT_BAND_EDGE` | `2.0` |
 | `MIN_BINS_IN_BAND` | `8` |
 | `TAPER_FRACTION` | `0.05` |
+| `MIN_CYCLES_FOR_PHASE` | `3.0` |
+| `MIN_PHASE_MONOTONICITY` | `0.9` |
+| `PHASE_AMP_FLOOR` | `0.001` |
 | `STRAIN_MATCH_N_BETA` | `720` |
 
 ---
@@ -83,6 +86,23 @@ Outcome of a frame-maximised match between two mode sets.
 | `n_bins_in_band` | `int` | Positive-frequency bins between the two cutoffs. |
 | `ms_used` | `tuple` | The ``m`` values that contributed, sorted. |
 | `reason` | `str` | ``'ok'``, or a failure code: ``'no_common_modes'``, ``'zero_norm'``, ``'insufficient_bins'``. |
+
+
+## *class* `PolarizationMatchResult`
+
+Outcome of a fixed-orientation comparison of the two polarisations.
+
+#### Attributes
+
+| Name | Type | Description |
+|---|---|---|
+| `match_plus, match_cross` | `float` | Match in [0, 1] of :math:`h_+` and of :math:`h_\times`, maximised over the time shift **only**. NaN on failure. |
+| `match_plus_quadrature, match_cross_quadrature` | `float` | The same maximised over the time shift *and a quadrature phase of that one real series*, which is what ``pycbc.filter.match`` reports for a real template. Always at least the value above. This is **not** a marginalisation over the polarisation angle: rotating the basis mixes :math:`h_+` and :math:`h_\times` into each other, and no operation on :math:`h_+` alone can undo it. For the polarisation-angle-maximised number use :func:`compute_strain_match`, whose ``alpha`` is exactly that rotation. |
+| `inclination, coa_phase` | `float` | The orientation the comparison was made at, in radians. |
+| `match_plus_best_psi, best_psi` | `float` | With ``n_psi``, the largest :math:`h_+` match over a rotation of the polarisation basis, and the rotation that achieves it in radians on [0, pi). This is the diagnostic that says whether a fixed-basis disagreement is a real waveform difference or an unaccounted basis convention: if ``best_psi`` takes the same value across a population, it is a convention and can be removed; if it scatters, no absolute orientation is available and only the quadrature columns mean anything (catalog-comparison-paper findings 5aj). |
+| `time_shift_plus, time_shift_cross` | `float` | Time offset applied, in seconds, relative to the (2,2)-peak alignment. |
+| `n_bins` | `int` | Frequency bins inside the band. |
+| `failure` | `str or None` | Reason, when the match could not be computed. |
 
 
 ## Functions
@@ -240,36 +260,81 @@ the matching frequency resolution, and calls ``pycbc.filter.match()``.
 ### `compute_phase_diff_per_cycle`
 
 ```python
-compute_phase_diff_per_cycle(h_nr, h_sur, alignment: str = 'peak') -> tuple
+compute_phase_diff_per_cycle(h_nr, h_sur, alignment: str = 'epoch', min_cycles: float = MIN_CYCLES_FOR_PHASE, t_stop: float | None = 0.0) -> tuple
 ```
 
-Compute accumulated phase difference per GW cycle over the common window.
+Accumulated inspiral phase difference per GW cycle.
 
-Both inputs are the *complex* mode time series (h_lm = h+ - i h×).
-The two waveforms are trimmed to their shared time window (both should have
-epoch set so t=0 is at peak amplitude), then the total accumulated phase of
-each is computed from the unwrapped angle.
-
-The metric returned is::
+Both inputs are the *complex* mode time series (h_lm = h+ - i h×), and both
+must be referenced to a common ``t = 0`` -- the (2,2) amplitude peak for
+every mode, which is what ``WaveformModes.get_mode()`` and the surrogate
+generator set.  The metric returned is::
 
     phase_diff_per_cycle = |ΔΦ_NR - ΔΦ_sur| / N_cycles_NR   [rad / cycle]
 
-where ``ΔΦ = |φ(t_end) - φ(t_start)|`` is the total phase evolved and
-``N_cycles_NR = ΔΦ_NR / (2π)``.
+with ``ΔΦ = |φ(t_end) - φ(t_start)|`` the net phase evolved over the window,
+which runs from the start of the common span to ``t_stop`` -- by default
+the (2,2) peak, so the quantity is an inspiral phase drift.  The numerator
+is ``δφ(t_end) - δφ(t_start)``, the change in the phase difference across
+the window, so a constant offset -- a coalescence-phase convention --
+cancels.  It is NOT the phase residual after match()-optimal time
+alignment.
+
+> **What this function got wrong until 2026-09-18**
+> Note first that, since ``N_cycles_NR = ΔΦ_NR / 2π``, the metric is
+> identically ``2π |1 - ΔΦ_sur/ΔΦ_NR|``: 2π times the *fractional* difference
+> in accumulated phase, unbounded above, and divergent as the denominator
+> goes to zero.  Three things then went wrong, two in the denominator and
+> one in the window:
+> 
+> 1. ``N_cycles`` was taken from the *net* endpoint difference, which counts
+>    cycles only while the phase is monotone.  On ``RIT:eBBH:1132-n100-ecc``
+>    -- a single close encounter -- the net difference is 3.14 rad against a
+>    total variation of 96.9 rad, so ``N_cycles`` came out at 0.50, passing
+>    the old 0.5-cycle floor by a hair, and the metric reported 288 rad/cycle
+>    for an accumulated-phase ratio of 46.9.  The cycle count now comes from
+>    the total variation, which agrees with the net difference exactly for a
+>    monotone chirp (``SXS:BBH:2348``: 275.13 rad both ways) and differs by a
+>    factor of 30 where the phase wanders -- which, item 3 found, it did
+>    only after merger: the run carries 0.71 cycles before its peak.
+> 2. The window was cut around each mode's *own* amplitude peak, found by
+>    :func:`_get_merger_index`, which takes the last prominent peak in order
+>    to step over junk radiation.  On a burst-like waveform the last
+>    prominent peak is late-time structure: for the same simulation it landed
+>    at t = +0.2373 s where the epoch puts the peak at 0.  The window is now
+>    the intersection of the two series *in time*, which is mode-independent
+>    and needs no peak search.
+> 3. The window ran to the end of the common span, through merger and
+>    ringdown, while the denominator counts cycles that are almost all
+>    inspiral.  The numerator was therefore mostly post-merger: on the (2,2)
+>    mode, with the window as cut before the amplitude floor, 98% of
+>    |ΔΦ_NR - ΔΦ_sur| for SXS:BBH:2348 accrued after t = 0, 72% for
+>    MAYA1022, 94% for GT0357, 69% for RIT:BBH:0555-n120-id1.  A quantity
+>    described as secular inspiral drift was mostly a ringdown phase
+>    difference spread over the inspiral cycles -- SXS:BBH:2348 reads 0.019
+>    rad/cycle over the whole span and 0.0004 up to the peak.  The window
+>    now stops at ``t_stop = 0``.  Ringdown agreement is what the match
+>    measures; this metric is kept for the inspiral.
+> 
+> ``alignment='peak'`` preserves the superseded behaviour, because
+> ``compare_alignment_backends.py`` exists to compare these conventions and
+> because it is what produced the phase columns of the frozen 2026-08 results.
 
 #### Parameters
 
 | Name | Type | Description |
 |---|---|---|
-| `h_nr` | `pycbc.types.TimeSeries` | Complex NR mode time series. |
-| `h_sur` | `pycbc.types.TimeSeries` | Complex surrogate mode time series. |
-| `alignment` | `str` | Method to align waveforms before computing phase diff. 'peak' (default) or 'crosscorr'. |
+| `h_nr` | `pycbc.types.TimeSeries` | Complex NR and model mode time series, same ``delta_t``, both referenced to a common ``t = 0``. |
+| `h_sur` | `pycbc.types.TimeSeries` | Complex NR and model mode time series, same ``delta_t``, both referenced to a common ``t = 0``. |
+| `alignment` | `str` | ``'epoch'`` (default) cuts the window from the epochs; ``'peak'`` from each series' own amplitude peak; ``'crosscorr'`` from the cross- correlation lag. |
+| `min_cycles` | `float` | Refuse to report a value below this many cycles in the window (default :data:`MIN_CYCLES_FOR_PHASE`). Pass ``0`` to disable. |
+| `t_stop` | `float or None` | ``'epoch'`` only: end the window here, in seconds on the common time axis (default ``0.0``, the (2,2) peak). ``None`` runs to the end of the common span, which is the superseded behaviour of item 3 and is kept so the ringdown share can be measured. |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
-|  | `tuple[float, float]` | ``(phase_diff_per_cycle, n_cycles_nr)``. Returns ``(nan, nan)`` if either waveform has zero norm or the common window contains fewer than 2 samples. |
+|  | `tuple[float, float]` | ``(phase_diff_per_cycle, n_cycles_nr)``. The value is ``nan`` when either waveform has zero norm, when the window holds fewer than two samples, or when it carries fewer than ``min_cycles`` cycles -- and in that last case ``n_cycles_nr`` is still returned, so the reason for the refusal is visible in the output rather than being another bare NaN. |
 
 ---
 
@@ -447,6 +512,73 @@ and returns the noise-weighted match maximised over :math:`\alpha`,
 | Name | Type | Description |
 |---|---|---|
 |  | `StrainMatchResult` | Carries ``alpha``, ``beta`` and ``phase_offsets = {m: alpha + m*beta}`` alongside the match. |
+
+---
+
+### `compute_polarization_match`
+
+```python
+compute_polarization_match(modes_a, modes_b, delta_t: float, inclination: float, coa_phase: float = 0.0, psd=None, psd_name: str = 'aLIGOZeroDetHighPower', f_lower: float = 20.0, f_upper=None, taper_fraction: float = TAPER_FRACTION, n_psi: int = 0) -> PolarizationMatchResult
+```
+
+Match :math:`h_+` and :math:`h_\times` separately at one orientation.
+
+Builds the complex strain from each mode set at the given inclination and
+coalescence phase,
+
+.. math::
+
+    h = h_+ - i h_\times = \sum_{\ell m} h_{\ell m}\,
+        {}_{-2}Y_{\ell m}(\iota, \varphi),
+
+and matches the two real polarisations one at a time, maximising over the
+time shift alone.
+
+> **Why the polarisations separately, and why nothing else is maximised over**
+> A rotation of the polarisation basis by :math:`\psi` sends
+> :math:`h_+ + i h_\times \to e^{2i\psi}(h_+ + i h_\times)`, so it mixes
+> the two polarisations into each other.  :func:`compute_strain_match`
+> maximises over exactly that phase, which makes its result independent of
+> the basis -- and therefore blind to the *relative* phase of the two
+> polarisations.  That relative phase is physical: an observer with a known
+> polarisation angle sees a definite mixture, and a parameter-estimation
+> analysis that fixes :math:`\psi` inherits the disagreement this function
+> reports.  Both mode sets are projected here in the same convention from the
+> same source frame, so the basis is shared and the comparison is meaningful.
+> ``match_*_quadrature`` is reported alongside as the value a search quoting a
+> single real template would see; it is a quadrature phase of that one
+> polarisation and not a rotation of the basis, so it does not recover a
+> :math:`\psi` offset -- measured on a synthetic chirp rotated by
+> :math:`\psi = \pi/4` at :math:`\iota = 60^\circ`, :math:`h_+` falls to
+> 0.613 and the quadrature value stays at 0.613, while
+> :func:`compute_strain_match`, which maximises over the rotation itself,
+> returns ~1.
+> 
+> Inclination and coalescence phase are arguments, not search dimensions, for
+> the reason :func:`compute_strain_match` gives about inclination: a mode set
+> that agrees only at some fitted orientation is not the same waveform.  In
+> particular the source-frame azimuth is **not** maximised over here, unlike
+> in :func:`compute_strain_match`, because fixing the orientation is the whole
+> point -- which means the caller is responsible for supplying two mode sets
+> already in a common source frame.  Two sets that differ by a rigid rotation
+> will report a large mismatch, correctly.
+
+#### Parameters
+
+| Name | Type | Description |
+|---|---|---|
+| `modes_a` | `dict` | ``{(ell, m): series}``. Only the modes present in both are used; no completeness requirement, since the projection is a plain sum with no mixing of ``m``. |
+| `modes_b` | `dict` | ``{(ell, m): series}``. Only the modes present in both are used; no completeness requirement, since the projection is a plain sum with no mixing of ``m``. |
+| `delta_t` | `float` | Sample spacing in seconds, shared by both mode sets. |
+| `inclination` | `float` | Viewing angles in radians. |
+| `coa_phase` | `float` | Viewing angles in radians. |
+| `n_psi` | `int` | When positive, also scan this many polarisation-basis rotations over [0, pi) and report the best :math:`h_+` match and the angle achieving it. A rotation by :math:`\psi` multiplies the complex strain by :math:`e^{2i\psi}`, so the scan costs two transforms per angle and nothing else; 24 is plenty to locate a broad maximum. |
+
+#### Returns
+
+| Name | Type | Description |
+|---|---|---|
+|  | `PolarizationMatchResult` |  |
 
 ---
 

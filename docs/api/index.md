@@ -21,13 +21,15 @@ which statically analyses the package with [griffe](https://mkdocstrings.github.
 | [waveform.matching](waveform_matching.md) | Mode matching, rotation, and PSD helpers |
 | [waveform.loaders](waveform_loaders.md) | HDF5 / tar.gz loaders for `WaveformModes` |
 | [waveform.units](waveform_units.md) | Waveform-level constants |
-| [surrogate](surrogate.md) | NRSur7dq4 loading, evaluation, and prior check |
+| [surrogate](surrogate.md) | NRSur7dq4, NRSur7dq4v2 and NRHJSur3dq8 loading, evaluation, and prior check |
 | [comparisons](comparisons.md) | End-to-end NR vs surrogate comparison pipeline |
 | [classification](classification.md) | Spin/eccentricity classification of catalog simulations |
 | [metadata](metadata.md) | Cross-catalog key mappings and `get_source_parameters_from_metadata` |
 | [registry](registry.md) | Catalog plugin registry |
 | [lvc](lvc.md) | Frame-rotation helpers and LVCNR format utilities |
 | [utils](utils.md) | Cache paths, download helpers, unit conversions |
+| [waveform.frame](waveform_frame.md) | BMS frame operations a catalog records, and the coprecessing frame |
+| [waveform.detectors](waveform_detectors.md) | Observatory registry: noise curves, bands, PSD resolution |
 
 ## Quick navigation
 

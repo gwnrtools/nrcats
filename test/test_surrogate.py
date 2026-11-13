@@ -148,21 +148,68 @@ def test_modes_come_in_plus_minus_m_pairs():
 # ── load_nrsur7dq4 ────────────────────────────────────────────────────────────
 
 
-def test_load_nrsur7dq4_caches_singleton():
-    """gwsurrogate.LoadSurrogate must be called exactly once regardless of call count."""
+def test_load_nrsur7dq4_caches_singleton(monkeypatch):
+    """gwsurrogate.LoadSurrogate must be called exactly once regardless of call count,
+    and with version 1 when nothing selects another model."""
     import nrcats.surrogate as _sur_mod
 
+    monkeypatch.delenv(_sur_mod.SURROGATE_ENV_VAR, raising=False)
     mock_sur = MagicMock()
     mock_gws = MagicMock()
     mock_gws.LoadSurrogate.return_value = mock_sur
 
-    with patch.object(_sur_mod, "_nrsur7dq4", None):
+    with patch.object(_sur_mod, "_surrogates", {}):
         with patch.dict("sys.modules", {"gwsurrogate": mock_gws}):
             r1 = _sur_mod.load_nrsur7dq4()
             r2 = _sur_mod.load_nrsur7dq4()
 
     mock_gws.LoadSurrogate.assert_called_once_with("NRSur7dq4")
     assert r1 is r2
+
+
+# ── choosing the model ────────────────────────────────────────────────────────
+
+
+def test_environment_selects_version_two(monkeypatch):
+    """$NRCATS_SURROGATE switches every caller of load_nrsur7dq4 at once."""
+    import nrcats.surrogate as _sur_mod
+
+    monkeypatch.setenv(_sur_mod.SURROGATE_ENV_VAR, "NRSur7dq4v2")
+    mock_gws = MagicMock()
+    with patch.object(_sur_mod, "_surrogates", {}):
+        with patch.dict("sys.modules", {"gwsurrogate": mock_gws}):
+            _sur_mod.load_nrsur7dq4()
+    mock_gws.LoadSurrogate.assert_called_once_with("NRSur7dq4v2")
+
+
+def test_argument_overrides_environment_and_models_are_cached_apart(monkeypatch):
+    """An explicit name wins, and two models in one process are two objects."""
+    import nrcats.surrogate as _sur_mod
+
+    monkeypatch.setenv(_sur_mod.SURROGATE_ENV_VAR, "NRSur7dq4v2")
+    mock_gws = MagicMock()
+    mock_gws.LoadSurrogate.side_effect = lambda name: MagicMock(name=name)
+    with patch.object(_sur_mod, "_surrogates", {}):
+        with patch.dict("sys.modules", {"gwsurrogate": mock_gws}):
+            v1 = _sur_mod.load_surrogate("NRSur7dq4")
+            v2 = _sur_mod.load_surrogate()
+            assert _sur_mod.load_surrogate("NRSur7dq4") is v1
+    assert v1 is not v2
+    assert [c.args[0] for c in mock_gws.LoadSurrogate.call_args_list] == [
+        "NRSur7dq4",
+        "NRSur7dq4v2",
+    ]
+
+
+def test_unknown_model_fails_and_says_where_it_came_from(monkeypatch):
+    """A typo in the environment must fail, never fall back to version 1."""
+    import nrcats.surrogate as _sur_mod
+
+    monkeypatch.setenv(_sur_mod.SURROGATE_ENV_VAR, "NRSur7dq4V2")
+    with pytest.raises(ValueError, match=r"NRCATS_SURROGATE"):
+        _sur_mod.surrogate_name()
+    with pytest.raises(ValueError, match=r"argument"):
+        _sur_mod.surrogate_name("NRSur7dq5")
 
 
 # ── generate_surrogate_modes ──────────────────────────────────────────────────
@@ -182,6 +229,23 @@ def test_generate_surrogate_modes_returns_timeseries_per_mode():
         assert isinstance(ts, TimeSeries), f"mode {mode} is not a TimeSeries"
         assert ts.dtype == np.complex128, f"mode {mode} dtype is {ts.dtype}"
     assert f_lower_eff > 0.0
+
+
+def test_generate_surrogate_modes_calls_the_named_model():
+    """model= reaches the loader; the default still goes through load_nrsur7dq4."""
+    import nrcats.surrogate as _sur_mod
+
+    params = _params(q=2.0, chi1z=0.3, chi2z=-0.2)
+    with patch.object(
+        _sur_mod, "load_surrogate", return_value=_mock_surrogate()
+    ) as by_name, patch.object(
+        _sur_mod, "load_nrsur7dq4", return_value=_mock_surrogate()
+    ) as default:
+        generate_surrogate_modes(params, total_mass=60.0, model="NRSur7dq4v2")
+        by_name.assert_called_once_with("NRSur7dq4v2")
+        default.assert_not_called()
+        generate_surrogate_modes(params, total_mass=60.0)
+        default.assert_called_once_with()
 
 
 def test_generate_surrogate_modes_epoch_at_h22_peak():
@@ -365,3 +429,223 @@ def test_modes_silently_skips_what_the_model_did_not_produce():
     """
     result = _generate(modes=[(2, 2), (5, 5)])
     assert set(result.keys()) == {(2, 2)}
+
+
+# ── NRHJSur3dq8 ───────────────────────────────────────────────────────────────
+# The aligned-spin models of the nrhjsurrogate package, driven through the
+# same three functions.  The fakes mirror the package's geometric API: m > 0
+# modes only, a uniform grid at the requested spacing, t = 0 at the (2,2) peak.
+
+
+def _mock_nrhj(n=4096):
+    import nrcats.surrogate as _sur_mod
+
+    t = np.linspace(-100, 100, n)
+    envelope = np.exp(-0.5 * ((t - 10) / 5) ** 2)
+    modes = {
+        (2, 2): envelope * np.exp(-2j * t),
+        (2, 1): 0.1 * envelope * np.exp(-1j * t),
+        (3, 3): 0.05 * envelope * np.exp(-3j * t),
+        (3, 2): 0.03 * envelope * np.exp(-2j * t),
+        (4, 4): 0.02 * envelope * np.exp(-4j * t),
+        (4, 3): 0.01 * envelope * np.exp(-3j * t),
+        (5, 5): 0.005 * envelope * np.exp(-5j * t),
+    }
+    mock = MagicMock()
+    mock.in_hull.side_effect = (
+        lambda q, c1, c2: q <= 8.0 and max(abs(c1), abs(c2)) <= 0.998
+    )
+    mock.get_td_waveform_modes_geometric.return_value = (t, modes)
+    mock._native = modes
+    mock._sign = _sur_mod.NRHJ_MODE_SIGN
+    return mock
+
+
+def test_nrhj_models_are_known_by_name(monkeypatch):
+    import nrcats.surrogate as _sur_mod
+
+    for name in _sur_mod.NRHJ_MODELS:
+        assert name in _sur_mod.SURROGATE_MODELS
+        assert _sur_mod.surrogate_name(name) == name
+    monkeypatch.setenv(_sur_mod.SURROGATE_ENV_VAR, "NRHJSur3dq8_AdA_v3")
+    assert _sur_mod.surrogate_name() == "NRHJSur3dq8_AdA_v3"
+
+
+def test_nrhj_loads_through_nrhjsurrogate_with_the_numpy_backend(monkeypatch):
+    """load_surrogate reaches NRHJSurAA.load_h5(name, backend="numpy"), once,
+    and never gwsurrogate."""
+    import nrcats.surrogate as _sur_mod
+
+    pkg = MagicMock()
+    pkg.NRHJSurAA.load_h5.return_value = _mock_nrhj()
+    gws = MagicMock()
+    with patch.object(_sur_mod, "_surrogates", {}):
+        with patch.dict("sys.modules", {"nrhjsurrogate": pkg, "gwsurrogate": gws}):
+            a = _sur_mod.load_surrogate("NRHJSur3dq8_AA_v3")
+            b = _sur_mod.load_surrogate("NRHJSur3dq8_AA_v3")
+    assert a is b
+    pkg.NRHJSurAA.load_h5.assert_called_once_with("NRHJSur3dq8_AA_v3", backend="numpy")
+    gws.LoadSurrogate.assert_not_called()
+
+
+def test_nrhj_missing_package_is_a_clear_error():
+    import nrcats.surrogate as _sur_mod
+
+    with patch.object(_sur_mod, "_surrogates", {}):
+        with patch.dict("sys.modules", {"nrhjsurrogate": None}):
+            with pytest.raises(RuntimeError, match="nrhjsurrogate"):
+                _sur_mod.load_surrogate("NRHJSur3dq8_AA_v3")
+
+
+def _nrhj_modes(params, model="NRHJSur3dq8_AA_v3", **kw):
+    import nrcats.surrogate as _sur_mod
+
+    fake = _mock_nrhj()
+    with patch.object(_sur_mod, "_surrogates", {model: fake}):
+        result, f_low = generate_surrogate_modes(
+            params,
+            total_mass=60.0,
+            distance=1.0,
+            delta_t_seconds=1.0 / 4096,
+            model=model,
+            **kw,
+        )
+    return result, f_low, fake
+
+
+def test_nrhj_returns_the_reporting_subset_with_reflected_negative_m():
+    """Default modes: the ell <= 4 pairs of SURROGATE_MODES, the m < 0 half
+    built by h_{l,-m} = (-1)^l conj(h_lm) from the model's m > 0 output."""
+    result, f_low, fake = _nrhj_modes(_params(q=2.0, chi1z=0.3, chi2z=-0.2))
+    assert set(result) == set(SURROGATE_MODES)
+    for mode, ts in result.items():
+        assert isinstance(ts, TimeSeries) and ts.dtype == np.complex128
+    assert float(result[(2, 2)].start_time) < 0.0, "epoch is at the (2,2) peak"
+    assert f_low > 0.0
+    for ell, em in [(2, 2), (2, 1), (3, 3), (4, 4), (4, 3), (3, 2)]:
+        pos = np.asarray(result[(ell, em)].numpy())
+        neg = np.asarray(result[(ell, -em)].numpy())
+        assert np.allclose(neg, ((-1) ** ell) * np.conj(pos))
+
+
+def test_nrhj_calls_the_native_span_without_extension_at_the_requested_spacing():
+    params = _params(q=2.0, chi1z=0.3, chi2z=-0.2)
+    _, _, fake = _nrhj_modes(params)
+    (q, c1, c2), kwargs = fake.get_td_waveform_modes_geometric.call_args
+    assert (q, c1, c2) == (2.0, 0.3, -0.2)
+    assert kwargs["hybridization"] == "never"
+    assert "f_low" not in kwargs, "the full native span, as f_low=0 is for NRSur7dq4"
+    m_secs = 60.0 * 4.925490947641267e-06
+    assert kwargs["time_step"] == pytest.approx((1.0 / 4096) / m_secs, rel=1e-9)
+
+
+def test_nrhj_sign_convention_is_applied_to_every_mode():
+    """The (2,2) in physical units equals NRHJ_MODE_SIGN times the native
+    mode times the amplitude scale (distance 1 Mpc, 60 Msun)."""
+    import nrcats.surrogate as _sur_mod
+    from nrcats import utils
+
+    result, _, fake = _nrhj_modes(_params(q=2.0, chi1z=0.3, chi2z=-0.2))
+    scale = utils.amp_to_physical(60.0, 1.0)
+    for ell, em in [(2, 2), (2, 1), (4, 4)]:
+        got = np.asarray(result[(ell, em)].numpy())
+        want = _sur_mod.NRHJ_MODE_SIGN * fake._native[(ell, em)] * scale
+        assert np.allclose(got, want)
+
+
+def test_nrhj_modes_all_includes_the_55_pair():
+    result, _, _ = _nrhj_modes(_params(q=2.0), modes="all")
+    assert (5, 5) in result and (5, -5) in result
+
+
+def test_nrhj_refuses_a_precessing_binary_and_drops_a_negligible_tilt():
+    """The bound is the model's training criterion, 1e-3 in-plane."""
+    with pytest.raises(ValueError, match="aligned-spin"):
+        _nrhj_modes(_params(q=2.0, chi1x=0.3, chi2z=0.1))
+    with pytest.raises(ValueError, match="aligned-spin"):
+        _nrhj_modes(_params(q=2.0, chi1x=1e-3, chi2z=0.1))
+    result, _, fake = _nrhj_modes(_params(q=2.0, chi1x=9e-4, chi1z=0.3, chi2z=0.1))
+    (q, c1, c2), _ = fake.get_td_waveform_modes_geometric.call_args
+    assert (q, c1, c2) == (2.0, 0.3, 0.1)
+
+
+def test_nrhj_refuses_a_point_outside_the_training_box():
+    """The model clamps silently; this module does not let it."""
+    with pytest.raises(ValueError, match="training box"):
+        _nrhj_modes(_params(q=8.5))
+    with pytest.raises(ValueError, match="training box"):
+        _nrhj_modes(_params(q=2.0, chi1z=0.999))
+
+
+def test_nrhj_info_never_raises_without_the_package():
+    import nrcats.surrogate as _sur_mod
+
+    with patch.dict(
+        "sys.modules", {"nrhjsurrogate": None, "nrhjsurrogate.models": None}
+    ):
+        info = _sur_mod.surrogate_info("NRHJSur3dq8_AA_v3")
+    assert info["name"] == "NRHJSur3dq8_AA_v3"
+    assert info["data_sha256"] is None and info["nrhjsurrogate"] is None
+    assert "data_md5" in info and "gwsurrogate" in info
+
+
+def _nrhj_available():
+    try:
+        from nrhjsurrogate import models as m
+
+        m.resolve_model("NRHJSur3dq8_AA_v3", fetch=False)
+        m.resolve_model("NRHJSur3dq8_MR_v3", fetch=False)
+        import gwsurrogate  # noqa: F401
+        from gwsurrogate import catalog
+
+        return any(
+            name in f
+            for f in __import__("os").listdir(catalog.download_path())
+            for name in ("NRSur7dq4v2",)
+        )
+    except Exception:
+        return False
+
+
+@pytest.mark.skipif(
+    not _nrhj_available(), reason="needs nrhjsurrogate, its v3 files and NRSur7dq4v2"
+)
+def test_nrhj_agrees_with_nrsur7dq4v2_in_the_lal_convention():
+    """On their overlap the two models' (2,2) overlap to better than 1e-3
+    with no maximisation over time (measured 2.1e-4 at (2, 0.3, -0.2)), and
+    after the sign of NRHJ_MODE_SIGN the (4,4) mode's phase relative to the
+    (2,2)'s agrees to 0.2 rad at 1500 M before the peak -- the check that
+    found the sign (see NRHJ_MODE_SIGN)."""
+    import nrcats.surrogate as _sur_mod
+    from nrcats import utils
+
+    params = _params(q=2.0, chi1z=0.3, chi2z=-0.2)
+    with patch.object(_sur_mod, "_surrogates", {}):
+        hj, _ = generate_surrogate_modes(
+            params,
+            total_mass=40.0,
+            delta_t_seconds=1 / 16384,
+            model="NRHJSur3dq8_AA_v3",
+        )
+        ns, _ = generate_surrogate_modes(
+            params, total_mass=40.0, delta_t_seconds=1 / 16384, model="NRSur7dq4v2"
+        )
+    m_secs = utils.time_to_physical(40.0)
+
+    def chi44(d):
+        h22, h44 = np.asarray(d[(2, 2)].numpy()), np.asarray(d[(4, 4)].numpy())
+        t = np.asarray(d[(2, 2)].sample_times) / m_secs
+        k = int(np.argmin(np.abs(t + 1500.0)))
+        return np.angle(np.exp(1j * (np.angle(h44[k]) - 2 * np.angle(h22[k]))))
+
+    assert abs(np.angle(np.exp(1j * (chi44(hj) - chi44(ns))))) < 0.2
+    a, b = np.asarray(hj[(2, 2)].numpy()), np.asarray(ns[(2, 2)].numpy())
+    ta, tb = np.asarray(hj[(2, 2)].sample_times), np.asarray(ns[(2, 2)].sample_times)
+    lo, hi = max(ta[0], tb[0]) + 0.01, min(ta[-1], tb[-1]) - 0.001
+    grid = np.arange(lo, hi, 1 / 16384)
+    ia = np.interp(grid, ta, a.real) + 1j * np.interp(grid, ta, a.imag)
+    ib = np.interp(grid, tb, b.real) + 1j * np.interp(grid, tb, b.imag)
+    overlap = abs(np.vdot(ia, ib)) / np.sqrt(
+        np.vdot(ia, ia).real * np.vdot(ib, ib).real
+    )
+    assert overlap > 0.999

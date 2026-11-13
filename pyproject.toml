@@ -84,7 +84,7 @@ all = [
 where = ["."]
 
 [tool.setuptools.package-data]
-nrcats = ["schemas/*.yaml"]
+nrcats = ["schemas/*.yaml", "waveform/data/*.txt"]
 
 [tool.setuptools_scm]
 # When building from a commit that has no tag (e.g. during development),

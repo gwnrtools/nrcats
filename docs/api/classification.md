@@ -31,6 +31,19 @@ Classifies simulations in SXS, RIT, and MAYA catalogs based on spin and eccentri
 Provides methods to query simulations belonging to different physical categories dynamically.
 
 
+### `ecc_threshold_for`
+
+```python
+ecc_threshold_for(catalog_name: str) -> float
+```
+
+The eccentricity threshold applied to *catalog_name*.
+
+Returns the scalar unchanged when a scalar was configured, so the
+uniform case costs nothing and reads the same.
+
+---
+
 ### `load_catalog`
 
 ```python

@@ -63,18 +63,38 @@ the surrogate's minimum training frequency (~0.0165 M·Ω_orbital):
 
 | Name | Value |
 |---|---|
+| `NRHJ_MODELS` | `('NRHJSur3dq8_AA_v3', 'NRHJSur3dq8_AdA_v3')` |
+| `SURROGATE_MODELS` | `('NRSur7dq4', 'NRSur7dq4v2') + NRHJ_MODELS` |
+| `NRHJ_MODE_SIGN` | `-1.0` |
+| `NRHJ_ALIGNED_TOLERANCE` | `0.001` |
+| `DEFAULT_SURROGATE` | `'NRSur7dq4'` |
+| `SURROGATE_ENV_VAR` | `'NRCATS_SURROGATE'` |
 | `NR_MODES` | `[(2, 2), (2, -2), (2, 1), (2, -1), (3, 3), (3, -3), (4, 4), (4, -4), (5, 5), (5, -5), (3, 2), (3, -2), (4, 3), (4, -3)]` |
 | `SURROGATE_MODES` | `[(ell, em) for ell, em in NR_MODES if ell <= 4]` |
 
 ---
 
-### `load_nrsur7dq4`
+### `surrogate_name`
 
 ```python
-load_nrsur7dq4()
+surrogate_name(name: str | None = None) -> str
 ```
 
-Load and cache the NRSur7dq4 surrogate model.
+The model a call uses: ``name``, else ``$NRCATS_SURROGATE``, else NRSur7dq4.
+
+Raises ``ValueError`` for a name outside :data:`SURROGATE_MODELS`, saying
+where the name came from, so that a typo in the environment fails at the
+first call instead of silently falling back to version 1.
+
+---
+
+### `load_surrogate`
+
+```python
+load_surrogate(name: str | None = None)
+```
+
+Load and cache one model of the NRSur7dq4 family (see :func:`surrogate_name`).
 
 #### Returns
 
@@ -84,10 +104,38 @@ Load and cache the NRSur7dq4 surrogate model.
 
 ---
 
+### `load_nrsur7dq4`
+
+```python
+load_nrsur7dq4()
+```
+
+Load and cache the configured model of the NRSur7dq4 family.
+
+Kept under its original name because every caller uses it; it returns
+version 1 unless ``$NRCATS_SURROGATE`` names another model.
+
+---
+
+### `surrogate_info`
+
+```python
+surrogate_info(name: str | None = None) -> dict
+```
+
+What a manifest needs to identify the model that produced a number.
+
+The model name, the gwsurrogate version, and the path and MD5 of the data
+file -- the same MD5 gwsurrogate's catalog and the Zenodo record publish,
+so a reader can check the file without trusting the name.  Never raises:
+a field that cannot be determined is ``None``.
+
+---
+
 ### `generate_surrogate_modes`
 
 ```python
-generate_surrogate_modes(params: dict, total_mass: float, distance: float = 1.0, delta_t_seconds: float = 1.0 / 4096, sim_name: str | None = None, catalog=None, nr_wfm=None, modes=None) -> tuple[dict, float]
+generate_surrogate_modes(params: dict, total_mass: float, distance: float = 1.0, delta_t_seconds: float = 1.0 / 4096, sim_name: str | None = None, catalog=None, nr_wfm=None, modes=None, model: str | None = None) -> tuple[dict, float]
 ```
 
 Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
@@ -104,6 +152,7 @@ Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
 | `catalog` | `CatalogBase` | Catalog instance; enables Phase 2 epoch alignment when the catalog is SXS. |
 | `nr_wfm` | `WaveformModes` | Unused; kept for API compatibility. |
 | `modes` | `list[tuple[int, int]] or 'all' or None` | Which modes to return. ``None`` (default) keeps the minimal :data:`SURROGATE_MODES` subset, so existing per-mode results are unchanged. ``"all"`` returns every mode the model produced, which is what a sphere-averaged or BMS-maximized comparison of a *precessing* binary requires -- see the note on :data:`SURROGATE_MODES`. |
+| `model` | `str` | Which model of the family to call, a name in :data:`SURROGATE_MODELS`. ``None`` (default) is the configured one -- ``$NRCATS_SURROGATE``, else NRSur7dq4 -- so existing callers are unchanged. |
 
 #### Returns
 

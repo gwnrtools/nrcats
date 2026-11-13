@@ -25,7 +25,16 @@ logger = logging.getLogger(__name__)
 
 
 def _interpolated_peak_abs(q):
-    """Peak of ``|q|`` refined below the sample spacing.
+    """Peak of ``|q|`` refined below the sample spacing.  See
+    :func:`_interpolated_peak`, which this delegates to; the polarisation
+    matches need the same refinement on a *signed* series, where the peak of
+    ``Re q`` is the maximum over time shift at fixed polarisation angle.
+    """
+    return _interpolated_peak(np.abs(q))
+
+
+def _interpolated_peak(y):
+    """Peak of a real series ``y`` refined below the sample spacing.
 
     The time maximization in the sphere-averaged matches is a discrete argmax
     over ``|ifft(...)|``, which quantizes the time shift to one sample.  That
@@ -44,14 +53,19 @@ def _interpolated_peak_abs(q):
     calling pycbc; keeping the two consistent is what makes a sphere-averaged
     mismatch comparable with a single-mode one.
 
-    Neighbours wrap: ``q`` is a circular correlation, so index ``-1`` and index
+    Neighbours wrap: ``y`` is a circular correlation, so index ``-1`` and index
     ``n`` are the genuine adjacent lags, not out-of-range.
+
+    ``y`` is already real and already signed as the caller wants it: the
+    quadrature maximisation passes ``|q|`` (via :func:`_interpolated_peak_abs`)
+    and the fixed-polarisation-angle maximisation passes ``Re q``, where a
+    negative peak is a genuine anti-correlation rather than a match.
 
     Returns the interpolated peak value.  Degenerate parabolas -- a flat or
     upward-curving triple, which occur when the peak is exactly on a sample or
     the series is constant -- fall back to the discrete maximum.
     """
-    a = np.abs(q)
+    a = np.asarray(y, dtype=float)
     i = int(np.argmax(a))
     n = a.size
     if n < 3:
@@ -190,8 +204,24 @@ def _analysis_setup(
     n2 = min(len(arr2[k]) for k in common_modes)
 
     if alignment == "peak":
-        i1 = _get_merger_index(arr1[ref])
-        i2 = _get_merger_index(arr2[ref])
+        # Locate the peak on the rotation-invariant amplitude, not on the
+        # reference mode.  These matches maximize over SO(3), and in a frame
+        # far from the reference frame the (2,2) mode is a beating mixture of
+        # every m in its block whose |h| peaks somewhere else: the last
+        # prominent peak lands on a beat, the two windows cover different
+        # stretches of the same signal, and no rotation can then make them
+        # agree.  Measured on a synthetic chirp rotated by Euler angles
+        # (0.7, 1.1, 2.3): peak on |h_22| 0.4926, on this amplitude 1.0000;
+        # rotations up to beta ~ 0.6 were undone either way.  sum_m |h_lm|^2
+        # is invariant under rotation within each complete ell block, so the
+        # window no longer depends on the frame the search is about to move
+        # (catalog-comparison-paper findings 5ac).
+        m1 = min(len(arr1[k]) for k in common_modes)
+        m2 = min(len(arr2[k]) for k in common_modes)
+        amp1 = np.sqrt(sum(np.abs(arr1[k][:m1]) ** 2 for k in common_modes))
+        amp2 = np.sqrt(sum(np.abs(arr2[k][:m2]) ** 2 for k in common_modes))
+        i1 = _get_merger_index(amp1)
+        i2 = _get_merger_index(amp2)
         before = min(i1, i2)
         after = min(n1 - i1, n2 - i2)
         s1, e1 = i1 - before, i1 + after
@@ -787,6 +817,7 @@ def match_sphere_averaged_bms_maximized(
     alignment="peak",
     taper_fraction=None,
     alpha_max_M=10.0,
+    boost_max=0.0,
     seed_rotation=True,
     n_coarse=128,
     n_starts=3,
@@ -795,6 +826,13 @@ def match_sphere_averaged_bms_maximized(
     return_transformation=False,
 ):
     """Implementation of :meth:`WaveformModes.match_sphere_averaged_bms_maximized`.
+
+    ``boost_max`` (units of c) adds a Lorentz boost to the search: three more
+    coordinates, each in [-boost_max, boost_max], passed to ``scri`` as
+    ``boost_velocity``.  The default of 0 searches no boost at all and leaves
+    every existing call unchanged.  SXS v3 records boosts of median 1.4e-5 c
+    and at most 1.7e-3 c (catalog-comparison-paper findings 5aa), which sets
+    the scale a caller should choose.
 
     ``wfm`` is the :class:`WaveformModes` instance; see the method for the full
     parameter and return documentation.
@@ -878,8 +916,19 @@ def match_sphere_averaged_bms_maximized(
 
     from nrcats import utils as _utils
 
+    # The transformation runs in geometric units -- time in M, strain with r
+    # and M scaled out -- because that is what the scri object below declares
+    # (r_is_scaled_out, m_is_scaled_out) and what the inhomogeneous
+    # supertranslation term h' = h - dbar^2 alpha assumes.  Feeding physical
+    # strain (~1e-18) with alpha in seconds made that term fourteen orders of
+    # magnitude too large for any ell >= 2 coefficient; the ell = 1 search, the
+    # only one ever tested, was immune because dbar^2 alpha vanishes for a
+    # translation.  Measured on a synthetic chirp: a (2,0) element of 2 M moves
+    # the modes by 1e15 in physical units and by a physics-scale factor of ten
+    # in geometric ones (catalog-comparison-paper findings 5ab).
     m_secs = _utils.time_to_physical(total_mass)
-    alpha_bound = abs(alpha_max_M) * m_secs
+    amp = _utils.amp_to_physical(total_mass, distance)
+    alpha_bound = abs(alpha_max_M)  # alpha is searched in units of M
 
     # No fixed analysis window here.  A supertranslation moves the merger in
     # retarded time and shortens the usable span, so a window fixed on the
@@ -896,14 +945,14 @@ def match_sphere_averaged_bms_maximized(
         if (2, 2) in common_modes
         else max(common_modes, key=lambda k: float(np.max(np.abs(arr1[k]))))
     )
-    t2 = np.asarray(h2_ts[ref2].sample_times, dtype=float)[:n2]
+    t2 = np.asarray(h2_ts[ref2].sample_times, dtype=float)[:n2] / m_secs  # in M
 
     def _sidx(ell, m):
         return ell * ell - ell_min2 * ell_min2 + (ell + m)
 
     data2 = np.zeros((n2, (ell_max2 + 1) ** 2 - ell_min2**2), dtype=complex)
     for (ell, m), v in arr2.items():
-        data2[:, _sidx(ell, m)] = v[:n2]
+        data2[:, _sidx(ell, m)] = v[:n2] / amp  # dimensionless strain
 
     other_scri = scri.WaveformModes(
         t=t2,
@@ -917,34 +966,52 @@ def match_sphere_averaged_bms_maximized(
     )
 
     layout = _supertranslation_params(j_max)
+    n_st = len(layout)
+    # The boost block sits between the supertranslation coefficients and the
+    # Euler angles: u = [st (n_st) | boost (n_boost) | euler (3)].  n_boost is
+    # zero unless a boost is asked for, so the vector, the bounds and every
+    # index below are exactly what they were before the block existed.
+    n_boost = 3 if boost_max and boost_max > 0 else 0
+    n_lin = n_st + n_boost
     euler_scale = np.array([2 * np.pi, np.pi, 2 * np.pi])
 
     def _unscale(u):
         """Normalized search coordinates -> physical ones.
 
-        The supertranslation coefficients are O(1e-4) seconds and the Euler
-        angles are O(1) radians.  A simplex built on the raw vector takes steps
-        that are meaningless for one or the other, so the search runs in
-        [-1, 1] per supertranslation coefficient and [0, 1] per angle.
+        The supertranslation coefficients are O(1e-2) M, a boost is
+        O(1e-5) c and the Euler angles are O(1) radians.  A simplex built on
+        the raw vector takes steps that are meaningless for one or another, so
+        the search runs in [-1, 1] per supertranslation coefficient and per
+        boost component, and [0, 1] per angle.
         """
         u = np.asarray(u, dtype=float)
-        return u[: len(layout)] * alpha_bound, u[len(layout) :] * euler_scale
+        return (
+            u[:n_st] * alpha_bound,
+            u[n_st:n_lin] * float(boost_max or 0.0),
+            u[n_lin:] * euler_scale,
+        )
 
     def _mismatch(u):
-        st_values, euler = _unscale(u)
+        st_values, boost, euler = _unscale(u)
         alpha = _build_supertranslation(st_values, layout, j_max)
         R = quaternionic.array.from_euler_angles(*euler)
+        kwargs = dict(
+            supertranslation=alpha,
+            frame_rotation=np.asarray(R, dtype=float).tolist(),
+            ell_max=ell_max2,
+        )
+        if n_boost:
+            kwargs["boost_velocity"] = [float(b) for b in boost]
 
         try:
-            tr = other_scri.transform(
-                supertranslation=alpha,
-                frame_rotation=np.asarray(R, dtype=float).tolist(),
-                ell_max=ell_max2,
-            )
+            tr = other_scri.transform(**kwargs)
         except Exception:
             return 1.0
 
-        arr2t = {k: np.ascontiguousarray(tr.data[:, _sidx(*k)]) for k in common_modes}
+        # back to physical strain; the sample spacing in seconds is unchanged
+        arr2t = {
+            k: np.ascontiguousarray(tr.data[:, _sidx(*k)] * amp) for k in common_modes
+        }
         setup = _analysis_setup(
             arr1,
             arr2t,
@@ -996,11 +1063,10 @@ def match_sphere_averaged_bms_maximized(
             return 1.0
         return 1.0 - overlap
 
-    identity = np.zeros(len(layout) + 3)
+    identity = np.zeros(n_lin + 3)
     identity_mismatch = _mismatch(identity)
 
-    n_st = len(layout)
-    bounds = [(-1.0, 1.0)] * n_st + [(0.0, 1.0)] * 3
+    bounds = [(-1.0, 1.0)] * n_lin + [(0.0, 1.0)] * 3
 
     # Coarse pass, then local polish.  The objective is a broad shallow plateau
     # with a narrow deep well at the answer: measured against a known 4 M
@@ -1055,19 +1121,19 @@ def match_sphere_averaged_bms_maximized(
                         ang[2] % (2 * np.pi),
                     ]
                 )
-                u = np.zeros(len(layout) + 3)
-                u[len(layout) :] = ang / euler_scale
+                u = np.zeros(n_lin + 3)
+                u[n_lin:] = ang / euler_scale
                 starts.append(u)
 
     if n_coarse > 0:
         from scipy.stats import qmc
 
-        sampler = qmc.Sobol(d=n_st, scramble=True, seed=seed)
+        sampler = qmc.Sobol(d=n_lin, scramble=True, seed=seed)
         pts = sampler.random(int(n_coarse)) * 2.0 - 1.0
         # Sweep the supertranslation at the best rotation found so far, not at
         # the identity: in the wrong frame every sample looks equally bad and
         # the sweep ranks noise.
-        rot_for_sweep = min(starts, key=_mismatch)[len(layout) :]
+        rot_for_sweep = min(starts, key=_mismatch)[n_lin:]
         scored = sorted(
             ((_mismatch(np.concatenate([pt, rot_for_sweep])), pt) for pt in pts),
             key=lambda t: t[0],
@@ -1096,11 +1162,12 @@ def match_sphere_averaged_bms_maximized(
 
     match = 1.0 - best_fun
     if return_transformation:
-        st_best, euler_best = _unscale(best_x)
+        st_best, boost_best, euler_best = _unscale(best_x)
         info = {
             "supertranslation": _build_supertranslation(st_best, layout, j_max),
-            "supertranslation_M": np.asarray(st_best) / m_secs,
+            "supertranslation_M": np.asarray(st_best),
             "layout": layout,
+            "boost_velocity": np.asarray(boost_best, dtype=float),
             "frame_rotation": quaternionic.array.from_euler_angles(*euler_best),
             "identity_match": 1.0 - identity_mismatch,
         }

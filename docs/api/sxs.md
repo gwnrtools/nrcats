@@ -294,7 +294,7 @@ in the ``sxs`` package's own cache directory.
 ### `get`
 
 ```python
-get(sim_name: str, extrapolation_order: int = 2, download: bool = True) -> waveform.WaveformModes
+get(sim_name: str, extrapolation_order: int = 2, download: bool = True, lev: int | None = None) -> waveform.WaveformModes
 ```
 
 Load the strain waveform for *sim_name* and return a WaveformModes object.
@@ -307,15 +307,38 @@ entirely through the ``sxs`` package rather than via direct HDF5 reads.
 | Name | Type | Description |
 |---|---|---|
 | `sim_name` | `str` | SXS simulation name, e.g. ``"SXS:BBH:0001"``. Deprecated IDs are resolved automatically via ``auto_supersede=True``. |
-| `extrapolation_order` | `int` | Order of the polynomial extrapolation to future null infinity. Defaults to 2, which is the SXS default and the only order stored in ``Strain_N2.h5``; orders 3 and 4 are read from ``ExtraWaveforms.h5``. Comparing waveforms across orders bounds the systematic error of the extraction to null infinity, which is a distinct component of the numerical error budget from finite-resolution truncation error -- the v3 catalog publishes a single Lev, so the latter cannot be measured from it. Raises if the requested order is not the one obtained. |
+| `extrapolation_order` | `int` | Order of the polynomial extrapolation to future null infinity. Defaults to 2, which is the SXS default and the only order stored in ``Strain_N2.h5``; orders 3 and 4 are read from ``ExtraWaveforms.h5``. Comparing waveforms across orders bounds the systematic error of the extraction to null infinity, which is a distinct component of the numerical error budget from finite-resolution truncation error. Raises if the requested order is not the one obtained. |
 | `download` | `bool` | Whether to download the waveform if not cached. Defaults to True. |
+| `lev` | `int or None` | Resolution level (``LevN``) to load. ``None`` (the default) loads the highest level published, which is what every result computed before this argument existed used. Most SXS simulations publish two or more levels (:meth:`available_levs`), and the mismatch between the two highest at a fixed extrapolation order is the standard estimate of the finite-resolution truncation error -- the other component of the numerical error budget, which the order comparison does not see. Raises if the level obtained is not the one requested. |
 
 #### Returns
 
 | Name | Type | Description |
 |---|---|---|
 |  | `waveform.WaveformModes` | nrcats.waveform.WaveformModes: Waveform object with the |
-|  | `waveform.WaveformModes` | catalog metadata attached. |
+|  | `waveform.WaveformModes` | catalog metadata attached. ``lev_number`` records the level that |
+|  | `waveform.WaveformModes` | was actually loaded, whether it was chosen or defaulted. |
+
+---
+
+### `available_levs`
+
+```python
+available_levs(sim_name: str) -> list[int]
+```
+
+Return the resolution levels (``LevN``) published for *sim_name*.
+
+Read from the catalog metadata's ``lev_numbers``, so it costs no
+download and can be called over a whole batch.  Sorted ascending; the
+last entry is the level :meth:`get` loads by default.  A simulation
+with one entry publishes a single level, and its truncation error
+cannot be estimated from the catalog.
+
+Over the v3 catalog's 4,150 BBH simulations, 3,964 publish two or
+more levels.  (Earlier docstrings in this module said the catalog
+publishes one level per simulation; that was wrong, and is the reason
+the resolution floor was not measured sooner.)
 
 ---
 
@@ -355,11 +378,11 @@ not per simulation in a loop.
 |  | `list[int]` | the default order is returned when no ``ExtraWaveforms.h5`` exists. |
 
 > **Note**
-> The extrapolation order is **not** the resolution.  The v3 catalog
-> publishes a single Lev per simulation (``lev_numbers == [3]``), so
-> finite-resolution truncation error cannot be estimated from it;
-> varying the order bounds the error of the extraction to null
-> infinity, which is a different component of the error budget.
+> The extrapolation order is **not** the resolution.  Varying the
+> order bounds the error of the extraction to null infinity; the
+> finite-resolution truncation error is estimated from two levels
+> at one order (see :meth:`available_levs` and ``get(..., lev=)``).
+> They are different components of the error budget.
 
 ---
 

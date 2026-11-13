@@ -158,10 +158,44 @@ def test_clear_cache_dry_run_targets_only_named_simulations():
         pytest.skip(f"{SIM} is not cached; nothing to select")
 
     # The caller passed no version suffix; the cache stores one.  Matching on
-    # the stem is the whole point, so assert it actually happened.
-    assert all(SIM in p for p in res["removed"]), res["removed"]
-    assert len(res["removed"]) == 1, "matched more than the one simulation asked for"
+    # the stem is the whole point, so assert it actually happened -- by the stem,
+    # exactly.  The previous check was ``SIM in p``, a substring test, which a
+    # path for SXS:BBH:14190 also satisfies, so it could not see the over-broad
+    # match this test exists for.
+    stems = {_stem(os.path.basename(p)) for p in res["removed"]}
+    assert stems == {SIM}, f"selected simulations {sorted(stems)}, asked for {SIM}"
+    # ONE simulation, not one path.  The sxs package caches a simulation in two
+    # directories -- the bare stem and the versioned one, SXS:BBH:1419 and
+    # SXS:BBH:1419v3.0 -- and clearing the simulation must take both.  The
+    # previous assertion, len(removed) == 1, counted paths, and failed on the
+    # correct selection the first time both directories were present.
+    assert all(_stem(os.path.basename(p)) == SIM for p in res["removed"])
     assert res["bytes_freed"] > 0
+
+
+def _stem(name: str) -> str:
+    """The rule clear_cache applies: strip a trailing v<digits>[.<digits>]."""
+    idx = name.rfind("v")
+    if idx > 0 and name[idx + 1 :].replace(".", "").isdigit():
+        return name[:idx]
+    return name
+
+
+@pytest.mark.requires_data
+def test_clear_cache_does_not_match_by_prefix():
+    """A name that is a prefix of a cached simulation must select nothing.
+
+    ``SXS:BBH:141`` is a prefix of ``SXS:BBH:1419``, ``SXS:BBH:1410`` and every
+    other ``141x``.  A substring or prefix match would select all of them for
+    deletion; the exact-stem rule selects none, because no simulation is named
+    ``SXS:BBH:141``.  This is the assertion that fails if the selection ever
+    regresses to the kind of match the previous version of the test above used.
+    """
+    from nrcats.sxs import SXSCatalog
+
+    res = SXSCatalog.clear_cache(["SXS:BBH:141"], dry_run=True)
+    assert res["dry_run"] is True
+    assert res["removed"] == [], f"a prefix selected {res['removed']}"
 
 
 @pytest.mark.requires_data

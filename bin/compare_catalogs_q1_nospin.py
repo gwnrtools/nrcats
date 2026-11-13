@@ -19,7 +19,9 @@ The even-m modes (2,2), (3,2), (4,4) are the physically meaningful ones to compa
 import os
 import sys
 
-sys.path.insert(0, "/home/prayush/src/nrcats")
+# This script lives in <checkout>/bin/, so the checkout is two levels up.  Do
+# not hardcode a home directory: the previous path existed on one machine.
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import warnings
 

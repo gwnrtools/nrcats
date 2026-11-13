@@ -42,28 +42,222 @@ the surrogate's minimum training frequency (~0.0165 M·Ω_orbital):
 
 from __future__ import annotations
 
+import hashlib
+import os
+
 import numpy as np
 from pycbc.types import TimeSeries
 
 from . import utils
 
-# Module-level surrogate singleton to avoid reloading the large model file.
-_nrsur7dq4 = None
+#: The models of the NRSur7dq4 family this module can drive, by their
+#: gwsurrogate catalog names.  ``NRSur7dq4v2`` (arXiv:2609.07873; gwsurrogate
+#: >= 1.2.0, data file on Zenodo, doi:10.5281/zenodo.22257361) keeps version
+#: 1's training domain (q <= 4, |chi| <= 0.8), its soft and hard parameter
+#: limits and its calling convention, and builds the coorbital waveform on two
+#: overlapping time domains, inspiral and merger-ringdown.  It also adds the
+#: ell = 5 modes; every call in this module passes ``ellMax=4``, so both
+#: models return the same set of modes.
+#: The aligned-spin NRHJSur3dq8 models (the ``nrhjsurrogate`` package, >= 1.4;
+#: model files on Zenodo, doi:10.5281/zenodo.22262339): the action-angle (AA)
+#: and adiabatic-angle (AdA) inspirals of generation v3, which share the
+#: merger-ringdown arm NRHJSur3dq8_MR_v3.  Seven m > 0 modes, (2,2), (2,1),
+#: (3,3), (3,2), (4,4), (4,3) and (5,5); the m < 0 modes follow from
+#: h_{l,-m} = (-1)^l conj(h_lm).  Trained on 260 SXS simulations with q to 8
+#: and spin magnitudes to 0.998; the domain is the box in (log q, chi1z,
+#: chi2z) at the extremes of those, which the model's ``in_hull`` reports.
+#: Outside it the model clamps to the boundary and says nothing, so this
+#: module refuses such a call instead.
+NRHJ_MODELS = ("NRHJSur3dq8_AA_v3", "NRHJSur3dq8_AdA_v3")
+
+SURROGATE_MODELS = ("NRSur7dq4", "NRSur7dq4v2") + NRHJ_MODELS
+
+#: Multiplies every NRHJSur3dq8 mode, so that the model's output is in the
+#: convention of the other models this module serves.  Measured 2026-10-15
+#: at 1500 M before the (2,2) peak on three parameter points, through
+#: chi_lm = arg h_lm - (m/2) arg h_22: NRSur7dq4v2 (gwsurrogate),
+#: SEOBNRv4PHM and NRHybSur3dq8 (LALSimulation) all show the leading-order
+#: PN pattern of the LAL convention, (2,1) +pi/2, (3,3) -pi/2, (3,2) 0,
+#: (4,4) pi, (4,3) -pi/2, up to the body-labelling ambiguity of the odd m.
+#: NRHJSur3dq8's native modes show (2,1), (3,3), (4,3) at 0 or pi and (4,4)
+#: at 0 -- the convention of the SXS catalog data as this package loads
+#: them -- which is the LAL convention times -exp(-i m pi/2): an overall
+#: sign and a quarter-turn of the azimuth.  The rotation is immaterial to a
+#: match, which maximises over the phase; the sign is applied here so that
+#: a mode set from any model in SURROGATE_MODELS means the same thing.
+NRHJ_MODE_SIGN = -1.0
+
+#: In-plane spin components below this are dropped when calling an aligned
+#: model; at or above it the call is refused.  The model's training set was
+#: selected with the same bound.
+NRHJ_ALIGNED_TOLERANCE = 1e-3
+
+#: The model used when nothing asks for another.  Version 1, so that every
+#: caller that does not choose -- every result computed before version 2
+#: existed, and every other project importing nrcats -- is unchanged.
+DEFAULT_SURROGATE = "NRSur7dq4"
+
+#: The environment variable through which a run chooses the model, so that a
+#: driver can switch every stage at once without each script growing a flag.
+SURROGATE_ENV_VAR = "NRCATS_SURROGATE"
+
+# Loaded models, by name: each data file is read once per process.
+_surrogates: dict = {}
 
 
-def load_nrsur7dq4():
-    """Load and cache the NRSur7dq4 surrogate model.
+def surrogate_name(name: str | None = None) -> str:
+    """The model a call uses: ``name``, else ``$NRCATS_SURROGATE``, else NRSur7dq4.
+
+    Raises ``ValueError`` for a name outside :data:`SURROGATE_MODELS`, saying
+    where the name came from, so that a typo in the environment fails at the
+    first call instead of silently falling back to version 1.
+    """
+    if name:
+        chosen, source = name, "argument"
+    else:
+        chosen = os.environ.get(SURROGATE_ENV_VAR, "").strip()
+        source = f"${SURROGATE_ENV_VAR}"
+        if not chosen:
+            chosen, source = DEFAULT_SURROGATE, "default"
+    if chosen not in SURROGATE_MODELS:
+        raise ValueError(
+            f"unknown surrogate {chosen!r} (from {source}); "
+            f"known: {', '.join(SURROGATE_MODELS)}"
+        )
+    return chosen
+
+
+def load_surrogate(name: str | None = None):
+    """Load and cache one model of the NRSur7dq4 family (see :func:`surrogate_name`).
 
     Returns
     -------
     gwsurrogate surrogate object
     """
-    global _nrsur7dq4
-    if _nrsur7dq4 is None:
+    key = surrogate_name(name)
+    if key in NRHJ_MODELS:
+        if key not in _surrogates:
+            _surrogates[key] = _load_nrhj(key)
+        return _surrogates[key]
+    if key not in _surrogates:
         import gwsurrogate as gws
 
-        _nrsur7dq4 = gws.LoadSurrogate("NRSur7dq4")
-    return _nrsur7dq4
+        try:
+            _surrogates[key] = gws.LoadSurrogate(key)
+        except Exception as exc:
+            if key == DEFAULT_SURROGATE:
+                raise
+            raise RuntimeError(
+                f"{key} could not be loaded by gwsurrogate "
+                f"{getattr(gws, '__version__', '?')}: {exc}.  NRSur7dq4v2 needs "
+                "gwsurrogate >= 1.2.0 and its data file, fetched once with "
+                "gwsurrogate.catalog.pull('NRSur7dq4v2')."
+            ) from exc
+    return _surrogates[key]
+
+
+def _load_nrhj(key: str):
+    """An NRHJSur3dq8 model through the nrhjsurrogate package.
+
+    ``backend="numpy"`` is the package's reference path, bit-for-bit
+    reproducible across environments; its compiled backend departs from it by
+    up to 5e-5 of peak at the spin extremes and hung in forked worker pools
+    (measured 2026-10-14/15).  The model files are found on the package's own
+    search path (``$NRHJ_MODEL_DIR``, its cache) and fetched from Zenodo on
+    first use unless ``$NRHJ_AUTO_FETCH=0``.
+    """
+    try:
+        from nrhjsurrogate import NRHJSurAA
+    except ImportError as exc:
+        raise RuntimeError(
+            f"{key} needs the nrhjsurrogate package (>= 1.4): {exc}"
+        ) from exc
+    return NRHJSurAA.load_h5(key, backend="numpy")
+
+
+def load_nrsur7dq4():
+    """Load and cache the configured model of the NRSur7dq4 family.
+
+    Kept under its original name because every caller uses it; it returns
+    version 1 unless ``$NRCATS_SURROGATE`` names another model.
+    """
+    return load_surrogate()
+
+
+_DATA_MD5: dict = {}
+
+
+def surrogate_info(name: str | None = None) -> dict:
+    """What a manifest needs to identify the model that produced a number.
+
+    The model name, the gwsurrogate version, and the path and MD5 of the data
+    file -- the same MD5 gwsurrogate's catalog and the Zenodo record publish,
+    so a reader can check the file without trusting the name.  Never raises:
+    a field that cannot be determined is ``None``.
+    """
+    key = surrogate_name(name)
+    if key in NRHJ_MODELS:
+        return _nrhj_info(key)
+    info = {"name": key, "gwsurrogate": None, "data_file": None, "data_md5": None}
+    try:
+        import gwsurrogate as gws
+        from gwsurrogate import catalog
+
+        info["gwsurrogate"] = getattr(gws, "__version__", None)
+        entry = getattr(catalog, "_surrogate_world", {}).get(key)
+        fname = os.path.basename(entry.url) if entry is not None else f"{key}.h5"
+        path = os.path.join(catalog.download_path(), fname)
+        if os.path.exists(path):
+            info["data_file"] = path
+            info["data_md5"] = _file_digests(path)[0]
+    except Exception:  # noqa: BLE001 - a manifest must describe, not fail
+        pass
+    return info
+
+
+def _file_digests(path: str) -> tuple:
+    """(md5, sha256) of a file, each read once per process."""
+    if path not in _DATA_MD5:
+        h5, h256 = hashlib.md5(), hashlib.sha256()
+        with open(path, "rb") as fh:
+            for chunk in iter(lambda: fh.read(1 << 20), b""):
+                h5.update(chunk)
+                h256.update(chunk)
+        _DATA_MD5[path] = (h5.hexdigest(), h256.hexdigest())
+    return _DATA_MD5[path]
+
+
+def _nrhj_info(key: str) -> dict:
+    """The manifest record of an NRHJSur3dq8 model: the package version, the
+    inspiral file and the merger-ringdown arm it names, each with the SHA-256
+    the package's registry and its INSTALL.md publish (and an MD5 beside it,
+    for readers of the other models' records).  Never raises."""
+    info = {
+        "name": key,
+        "gwsurrogate": None,
+        "nrhjsurrogate": None,
+        "data_file": None,
+        "data_md5": None,
+        "data_sha256": None,
+        "merger_ringdown_file": None,
+        "merger_ringdown_sha256": None,
+    }
+    try:
+        import nrhjsurrogate
+        from nrhjsurrogate import models as _models
+
+        info["nrhjsurrogate"] = getattr(nrhjsurrogate, "__version__", None)
+        path = _models.resolve_model(key, fetch=False)
+        info["data_file"] = path
+        info["data_md5"], info["data_sha256"] = _file_digests(path)
+        arm = _models.MODELS.get(key.replace("_AA_", "_MR_").replace("_AdA_", "_MR_"))
+        if arm is not None:
+            arm_path = _models.resolve_model(arm.name, fetch=False)
+            info["merger_ringdown_file"] = arm_path
+            info["merger_ringdown_sha256"] = _file_digests(arm_path)[1]
+    except Exception:  # noqa: BLE001 - a manifest must describe, not fail
+        pass
+    return info
 
 
 # Full set of NR modes to include in the comparison table.  Modes absent from
@@ -268,6 +462,7 @@ def generate_surrogate_modes(
     catalog=None,
     nr_wfm=None,
     modes=None,
+    model: str | None = None,
 ) -> tuple[dict, float]:
     """Call NRSur7dq4 and return physical-unit modes as a pycbc TimeSeries dict.
 
@@ -296,6 +491,10 @@ def generate_surrogate_modes(
         unchanged.  ``"all"`` returns every mode the model produced, which is
         what a sphere-averaged or BMS-maximized comparison of a *precessing*
         binary requires -- see the note on :data:`SURROGATE_MODES`.
+    model : str, optional
+        Which model of the family to call, a name in :data:`SURROGATE_MODELS`.
+        ``None`` (default) is the configured one -- ``$NRCATS_SURROGATE``, else
+        NRSur7dq4 -- so existing callers are unchanged.
 
     Returns
     -------
@@ -326,7 +525,23 @@ def generate_surrogate_modes(
     f_ref_dimless = f_lower_hz * m_secs  # cycles/M
     dt_dimless = delta_t_seconds / m_secs  # dimensionless time step
 
-    sur = load_nrsur7dq4()
+    if surrogate_name(model) in NRHJ_MODELS:
+        return _generate_nrhj_modes(
+            surrogate_name(model),
+            q,
+            chiA,
+            chiB,
+            total_mass,
+            distance,
+            delta_t_seconds,
+            m_secs,
+            dt_dimless,
+            modes,
+        )
+
+    # The default goes through load_nrsur7dq4, the one entry point every
+    # caller (and every test double) has always used.
+    sur = load_nrsur7dq4() if model is None else load_surrogate(model)
 
     # Query the surrogate's training window start from its internal metadata so
     # that epoch-aligned spin extraction targets the correct NR time regardless
@@ -421,13 +636,21 @@ def generate_surrogate_modes(
         else:
             raise
 
+    return _to_physical_modes(
+        t_sur, h_sur, total_mass, distance, delta_t_seconds, m_secs, dt_dimless, modes
+    )
+
+
+def _to_physical_modes(
+    t_sur, h_sur, total_mass, distance, delta_t_seconds, m_secs, dt_dimless, modes
+):
+    """Geometric modes on a uniform grid to physical-unit TimeSeries with the
+    epoch at the (2,2) peak, and the effective start frequency in Hz."""
     amp_scale = utils.amp_to_physical(total_mass, distance)
     t_physical = t_sur * m_secs
-
     peak_idx = int(np.argmax(np.abs(h_sur[(2, 2)])))
     peak_time_phys = t_physical[peak_idx]
     epoch = t_physical[0] - peak_time_phys
-
     phase22 = np.unwrap(np.angle(h_sur[(2, 2)]))
     omega_gw_start = abs(phase22[1] - phase22[0]) / dt_dimless
     f_lower_effective = omega_gw_start / (2.0 * np.pi) / m_secs
@@ -451,6 +674,51 @@ def generate_surrogate_modes(
         )
 
     return result, f_lower_effective
+
+
+def _generate_nrhj_modes(
+    key, q, chiA, chiB, total_mass, distance, delta_t_seconds, m_secs, dt_dimless, modes
+):
+    """NRHJSur3dq8's native span, synthesised on the uniform grid asked for.
+
+    The full native span (``f_low`` unset) and no post-Newtonian extension
+    (``hybridization="never"``): a comparison with numerical relativity must
+    see the model's own content and nothing spliced below it.  The grid is
+    the model's own, at the requested spacing (``time_step``), synthesised
+    directly rather than resampled.  The m < 0 modes are built by reflection,
+    and every mode is multiplied by :data:`NRHJ_MODE_SIGN`.
+    """
+    # The model's own training criterion for "aligned" (in-plane components
+    # below 1e-3, training-set.html), which is also this pipeline's: an
+    # earlier 1e-4 refused three SXS simulations the catalog classifies as
+    # aligned (stage 37, 2026-10-15).  Components below it are dropped.
+    chi1_perp = float(np.hypot(chiA[0], chiA[1]))
+    chi2_perp = float(np.hypot(chiB[0], chiB[1]))
+    if chi1_perp >= NRHJ_ALIGNED_TOLERANCE or chi2_perp >= NRHJ_ALIGNED_TOLERANCE:
+        raise ValueError(
+            f"{key} is an aligned-spin model; in-plane spin components "
+            f"{chi1_perp:.2e} and {chi2_perp:.2e} cannot be passed to it"
+        )
+    chi1z, chi2z = float(chiA[2]), float(chiB[2])
+    sur = load_surrogate(key)
+    if not sur.in_hull(q, chi1z, chi2z):
+        raise ValueError(
+            f"(q, chi1z, chi2z) = ({q:.4f}, {chi1z:+.4f}, {chi2z:+.4f}) is outside "
+            f"the training box of {key}; the model would clamp to the boundary "
+            "and return an extrapolation without saying so"
+        )
+    t_sur, h_pos = sur.get_td_waveform_modes_geometric(
+        q, chi1z, chi2z, time_step=dt_dimless, hybridization="never"
+    )
+    t_sur = np.asarray(t_sur, dtype=np.float64)
+    h_sur = {}
+    for (ell, em), h in h_pos.items():
+        h = NRHJ_MODE_SIGN * np.asarray(h, dtype=np.complex128)
+        h_sur[(ell, em)] = h
+        h_sur[(ell, -em)] = ((-1) ** ell) * np.conj(h)
+    return _to_physical_modes(
+        t_sur, h_sur, total_mass, distance, delta_t_seconds, m_secs, dt_dimless, modes
+    )
 
 
 def check_surrogate_prior(

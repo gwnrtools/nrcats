@@ -272,7 +272,11 @@ class SXSCatalog(catalog.CatalogBase):
         sim.psi4  # noqa: B018
 
     def get(
-        self, sim_name: str, extrapolation_order: int = 2, download: bool = True
+        self,
+        sim_name: str,
+        extrapolation_order: int = 2,
+        download: bool = True,
+        lev: int | None = None,
     ) -> waveform.WaveformModes:
         """Load the strain waveform for *sim_name* and return a WaveformModes object.
 
@@ -289,15 +293,24 @@ class SXSCatalog(catalog.CatalogBase):
                 are read from ``ExtraWaveforms.h5``.  Comparing waveforms across
                 orders bounds the systematic error of the extraction to null
                 infinity, which is a distinct component of the numerical error
-                budget from finite-resolution truncation error -- the v3 catalog
-                publishes a single Lev, so the latter cannot be measured from it.
-                Raises if the requested order is not the one obtained.
+                budget from finite-resolution truncation error.  Raises if the
+                requested order is not the one obtained.
             download (bool): Whether to download the waveform if not cached.
                 Defaults to True.
+            lev (int or None): Resolution level (``LevN``) to load.  ``None``
+                (the default) loads the highest level published, which is what
+                every result computed before this argument existed used.  Most
+                SXS simulations publish two or more levels
+                (:meth:`available_levs`), and the mismatch between the two
+                highest at a fixed extrapolation order is the standard estimate
+                of the finite-resolution truncation error -- the other component
+                of the numerical error budget, which the order comparison does
+                not see.  Raises if the level obtained is not the one requested.
 
         Returns:
             nrcats.waveform.WaveformModes: Waveform object with the
-            catalog metadata attached.
+            catalog metadata attached.  ``lev_number`` records the level that
+            was actually loaded, whether it was chosen or defaulted.
         """
         # sxs >= 2024 uses a Simulation_v3 object; access .strain for WaveformModes.
         # auto_supersede=True resolves deprecated simulation IDs automatically.
@@ -311,12 +324,27 @@ class SXSCatalog(catalog.CatalogBase):
         # meant `extrapolation_order` was silently ignored and every caller got
         # the default N2 -- including anyone who passed 3 or 4 explicitly.
         extrapolation = f"N{extrapolation_order}"
+        # The level rides on the location string, which is the only way the
+        # sxs package takes it ("SXS:BBH:1234/Lev5"); a bare ID means the
+        # highest level.  auto_supersede carries the suffix across to the
+        # superseding simulation.
+        location = sim_name if lev is None else f"{sim_name}/Lev{int(lev)}"
         sim_obj = sxs.load(
-            sim_name,
+            location,
             download=download,
             auto_supersede=True,
             extrapolation=extrapolation,
         )
+        # Fail loudly here too: a level that silently fell back to the
+        # highest would make a "resolution comparison" compare a waveform
+        # with itself.  The sxs package raises for an absent level today; this
+        # is the guard against that changing under us.
+        lev_obtained = getattr(sim_obj, "lev_number", None)
+        if lev is not None and lev_obtained != int(lev):
+            raise ValueError(
+                f"{sim_name}: requested Lev{int(lev)}, got Lev{lev_obtained}. "
+                f"Available levels: {self.available_levs(sim_name)}."
+            )
         raw_obj = sim_obj.strain
 
         # Fail loudly rather than silently returning a different order than asked
@@ -335,7 +363,7 @@ class SXSCatalog(catalog.CatalogBase):
 
         # Build a WaveformModes object; strip keys the parent class doesn't accept
         meta = dict(raw_obj._metadata)
-        meta.update({"waveform_data_location": ""})
+        meta.update({"waveform_data_location": "", "lev_number": lev_obtained})
         meta.pop("metadata", None)  # avoid nested dict conflict
         meta.pop("time", None)
         # `metadata`, not `sim_metadata`: WaveformModes.sim_metadata reads
@@ -347,6 +375,24 @@ class SXSCatalog(catalog.CatalogBase):
         return waveform.WaveformModes(
             raw_obj.data, raw_obj.time, metadata=sim_metadata, **meta
         )
+
+    def available_levs(self, sim_name: str) -> list[int]:
+        """Return the resolution levels (``LevN``) published for *sim_name*.
+
+        Read from the catalog metadata's ``lev_numbers``, so it costs no
+        download and can be called over a whole batch.  Sorted ascending; the
+        last entry is the level :meth:`get` loads by default.  A simulation
+        with one entry publishes a single level, and its truncation error
+        cannot be estimated from the catalog.
+
+        Over the v3 catalog's 4,150 BBH simulations, 3,964 publish two or
+        more levels.  (Earlier docstrings in this module said the catalog
+        publishes one level per simulation; that was wrong, and is the reason
+        the resolution floor was not measured sooner.)
+        """
+        meta = self.get_metadata(sim_name)
+        levs = meta.get("lev_numbers") or []
+        return sorted(int(x) for x in levs)
 
     def available_extrapolation_orders(
         self, sim_name: str, download: bool = False
@@ -376,11 +422,11 @@ class SXSCatalog(catalog.CatalogBase):
             the default order is returned when no ``ExtraWaveforms.h5`` exists.
 
         Note:
-            The extrapolation order is **not** the resolution.  The v3 catalog
-            publishes a single Lev per simulation (``lev_numbers == [3]``), so
-            finite-resolution truncation error cannot be estimated from it;
-            varying the order bounds the error of the extraction to null
-            infinity, which is a different component of the error budget.
+            The extrapolation order is **not** the resolution.  Varying the
+            order bounds the error of the extraction to null infinity; the
+            finite-resolution truncation error is estimated from two levels
+            at one order (see :meth:`available_levs` and ``get(..., lev=)``).
+            They are different components of the error budget.
         """
         import re
 
